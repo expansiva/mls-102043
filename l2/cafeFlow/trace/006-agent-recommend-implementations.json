@@ -1,0 +1,248 @@
+{
+  "savedAt": "2026-06-08T21:30:56.357Z",
+  "agentName": "agentRecommendImplementations",
+  "stepId": 6,
+  "planning": {
+    "planId": "req-recommend-implementations",
+    "dependsOn": [
+      "req-discover-scope"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitImplementationRecommendations",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "recommendations": [
+            {
+              "recommendationId": "mdmCafeFlowCore",
+              "artifactType": "mdm",
+              "title": "MDM CafeFlow (Core)",
+              "description": "Modelo mestre com Item do Cardápio, Ingrediente, Item de Estoque, Pedido, Itens do Pedido e Turno Diário, incluindo vínculo de receitas para baixa automática por ingrediente.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Base estrutural necessária para POS, estoque por ingrediente, métricas do dashboard e fechamento de turno.",
+              "requiresClientDecision": false,
+              "dependencies": []
+            },
+            {
+              "recommendationId": "usecaseEntitiesCafeFlow",
+              "artifactType": "usecaseEntity",
+              "title": "Entidades de Caso de Uso do CafeFlow",
+              "description": "Entidades operacionais para Criar Pedido, Atualizar Status, Baixar Estoque por Ingrediente, Fechar Turno e Calcular Métricas do Dashboard.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "O escopo inclui gravações, transições de status e atualização de métricas/tabelas.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "mdmCafeFlowCore"
+              ]
+            },
+            {
+              "recommendationId": "workflowPedidoPos",
+              "artifactType": "workflow",
+              "title": "Workflow de Pedido no POS",
+              "description": "Fluxo de criação do pedido (mesa/takeout), seleção de itens e envio para cozinha.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Atende o objetivo de atendimento rápido e coordenação com a cozinha.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "workflowStatusCozinha",
+              "artifactType": "workflow",
+              "title": "Workflow de Status da Cozinha",
+              "description": "Transições Novo → Em preparo → Pronto → Entregue com atualização da fila da cozinha.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Coordenação de cozinha é requisito central do MVP.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "workflowFechamentoTurno",
+              "artifactType": "workflow",
+              "title": "Workflow de Fechamento de Turno",
+              "description": "Consolidação de vendas do turno com geração de relatório diário.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Relatório de fechamento é tela chave e requer fluxo próprio.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "pagePosRapido",
+              "artifactType": "page",
+              "title": "POS Rápido",
+              "description": "Interface rápida para lançamento de pedidos, seleção de mesa/takeout e visualização de status.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Tela principal para o Caixa registrar pedidos.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "workflowPedidoPos"
+              ]
+            },
+            {
+              "recommendationId": "pagePainelCozinha",
+              "artifactType": "page",
+              "title": "Painel da Cozinha",
+              "description": "Fila de pedidos em aberto com ações para atualizar status.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Suporta operação da cozinha e transições de status.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "workflowStatusCozinha"
+              ]
+            },
+            {
+              "recommendationId": "pageGestaoCardapioEstoque",
+              "artifactType": "page",
+              "title": "Gestão de Cardápio e Estoque",
+              "description": "Cadastro e manutenção de itens do cardápio, receitas por ingrediente e níveis mínimos de estoque.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Controle de estoque por ingrediente exige gestão direta.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "mdmCafeFlowCore"
+              ]
+            },
+            {
+              "recommendationId": "pageRelatorioFechamentoTurno",
+              "artifactType": "page",
+              "title": "Relatório de Fechamento de Turno",
+              "description": "Resumo do turno com totalizadores e itens vendidos.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Tela chave solicitada para fechamento diário.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "workflowFechamentoTurno"
+              ]
+            },
+            {
+              "recommendationId": "metricTableVendasDiarias",
+              "artifactType": "metricTable",
+              "title": "Tabela de Métricas de Vendas Diárias",
+              "description": "Tabela agregada por dia e turno com total de pedidos, itens e receita.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Métricas básicas do MVP foram aceitas para o dashboard.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "metricTableItensMaisVendidos",
+              "artifactType": "metricTable",
+              "title": "Tabela de Métricas de Itens Mais Vendidos",
+              "description": "Agregação por item e período para ranking de vendas.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Suporta dashboard e sugestões de promoção.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "metricTableEstoqueBaixo",
+              "artifactType": "metricTable",
+              "title": "Tabela de Métricas de Estoque Baixo",
+              "description": "Snapshot de ingredientes abaixo do nível mínimo.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Necessário para alertas de reposição no dashboard.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "usecaseEntitiesCafeFlow"
+              ]
+            },
+            {
+              "recommendationId": "gerenteDashboardMetricas",
+              "artifactType": "metricDashboard",
+              "title": "Dashboard de Métricas do Gerente",
+              "description": "Painel com vendas do dia, itens mais vendidos e alertas de estoque baixo.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Dashboard básico foi aceito para o MVP.",
+              "requiresClientDecision": false,
+              "dependencies": [
+                "metricTableVendasDiarias",
+                "metricTableItensMaisVendidos",
+                "metricTableEstoqueBaixo"
+              ]
+            },
+            {
+              "recommendationId": "horizontalAutenticacaoPerfis",
+              "artifactType": "horizontalModule",
+              "title": "Autenticação e Perfis",
+              "description": "Controle de acesso para Caixa, Cozinha e Gerente.",
+              "priority": "now",
+              "defaultPriority": "now",
+              "reason": "Perfis distintos foram confirmados na clarificação.",
+              "requiresClientDecision": false,
+              "dependencies": []
+            },
+            {
+              "recommendationId": "agentResumoVendasIA",
+              "artifactType": "agent",
+              "title": "Agente IA de Resumo de Vendas",
+              "description": "Gera resumo diário a partir das métricas de vendas.",
+              "priority": "soon",
+              "defaultPriority": "soon",
+              "reason": "Funcionalidade LLM prevista, mas não crítica para o fluxo operacional imediato.",
+              "requiresClientDecision": true,
+              "dependencies": [
+                "metricTableVendasDiarias"
+              ]
+            },
+            {
+              "recommendationId": "agentSugestoesPromocaoIA",
+              "artifactType": "agent",
+              "title": "Agente IA de Sugestões de Promoção",
+              "description": "Sugere itens para promover com base nos últimos 7 dias.",
+              "priority": "soon",
+              "defaultPriority": "soon",
+              "reason": "Melhora decisões operacionais usando histórico recente.",
+              "requiresClientDecision": true,
+              "dependencies": [
+                "metricTableItensMaisVendidos"
+              ]
+            }
+          ]
+        },
+        "questions": [
+          "O MVP deve registrar pagamentos (dinheiro/cartão) no pedido e no fechamento de turno?",
+          "Há necessidade de integração com impressora térmica ou apenas painel de cozinha?",
+          "O relatório de fechamento deve considerar apenas vendas ou também cancelamentos e estornos?"
+        ],
+        "trace": [
+          "Escopo inclui POS, cozinha, gestão de cardápio/estoque e fechamento de turno.",
+          "Clarificação confirma perfis Caixa/Cozinha/Gerente, status do pedido e estoque por ingrediente.",
+          "Métricas básicas para o dashboard foram aceitas no MVP.",
+          "Fluxos e entidades requerem gravações e atualização de métricas."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 30,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

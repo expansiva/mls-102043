@@ -1,0 +1,112 @@
+{
+  "savedAt": "2026-06-08T22:15:28.835Z",
+  "agentName": "agentPlanAgents",
+  "stepId": 22,
+  "planning": {
+    "planId": "plan-agents",
+    "dependsOn": [
+      "plan-plugins",
+      "plan-usecase-entities",
+      "plan-workflow-definition"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitAgentPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "agents": [
+            {
+              "agentId": "salesSummaryNarrativeAgent",
+              "title": "Agente de Resumo de Vendas",
+              "purpose": "Gerar automaticamente o resumo narrativo das vendas do dia após o fechamento do turno ou sob demanda do gerente.",
+              "priority": "soon",
+              "trigger": "Fechamento de turno concluído ou solicitação manual do gerente.",
+              "input": [
+                "salesSummaryId",
+                "dailyShiftId",
+                "periodoReferencia"
+              ],
+              "output": [
+                "salesSummaryNarrative",
+                "generationStatus"
+              ],
+              "persistenceRefs": [
+                "salesSummary"
+              ],
+              "usecaseRefs": [
+                "usecaseGerarResumoVendasIA"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics"
+              ],
+              "allowedTools": [
+                "layer_3_usecases"
+              ],
+              "permissions": [
+                "read:salesSummary",
+                "read:dailySalesMetrics"
+              ],
+              "stopCriteria": [
+                "Resumo narrativo persistido e retornado com status de sucesso.",
+                "Falha registrada com motivo e sem nova tentativa automática imediata."
+              ]
+            },
+            {
+              "agentId": "promotionSuggestionAgent",
+              "title": "Agente de Sugestões de Promoção",
+              "purpose": "Gerar sugestões de promoção para itens do cardápio com base nas vendas recentes, para revisão do gerente.",
+              "priority": "soon",
+              "trigger": "Execução agendada semanal ou solicitação do gerente.",
+              "input": [
+                "periodoAnalise",
+                "limiteSugestoes",
+                "filtrosCategoria"
+              ],
+              "output": [
+                "promotionSuggestionList",
+                "generationStatus"
+              ],
+              "persistenceRefs": [
+                "promotionSuggestion",
+                "salesSummary"
+              ],
+              "usecaseRefs": [
+                "usecaseGerarSugestoesPromocaoIA"
+              ],
+              "metricRefs": [
+                "topSellingItemsMetrics"
+              ],
+              "allowedTools": [
+                "layer_3_usecases"
+              ],
+              "permissions": [
+                "read:salesSummary",
+                "read:topSellingItemsMetrics",
+                "write:promotionSuggestion"
+              ],
+              "stopCriteria": [
+                "Sugestões criadas e registradas com status válido.",
+                "Falha registrada com motivo e sem criação parcial."
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Definidos agentes operacionais para geração de resumo de vendas e sugestões de promoção alinhados aos workflows e usecases.",
+          "Associadas referências de persistência e métricas apenas quando o agente depende de tabelas moduleOwned ou métricas."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 74,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

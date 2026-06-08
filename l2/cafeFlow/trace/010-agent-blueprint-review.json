@@ -1,0 +1,88 @@
+{
+  "savedAt": "2026-06-08T21:32:03.186Z",
+  "agentName": "agentBlueprintReview",
+  "stepId": 10,
+  "planning": {
+    "planId": "plan-blueprint-review",
+    "dependsOn": [
+      "plan-solution-blueprint"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitBlueprintReview",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "issues": [
+            {
+              "severity": "error",
+              "code": "missing_layer3_usecase",
+              "message": "Ação BFF de criação/gestão de cardápio não tem usecase layer_3 associado.",
+              "path": "result.userActions[actionId=createMenuItem]",
+              "evidence": [
+                "commandType=BFF",
+                "affectedEntities: MenuItem, RecipeLine",
+                "usecaseEntities não inclui usecase para criar/editar MenuItem/RecipeLine"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "missing_layer3_usecase",
+              "message": "Ação BFF de atualização de estoque não tem usecase layer_3 associado.",
+              "path": "result.userActions[actionId=updateStockItem]",
+              "evidence": [
+                "commandType=BFF",
+                "affectedEntities: StockItem",
+                "usecaseEntities não inclui usecase para ajuste de estoque"
+              ]
+            },
+            {
+              "severity": "warning",
+              "code": "missing_layer3_usecase_link",
+              "message": "Baixa de estoque por ingrediente é aplicada no fluxo de entrega, mas não está ligada ao usecase de baixa de estoque.",
+              "path": "result.userActions[actionId=updateOrderStatusDelivered]",
+              "evidence": [
+                "rulesApplied inclui rule-stock-deduct-by-ingredient",
+                "usecaseBaixarEstoqueIngredientes não é referenciado por workflow/ação/cobertura"
+              ]
+            },
+            {
+              "severity": "warning",
+              "code": "missing_relationship",
+              "message": "PromotionSuggestion não possui relacionamento com MenuItem ou SalesSummary, dificultando rastrear itens sugeridos.",
+              "path": "result.ontology.entities.PromotionSuggestion",
+              "evidence": [
+                "entidade definida sem relacionamento em relationships"
+              ]
+            }
+          ],
+          "recommendedFixes": [
+            "Adicionar usecase layer_3 para criar/editar itens de cardápio e receitas e referenciá-lo em createMenuItem, workflow e cobertura.",
+            "Adicionar usecase layer_3 para ajuste manual de estoque e referenciá-lo em updateStockItem e cobertura.",
+            "Vincular usecaseBaixarEstoqueIngredientes ao fluxo/ação de entrega (updateOrderStatusDelivered) e/ou ao workflow de cozinha.",
+            "Adicionar relacionamento de PromotionSuggestion com MenuItem (e opcionalmente SalesSummary/OrderItem) para rastrear itens sugeridos."
+          ]
+        },
+        "questions": [
+          "O ajuste de estoque manual deve gerar histórico/auditoria de movimentações?",
+          "A sugestão de promoção deve referenciar diretamente MenuItem ou categorias do cardápio?"
+        ],
+        "trace": [
+          "Verificação de BFF actions versus usecaseEntities.",
+          "Checagem de vínculos entre regras layer_3 e usecases.",
+          "Checagem de relacionamentos das entidades de IA.",
+          "Cobertura de capacidades e artefatos conferida."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 33,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

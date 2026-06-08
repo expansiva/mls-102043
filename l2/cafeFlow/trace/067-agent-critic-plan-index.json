@@ -1,0 +1,59 @@
+{
+  "savedAt": "2026-06-08T22:13:34.427Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 67,
+  "planning": {
+    "planId": "plan-index-critic:workflowIndex:2",
+    "dependsOn": [
+      "plan-index-repair:workflowIndex:1"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": false,
+          "errors": [
+            {
+              "code": "wrong-usecase-refs",
+              "message": "A automação de alerta apenas monitora estoque e gera alertas; não executa ajuste manual de estoque (usecaseAjustarEstoque) nem baixa por ingrediente em pedidos (usecaseBaixarEstoqueIngredientes).",
+              "path": "workflows[3].usecaseRefs"
+            }
+          ],
+          "warnings": [
+            {
+              "code": "metric-read-not-feed",
+              "message": "O ciclo de sugestão consome a métrica de itens mais vendidos, mas não a alimenta; metricRefs deve ser usado apenas quando transições escrevem na métrica.",
+              "path": "workflows[2].metricRefs"
+            },
+            {
+              "code": "metric-read-not-feed",
+              "message": "O agente de resumo consome a métrica de vendas diárias, mas não a alimenta; metricRefs deve ser usado apenas quando transições escrevem na métrica.",
+              "path": "workflows[4].metricRefs"
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Verificação de executionMode: todos os valores refletem a realidade (entityLifecycle ou automation).",
+          "Verificação de createsTask: nenhum workflow cria ou coordena tarefas explicitamente; false está correto.",
+          "Verificação de actors: todos os actorIds existem no plano final.",
+          "Verificação de persistenceRefs: todas as tabelas pertencem ao módulo (moduleTableIds).",
+          "Verificação de relatedEntities, relatedCapabilities, rulesApplied: todas as referências existem no contexto.",
+          "Verificação semântica de usecaseRefs: lowStockAlert referencia casos de uso que não executa.",
+          "Verificação semântica de metricRefs: promotionSuggestionLifecycle e dailySalesSummaryAgent referenciam métricas que leem, mas não alimentam."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 68,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

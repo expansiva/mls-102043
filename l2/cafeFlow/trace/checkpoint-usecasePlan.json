@@ -1,0 +1,578 @@
+{
+  "schemaVersion": "2026-06-06",
+  "artifactType": "indexCheckpoint",
+  "indexName": "usecasePlan",
+  "moduleName": "cafeFlow",
+  "status": "frozen",
+  "approvedAt": "2026-06-08T22:10:05.203Z",
+  "source": {
+    "agentName": "agentPlanUsecaseEntities",
+    "stepId": 60,
+    "planId": "plan-index-critic:usecasePlan:1"
+  },
+  "healthReport": {
+    "localErrors": [],
+    "localWarnings": [
+      {
+        "severity": "warning",
+        "code": "usecase.metrics.noWriter",
+        "message": "metric tables exist, but no usecase declares writes to any metric table"
+      }
+    ],
+    "criticErrors": [],
+    "criticWarnings": [],
+    "attempts": 1,
+    "notes": [
+      "critic LLM failed, approved by fallback: critic returned status needs_input"
+    ]
+  },
+  "index": {
+    "runId": "provider-tool-call",
+    "stepId": "16-plan-usecase-entities",
+    "schemaVersion": "2026-06-02",
+    "status": "ok",
+    "result": {
+      "backendArchitecture": {
+        "pattern": "layeredUsecaseDriven",
+        "layer1Responsibility": "Definições de tabelas transacionais e de métricas (layer_1_external). Acesso direto apenas por layer_3_usecases.",
+        "layer2Responsibility": "Controllers BFF que recebem comandos de páginas, workflows e agentes. Devem sempre delegar para usecases de layer_3.",
+        "layer3Responsibility": "Usecases que encapsulam regras de negócio, leitura e escrita em tabelas de layer_1, e atualização de métricas."
+      },
+      "usecaseEntities": [
+        {
+          "usecaseEntityId": "orderAggregateEntity",
+          "title": "Agregado de Pedido",
+          "purpose": "Representar o pedido completo com itens e ticket de cozinha para operações do POS e painel da cozinha.",
+          "sourceTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "allowedOperations": [
+            "create",
+            "read",
+            "update"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-order-status-transition",
+            "rule-stock-deduct-by-ingredient"
+          ]
+        },
+        {
+          "usecaseEntityId": "salesSummaryEntity",
+          "title": "Resumo de Vendas",
+          "purpose": "Representar o resumo consolidado do turno para fechamento e relatórios.",
+          "sourceTables": [
+            {
+              "tableName": "sales_summary",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "allowedOperations": [
+            "create",
+            "read",
+            "update"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ]
+        },
+        {
+          "usecaseEntityId": "promotionSuggestionEntity",
+          "title": "Sugestão de Promoção",
+          "purpose": "Representar sugestões de promoção geradas por IA para itens do cardápio.",
+          "sourceTables": [
+            {
+              "tableName": "promotion_suggestion",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "allowedOperations": [
+            "create",
+            "read",
+            "update"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": []
+        },
+        {
+          "usecaseEntityId": "menuItemEntity",
+          "title": "Item do Cardápio (MDM)",
+          "purpose": "Representar item do cardápio para leitura em operações de pedido e métricas.",
+          "sourceTables": [
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "allowedOperations": [
+            "read"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-menuitem-recipe-required"
+          ]
+        },
+        {
+          "usecaseEntityId": "recipeLineEntity",
+          "title": "Linha de Receita (MDM)",
+          "purpose": "Representar composição de ingredientes do item do cardápio para cálculo de baixa de estoque.",
+          "sourceTables": [
+            {
+              "tableName": "RecipeLine",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "allowedOperations": [
+            "read"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-menuitem-recipe-required"
+          ]
+        },
+        {
+          "usecaseEntityId": "ingredientEntity",
+          "title": "Ingrediente (MDM)",
+          "purpose": "Representar ingrediente para referência em receitas e estoque.",
+          "sourceTables": [
+            {
+              "tableName": "Ingredient",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "allowedOperations": [
+            "read"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": []
+        },
+        {
+          "usecaseEntityId": "stockItemEntity",
+          "title": "Item de Estoque (MDM)",
+          "purpose": "Representar estoque por ingrediente para baixa automática e alertas.",
+          "sourceTables": [
+            {
+              "tableName": "StockItem",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "allowedOperations": [
+            "read",
+            "update"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-low-stock-alert",
+            "rule-stock-deduct-by-ingredient"
+          ]
+        },
+        {
+          "usecaseEntityId": "dailyShiftEntity",
+          "title": "Turno Diário (MDM)",
+          "purpose": "Representar turno diário para consolidação de vendas e fechamento.",
+          "sourceTables": [
+            {
+              "tableName": "DailyShift",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "allowedOperations": [
+            "read",
+            "update"
+          ],
+          "layer": "layer_3_usecases",
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ]
+        }
+      ],
+      "usecases": [
+        {
+          "usecaseId": "usecaseCriarPedido",
+          "title": "Criar Pedido",
+          "purpose": "Registrar novo pedido com itens e criar ticket de cozinha para fila operacional.",
+          "actor": "caixa",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "orderAggregateEntity",
+            "menuItemEntity"
+          ],
+          "outputEntities": [
+            "orderAggregateEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "DailyShift",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "createOrder",
+            "addOrderItem",
+            "sendToKitchen"
+          ],
+          "rulesApplied": [
+            "rule-order-status-transition"
+          ]
+        },
+        {
+          "usecaseId": "usecaseAtualizarStatusPedido",
+          "title": "Atualizar Status do Pedido",
+          "purpose": "Transicionar status do pedido (Novo → Em preparo → Pronto → Entregue) e atualizar ticket de cozinha.",
+          "actor": "cozinha",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "orderAggregateEntity"
+          ],
+          "outputEntities": [
+            "orderAggregateEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "updateOrderStatusPreparing",
+            "updateOrderStatusReady",
+            "updateOrderStatusDelivered"
+          ],
+          "rulesApplied": [
+            "rule-order-status-transition"
+          ]
+        },
+        {
+          "usecaseId": "usecaseBaixarEstoqueIngredientes",
+          "title": "Baixa de Estoque por Ingrediente",
+          "purpose": "Deduzir estoque de ingredientes com base nos itens do pedido entregue, usando receitas do cardápio.",
+          "actor": "cozinha",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "orderAggregateEntity",
+            "recipeLineEntity",
+            "stockItemEntity"
+          ],
+          "outputEntities": [
+            "stockItemEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "RecipeLine",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "Ingredient",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "StockItem",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "StockItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "low_stock_metrics",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "deductStockByRecipe"
+          ],
+          "rulesApplied": [
+            "rule-stock-deduct-by-ingredient",
+            "rule-low-stock-alert"
+          ]
+        },
+        {
+          "usecaseId": "usecaseFecharTurno",
+          "title": "Fechar Turno",
+          "purpose": "Consolidar vendas do turno diário e gerar resumo para relatório de fechamento.",
+          "actor": "gerente",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "dailyShiftEntity",
+            "orderAggregateEntity"
+          ],
+          "outputEntities": [
+            "salesSummaryEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "DailyShift",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "sales_summary",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "DailyShift",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "daily_sales_metrics",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "closeDailyShift",
+            "generateSalesSummary"
+          ],
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ]
+        },
+        {
+          "usecaseId": "usecaseCalcularMetricasDashboard",
+          "title": "Calcular Métricas do Dashboard",
+          "purpose": "Atualizar métricas de vendas diárias e itens mais vendidos para o dashboard do gerente.",
+          "actor": "gerente",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "orderAggregateEntity",
+            "menuItemEntity"
+          ],
+          "outputEntities": [],
+          "readsTables": [
+            {
+              "tableName": "order_aggregate",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "daily_sales_metrics",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "top_selling_items_metrics",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "refreshDailySalesMetrics",
+            "refreshTopSellingItemsMetrics"
+          ],
+          "rulesApplied": []
+        },
+        {
+          "usecaseId": "usecaseGerenciarCardapio",
+          "title": "Gerenciar Cardápio e Receitas",
+          "purpose": "Criar e editar itens do cardápio com linhas de receita vinculadas para baixa automática de estoque.",
+          "actor": "gerente",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "menuItemEntity",
+            "recipeLineEntity",
+            "ingredientEntity"
+          ],
+          "outputEntities": [
+            "menuItemEntity",
+            "recipeLineEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "RecipeLine",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "Ingredient",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "RecipeLine",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "commands": [
+            "createMenuItem",
+            "updateMenuItem",
+            "addRecipeLine",
+            "removeRecipeLine"
+          ],
+          "rulesApplied": [
+            "rule-menuitem-recipe-required"
+          ]
+        },
+        {
+          "usecaseId": "usecaseAjustarEstoque",
+          "title": "Ajustar Estoque Manual",
+          "purpose": "Registrar ajustes manuais de estoque e nível mínimo para ingredientes, gerando alertas quando necessário.",
+          "actor": "gerente",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "stockItemEntity",
+            "ingredientEntity"
+          ],
+          "outputEntities": [
+            "stockItemEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "StockItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "Ingredient",
+              "ownership": "mdmOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "StockItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "low_stock_metrics",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "adjustStockQuantity",
+            "setMinStockLevel"
+          ],
+          "rulesApplied": [
+            "rule-low-stock-alert"
+          ]
+        },
+        {
+          "usecaseId": "usecaseGerarResumoVendasIA",
+          "title": "Gerar Resumo de Vendas (IA)",
+          "purpose": "Produzir resumo narrativo das vendas do dia para o agente de IA.",
+          "actor": "assistenteIA",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "salesSummaryEntity",
+            "dailyShiftEntity"
+          ],
+          "outputEntities": [],
+          "readsTables": [
+            {
+              "tableName": "sales_summary",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "DailyShift",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "daily_sales_metrics",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "writesTables": [],
+          "commands": [
+            "generateSalesNarrative"
+          ],
+          "rulesApplied": []
+        },
+        {
+          "usecaseId": "usecaseGerarSugestoesPromocaoIA",
+          "title": "Gerar Sugestões de Promoção (IA)",
+          "purpose": "Sugerir itens do cardápio para promover com base no histórico de vendas dos últimos 7 dias.",
+          "actor": "assistenteIA",
+          "layer": "layer_3_usecases",
+          "inputEntities": [
+            "menuItemEntity",
+            "salesSummaryEntity"
+          ],
+          "outputEntities": [
+            "promotionSuggestionEntity"
+          ],
+          "readsTables": [
+            {
+              "tableName": "MenuItem",
+              "ownership": "mdmOwned"
+            },
+            {
+              "tableName": "top_selling_items_metrics",
+              "ownership": "moduleOwned"
+            },
+            {
+              "tableName": "sales_summary",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "writesTables": [
+            {
+              "tableName": "promotion_suggestion",
+              "ownership": "moduleOwned"
+            }
+          ],
+          "commands": [
+            "analyzeSellingTrends",
+            "createPromotionSuggestion"
+          ],
+          "rulesApplied": []
+        }
+      ],
+      "controllerRules": {
+        "bffMustCallUsecases": true,
+        "bffDirectTableAccessForbidden": true
+      }
+    },
+    "questions": [
+      "O ajuste de estoque manual deve gerar histórico/auditoria de movimentações em tabela separada?",
+      "A baixa de estoque deve ocorrer no momento da confirmação do pedido ou apenas na entrega?",
+      "Os agentes de IA devem ter permissão para criar sugestões automaticamente ou apenas sob demanda do gerente?"
+    ],
+    "trace": [
+      "Identificadas 3 tabelas transacionais moduleOwned: order_aggregate, sales_summary, promotion_suggestion.",
+      "Identificadas 5 entidades MDM excluídas: MenuItem, RecipeLine, Ingredient, StockItem, DailyShift.",
+      "Criados 8 usecaseEntities para representar agregados e entidades MDM acessadas pelos usecases.",
+      "Criados 9 usecases cobrindo todas as ações BFF, workflows e agentes do plano.",
+      "Incluída responsabilidade de atualização de métricas nos usecases que escrevem tabelas base (usecaseBaixarEstoqueIngredientes, usecaseFecharTurno, usecaseCalcularMetricasDashboard, usecaseAjustarEstoque).",
+      "Aplicadas regras de negócio aos usecases conforme definido no plano de solução.",
+      "Garantido que layer_2_controllers deve sempre chamar layer_3_usecases e não pode acessar tabelas diretamente."
+    ]
+  }
+}

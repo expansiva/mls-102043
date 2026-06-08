@@ -1,0 +1,89 @@
+{
+  "savedAt": "2026-06-08T21:28:31.515Z",
+  "agentName": "agentNewSolutionRequirements",
+  "stepId": 3,
+  "planning": {
+    "planId": "org-requirements",
+    "dependsOn": [],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "clarification",
+    "json": {
+      "userLanguage": "pt-BR",
+      "title": "Clarificação 1/2",
+      "userPrompt": "Gere um app profissional chamado CafeFlow para cafeterias e lanchonetes pequenas.\nEntidades principais: Item do Cardápio (categoria, preço, ingredientes em estoque), Pedido (mesa ou takeout, itens, status), Turno Diário, Item de Estoque.\nTelas chave: Dashboard (vendas de hoje, itens mais vendidos, estoque baixo), Interface rápida de POS (lançamento de pedido + status cozinha), Gerenciamento de cardápio e estoque, Relatório de fechamento de turno.\nFuncionalidade LLM: Assistente IA que gera \"resumo de vendas do dia\" ou sugere \"quais itens promover com base nos últimos 7 dias\".\nFoco: Atendimento rápido de pedidos, coordenação de cozinha e controle simples de estoque para food service.\nlinguagem: en, pt-br",
+      "questions": {
+        "languages": {
+          "type": "open",
+          "question": "Quais idiomas você quer habilitar no app?",
+          "answer": "pt-BR e en"
+        },
+        "moduleName": {
+          "type": "open",
+          "question": "Qual o nome exato do módulo/app?",
+          "answer": "CafeFlow"
+        },
+        "roles": {
+          "type": "open",
+          "question": "Quais perfis de usuário principais devem existir?",
+          "answer": "Caixa, Cozinha e Gerente"
+        },
+        "publicTarget": {
+          "type": "open",
+          "question": "Qual é o público-alvo principal do app?",
+          "answer": "Cafeterias e lanchonetes pequenas"
+        },
+        "mainGoal": {
+          "type": "open",
+          "question": "Qual o objetivo principal do MVP?",
+          "answer": "Agilizar pedidos e controle simples de estoque"
+        },
+        "initialMetricsDashboard": {
+          "type": "select",
+          "question": "Você quer métricas operacionais básicas e um dashboard administrativo na primeira versão?",
+          "answer": "basic",
+          "options": [
+            {
+              "id": "basic",
+              "label": "Sim, básico no MVP"
+            },
+            {
+              "id": "later",
+              "label": "Depois do MVP"
+            },
+            {
+              "id": "none",
+              "label": "Não é necessário"
+            }
+          ]
+        },
+        "visualStyle": {
+          "type": "open",
+          "question": "Qual estilo visual você prefere (ex.: moderno, minimalista, cores quentes)?",
+          "answer": "Moderno e minimalista, cores quentes"
+        },
+        "openQuestion1": {
+          "type": "open",
+          "question": "No POS, quais status básicos o pedido deve ter?",
+          "answer": "Novo, Em preparo, Pronto, Entregue"
+        },
+        "openQuestion2": {
+          "type": "open",
+          "question": "Você quer controlar estoque por ingrediente ou apenas por item final?",
+          "answer": "Por ingrediente"
+        }
+      },
+      "legends": [
+        "Esta é a primeira rodada de clarificações rápidas.",
+        "O planejamento detalhado virá na próxima etapa."
+      ]
+    },
+    "status": "pending",
+    "stepId": 27,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "savedAt": "2026-06-08T21:30:35.868Z",
+  "agentName": "agentDiscoverSolutionScope",
+  "stepId": 5,
+  "planning": {
+    "planId": "req-discover-scope",
+    "dependsOn": [
+      "req-clarification-answer"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitSolutionScopeDraft",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "domain": "cafeFlow",
+          "summary": "Aplicativo CafeFlow para cafeterias e lanchonetes pequenas, focado em pedidos rápidos, coordenação da cozinha e controle simples de estoque por ingrediente. Inclui POS, gestão de cardápio/estoque, dashboard com métricas básicas e relatório de fechamento de turno, com assistente IA para resumo de vendas e sugestões de promoção.",
+          "actors": [
+            {
+              "actorId": "caixa",
+              "title": "Caixa",
+              "description": "Registra pedidos no POS e acompanha status até entrega."
+            },
+            {
+              "actorId": "cozinha",
+              "title": "Cozinha",
+              "description": "Recebe pedidos, atualiza status de preparo e entrega."
+            },
+            {
+              "actorId": "gerente",
+              "title": "Gerente",
+              "description": "Configura cardápio, estoque e acompanha métricas e fechamento de turno."
+            },
+            {
+              "actorId": "assistenteIA",
+              "title": "Assistente IA",
+              "description": "Gera resumo de vendas do dia e sugere itens para promover."
+            }
+          ],
+          "capabilities": [
+            {
+              "capabilityId": "registrarPedido",
+              "title": "Registrar pedido",
+              "description": "Criar pedido com mesa ou takeout, itens e observações.",
+              "actor": "caixa",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "atualizarStatusPedido",
+              "title": "Atualizar status do pedido",
+              "description": "Marcar pedido como Novo, Em preparo, Pronto ou Entregue.",
+              "actor": "cozinha",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "acompanharFilaCozinha",
+              "title": "Acompanhar fila da cozinha",
+              "description": "Visualizar pedidos em aberto e seus status.",
+              "actor": "cozinha",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "gerenciarCardapio",
+              "title": "Gerenciar cardápio",
+              "description": "Criar e ajustar itens do cardápio, categorias e preços.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "gerenciarEstoqueIngredientes",
+              "title": "Gerenciar estoque por ingrediente",
+              "description": "Cadastrar itens de estoque e níveis mínimos, com baixa automática por ingrediente.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "visualizarDashboard",
+              "title": "Visualizar dashboard",
+              "description": "Ver vendas do dia, itens mais vendidos e alertas de estoque baixo.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "fecharTurnoDiario",
+              "title": "Fechar turno diário",
+              "description": "Gerar relatório de fechamento de turno e totalizadores do dia.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "gerarResumoVendasIA",
+              "title": "Resumo de vendas com IA",
+              "description": "Gerar resumo de vendas do dia.",
+              "actor": "assistenteIA",
+              "priority": "soon"
+            },
+            {
+              "capabilityId": "sugerirPromocoesIA",
+              "title": "Sugestões de promoção com IA",
+              "description": "Sugerir itens para promover com base nos últimos 7 dias.",
+              "actor": "assistenteIA",
+              "priority": "soon"
+            }
+          ],
+          "artifactSignals": {
+            "pages": [
+              {
+                "signal": "dashboardVendas",
+                "title": "Dashboard de Vendas",
+                "actor": "gerente",
+                "reason": "Métricas básicas do MVP: vendas do dia, itens mais vendidos e estoque baixo.",
+                "priority": "now"
+              },
+              {
+                "signal": "posRapido",
+                "title": "POS Rápido",
+                "actor": "caixa",
+                "reason": "Interface de lançamento de pedido com atualização de status.",
+                "priority": "now"
+              },
+              {
+                "signal": "painelCozinha",
+                "title": "Painel da Cozinha",
+                "actor": "cozinha",
+                "reason": "Fila de pedidos e mudança de status de preparo.",
+                "priority": "now"
+              },
+              {
+                "signal": "gestaoCardapioEstoque",
+                "title": "Gestão de Cardápio e Estoque",
+                "actor": "gerente",
+                "reason": "Cadastro e manutenção de itens do cardápio e ingredientes.",
+                "priority": "now"
+              },
+              {
+                "signal": "relatorioFechamentoTurno",
+                "title": "Relatório de Fechamento de Turno",
+                "actor": "gerente",
+                "reason": "Fechamento diário com totalizadores e resumo.",
+                "priority": "now"
+              },
+              {
+                "signal": "adminDashboard",
+                "title": "Dashboard Administrativo",
+                "actor": "gerente",
+                "reason": "Configurações gerais e visão consolidada de métricas no MVP.",
+                "priority": "soon"
+              }
+            ],
+            "workflows": [
+              {
+                "signal": "fluxoPedidoPOS",
+                "title": "Fluxo de Pedido POS",
+                "actor": "caixa",
+                "reason": "Criação do pedido e envio para cozinha.",
+                "priority": "now"
+              },
+              {
+                "signal": "fluxoCozinhaStatus",
+                "title": "Fluxo de Status de Cozinha",
+                "actor": "cozinha",
+                "reason": "Transições Novo → Em preparo → Pronto → Entregue.",
+                "priority": "now"
+              },
+              {
+                "signal": "fluxoFechamentoTurno",
+                "title": "Fluxo de Fechamento de Turno",
+                "actor": "gerente",
+                "reason": "Consolidação de vendas e geração do relatório.",
+                "priority": "now"
+              }
+            ],
+            "plugins": [],
+            "agents": [
+              {
+                "signal": "agenteResumoVendas",
+                "title": "Agente de Resumo de Vendas",
+                "actor": "assistenteIA",
+                "reason": "Geração automática do resumo diário.",
+                "priority": "soon"
+              },
+              {
+                "signal": "agenteSugestoesPromocao",
+                "title": "Agente de Sugestões de Promoção",
+                "actor": "assistenteIA",
+                "reason": "Sugestões baseadas nos últimos 7 dias.",
+                "priority": "soon"
+              }
+            ],
+            "horizontalModules": [
+              {
+                "signal": "autenticacaoPerfis",
+                "title": "Autenticação e Perfis",
+                "actor": "gerente",
+                "reason": "Perfis distintos para Caixa, Cozinha e Gerente.",
+                "priority": "now"
+              }
+            ],
+            "mdm": [
+              {
+                "signal": "mdmCafeFlow",
+                "title": "MDM CafeFlow",
+                "actor": "gerente",
+                "reason": "Entidades centrais: Item do Cardápio, Pedido, Turno Diário, Item de Estoque e Ingredientes com baixa automática.",
+                "priority": "now",
+                "mdmKind": "core"
+              }
+            ],
+            "metrics": [
+              {
+                "signal": "metricasVendasDiarias",
+                "title": "Métricas de Vendas Diárias",
+                "actor": "gerente",
+                "reason": "MVP requer métricas básicas no dashboard.",
+                "priority": "now"
+              },
+              {
+                "signal": "metricasItensMaisVendidos",
+                "title": "Métricas de Itens Mais Vendidos",
+                "actor": "gerente",
+                "reason": "Identificar itens mais vendidos para operação e IA.",
+                "priority": "now"
+              },
+              {
+                "signal": "metricasEstoqueBaixo",
+                "title": "Métricas de Estoque Baixo",
+                "actor": "gerente",
+                "reason": "Alertas de reposição de ingredientes.",
+                "priority": "now"
+              }
+            ],
+            "usecases": [
+              {
+                "signal": "criarPedido",
+                "title": "Criar Pedido",
+                "actor": "caixa",
+                "reason": "Gravação do pedido com itens e tipo mesa/takeout.",
+                "priority": "now"
+              },
+              {
+                "signal": "atualizarStatusPedidoUC",
+                "title": "Atualizar Status do Pedido",
+                "actor": "cozinha",
+                "reason": "Persistir transições de status e atualizar fila.",
+                "priority": "now"
+              },
+              {
+                "signal": "baixarEstoqueIngredientes",
+                "title": "Baixa de Estoque por Ingrediente",
+                "actor": "gerente",
+                "reason": "Atualizar estoque com base nos itens vendidos.",
+                "priority": "now"
+              },
+              {
+                "signal": "gerarRelatorioFechamento",
+                "title": "Gerar Relatório de Fechamento",
+                "actor": "gerente",
+                "reason": "Consolidar vendas e produzir resumo do turno.",
+                "priority": "now"
+              },
+              {
+                "signal": "calcularMetricasDashboard",
+                "title": "Calcular Métricas do Dashboard",
+                "actor": "gerente",
+                "reason": "Atualizar métricas do dia e itens mais vendidos.",
+                "priority": "now"
+              }
+            ]
+          },
+          "businessRisks": [
+            "Falta de definição sobre pagamentos pode impactar o fluxo de pedido e fechamento de turno.",
+            "Integração opcional com impressora/display de cozinha pode alterar o fluxo operacional.",
+            "Baixa automática por ingrediente exige cadastro consistente de receitas por item do cardápio."
+          ],
+          "missingContext": [
+            "Forma de pagamento e necessidade de fechamento por meio de caixa.",
+            "Necessidade de integração com impressora térmica ou display de cozinha."
+          ]
+        },
+        "questions": [
+          "O MVP deve registrar pagamentos (dinheiro/cartão) no pedido e no fechamento de turno?",
+          "Há necessidade de integração com impressora térmica ou apenas painel de cozinha?",
+          "O relatório de fechamento deve considerar apenas vendas ou também cancelamentos e estornos?"
+        ],
+        "trace": [
+          "Prompt inicial define entidades principais, telas chave e LLM.",
+          "Clarificação confirma perfis Caixa/Cozinha/Gerente, status do pedido e estoque por ingrediente.",
+          "MVP inclui métricas básicas no dashboard."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 29,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

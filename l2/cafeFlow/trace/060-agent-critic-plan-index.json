@@ -1,0 +1,56 @@
+{
+  "savedAt": "2026-06-08T22:10:05.199Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 60,
+  "planning": {
+    "planId": "plan-index-critic:usecasePlan:1",
+    "dependsOn": [
+      "plan-usecase-entities"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "needs_input",
+        "result": {
+          "approved": false,
+          "errors": [
+            {
+              "code": "missing-obvious-read-usecase-kitchen-queue",
+              "message": "Falta usecase de leitura para fila de cozinha (capability acompanharFilaCozinha / page Painel da Cozinha). O BFF não possui usecaseId para listar pedidos em aberto.",
+              "path": "usecases"
+            },
+            {
+              "code": "missing-obvious-read-usecase-dashboard",
+              "message": "Falta usecase de leitura para métricas do dashboard (capability visualizarDashboard / page Dashboard de Vendas). O BFF não possui usecaseId para consultar daily_sales_metrics, top_selling_items_metrics ou low_stock_metrics.",
+              "path": "usecases"
+            }
+          ],
+          "warnings": [
+            {
+              "code": "promotion-suggestion-lifecycle-incomplete",
+              "message": "A entidade promotionSuggestionEntity permite update, mas nenhum usecase realiza essa operação.",
+              "path": "usecaseEntities.promotionSuggestionEntity.allowedOperations"
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Verificando cobertura de leitura para pages e capabilities aprovadas.",
+          "Identificando usecases de escrita em tabelas transacionais e métricas.",
+          "Verificando transições de ciclo de vida das entidades.",
+          "Concluído: faltam usecases de leitura óbvios para fila de cozinha e dashboard."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 61,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

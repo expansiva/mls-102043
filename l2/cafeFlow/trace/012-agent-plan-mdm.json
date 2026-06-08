@@ -1,0 +1,114 @@
+{
+  "savedAt": "2026-06-08T21:33:41.044Z",
+  "agentName": "agentPlanMDM",
+  "stepId": 12,
+  "planning": {
+    "planId": "plan-mdm",
+    "dependsOn": [
+      "plan-finalize-solution-plan"
+    ],
+    "executionMode": "parallel_static",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitMdmPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "mdmDomains": [
+            {
+              "domainId": "menuItem",
+              "title": "Item do Cardápio",
+              "masterEntities": [
+                "MenuItem",
+                "RecipeLine"
+              ],
+              "sourceOfTruth": "usecaseGerenciarCardapio",
+              "consumers": [
+                "OrderItem",
+                "KitchenTicket",
+                "PromotionSuggestion",
+                "metricTableItensMaisVendidos",
+                "workflowPedidoPos",
+                "posRapido",
+                "painelCozinha",
+                "usecaseCriarPedido",
+                "usecaseAtualizarStatusPedido",
+                "usecaseBaixarEstoqueIngredientes",
+                "agenteSugestoesPromocao"
+              ],
+              "governanceRules": [
+                "rule-menuitem-recipe-required"
+              ]
+            },
+            {
+              "domainId": "ingredient",
+              "title": "Ingrediente e Estoque",
+              "masterEntities": [
+                "Ingredient",
+                "StockItem"
+              ],
+              "sourceOfTruth": "usecaseAjustarEstoque",
+              "consumers": [
+                "RecipeLine",
+                "Order",
+                "OrderItem",
+                "metricTableEstoqueBaixo",
+                "dashboardVendas",
+                "painelCozinha",
+                "usecaseBaixarEstoqueIngredientes",
+                "usecaseCalcularMetricasDashboard",
+                "workflowStatusCozinha",
+                "gestaoCardapioEstoque"
+              ],
+              "governanceRules": [
+                "rule-low-stock-alert",
+                "rule-stock-deduct-by-ingredient"
+              ]
+            },
+            {
+              "domainId": "dailyShift",
+              "title": "Turno Diário",
+              "masterEntities": [
+                "DailyShift"
+              ],
+              "sourceOfTruth": "usecaseFecharTurno",
+              "consumers": [
+                "Order",
+                "SalesSummary",
+                "metricTableVendasDiarias",
+                "relatorioFechamentoTurno",
+                "workflowFechamentoTurno",
+                "usecaseCalcularMetricasDashboard",
+                "agenteResumoVendas"
+              ],
+              "governanceRules": [
+                "rule-shift-close-required"
+              ]
+            }
+          ]
+        },
+        "questions": [
+          "O sistema deve registrar o cliente na mesa ou no takeout (domínio MDM de Cliente), ou o pedido permanece sem identificação de parte externa?",
+          "Haverá mais de uma unidade/loja operando, exigindo um domínio MDM de Location?",
+          "Os colaboradores (caixa, cozinha, gerente) precisam ser mantidos como cadastro de pessoal (Staff) ou apenas perfis de acesso são suficientes?"
+        ],
+        "trace": [
+          "Identificadas entidades mestre estáveis no domínio foodServicePos: MenuItem, Ingredient, StockItem e DailyShift.",
+          "MenuItem e RecipeLine agrupados no domínio menuItem por representarem o catálogo de produtos e suas composições.",
+          "Ingredient e StockItem unificados no domínio ingredient por vínculo 1:1 e gestão conjunta no estoque.",
+          "DailyShift incluído como domínio de referência operacional para consolidação de pedidos e fechamento.",
+          "Entidades transacionais (Order, OrderItem, KitchenTicket, SalesSummary, PromotionSuggestion) mantidas como consumidoras, não como mestre.",
+          "Não identificada entidade Cliente no modelo atual; questão levantada para validação."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 35,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

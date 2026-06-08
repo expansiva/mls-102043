@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "2026-06-06",
+  "artifactType": "indexCheckpoint",
+  "indexName": "workflowIndex",
+  "moduleName": "cafeFlow",
+  "status": "frozen",
+  "approvedAt": "2026-06-08T22:14:32.830Z",
+  "source": {
+    "agentName": "agentPlanWorkflowIndex",
+    "stepId": 71,
+    "planId": "plan-index-critic:workflowIndex:3"
+  },
+  "healthReport": {
+    "localErrors": [],
+    "localWarnings": [],
+    "criticErrors": [],
+    "criticWarnings": [],
+    "attempts": 3,
+    "notes": []
+  },
+  "index": {
+    "runId": "provider-tool-call",
+    "stepId": "repair:workflowIndex",
+    "schemaVersion": "2026-06-02",
+    "status": "ok",
+    "result": {
+      "workflows": [
+        {
+          "workflowId": "orderLifecycle",
+          "title": "Ciclo de Vida do Pedido",
+          "purpose": "Coordenar o pedido desde o registro no POS, passando pela fila da cozinha, até a entrega, incluindo a baixa automática de estoque por ingrediente.",
+          "executionMode": "entityLifecycle",
+          "createsTask": false,
+          "priority": "now",
+          "actors": [
+            "caixa",
+            "cozinha"
+          ],
+          "relatedEntities": [
+            "Order",
+            "OrderItem",
+            "KitchenTicket"
+          ],
+          "persistenceRefs": [
+            "orderAggregate"
+          ],
+          "usecaseRefs": [
+            "usecaseCriarPedido",
+            "usecaseAtualizarStatusPedido",
+            "usecaseBaixarEstoqueIngredientes"
+          ],
+          "metricRefs": [
+            "dailySalesMetrics",
+            "topSellingItemsMetrics"
+          ],
+          "relatedCapabilities": [
+            "registrarPedido",
+            "atualizarStatusPedido",
+            "acompanharFilaCozinha"
+          ],
+          "rulesApplied": [
+            "rule-order-status-transition",
+            "rule-stock-deduct-by-ingredient"
+          ],
+          "implementationSuggestions": [
+            {
+              "suggestionId": "suggOrderKitchenNotification",
+              "title": "Notificação em tempo real para cozinha",
+              "reason": "A cozinha deve receber notificação push assim que o pedido for confirmado no POS.",
+              "priority": "now"
+            },
+            {
+              "suggestionId": "suggOrderPosSync",
+              "title": "Sincronização de status no POS",
+              "reason": "O caixa deve visualizar atualizações de status (Em preparo, Pronto) sem recarregar a interface.",
+              "priority": "now"
+            }
+          ]
+        },
+        {
+          "workflowId": "dailyShiftClose",
+          "title": "Fechamento de Turno Diário",
+          "purpose": "Consolidar as vendas do período, gerar o resumo de vendas e concluir o turno diário com totalizadores e auditoria.",
+          "executionMode": "entityLifecycle",
+          "createsTask": false,
+          "priority": "now",
+          "actors": [
+            "gerente"
+          ],
+          "relatedEntities": [
+            "DailyShift",
+            "SalesSummary"
+          ],
+          "persistenceRefs": [
+            "salesSummary"
+          ],
+          "usecaseRefs": [
+            "usecaseFecharTurno"
+          ],
+          "metricRefs": [
+            "dailySalesMetrics"
+          ],
+          "relatedCapabilities": [
+            "fecharTurnoDiario"
+          ],
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ],
+          "implementationSuggestions": [
+            {
+              "suggestionId": "suggShiftCloseConfirmation",
+              "title": "Confirmação com totalizadores antes de fechar",
+              "reason": "Exibir resumo dos totalizadores do turno para conferência do gerente antes da confirmação final.",
+              "priority": "now"
+            },
+            {
+              "suggestionId": "suggShiftReopenAudit",
+              "title": "Auditoria de reabertura de turno",
+              "reason": "Permitir reabertura apenas com justificativa registrada para fins de auditoria.",
+              "priority": "later"
+            }
+          ]
+        },
+        {
+          "workflowId": "promotionSuggestionLifecycle",
+          "title": "Ciclo de Vida de Sugestão de Promoção",
+          "purpose": "Gerenciar as sugestões de promoção geradas pela IA, desde a criação até a revisão, aprovação, rejeição ou expiração.",
+          "executionMode": "entityLifecycle",
+          "createsTask": false,
+          "priority": "soon",
+          "actors": [
+            "assistenteIA",
+            "gerente"
+          ],
+          "relatedEntities": [
+            "PromotionSuggestion",
+            "MenuItem"
+          ],
+          "persistenceRefs": [
+            "promotionSuggestion"
+          ],
+          "usecaseRefs": [
+            "usecaseGerarSugestoesPromocaoIA"
+          ],
+          "metricRefs": [],
+          "relatedCapabilities": [
+            "sugerirPromocoesIA"
+          ],
+          "rulesApplied": [],
+          "implementationSuggestions": [
+            {
+              "suggestionId": "suggPromoReviewTask",
+              "title": "Criar tarefa de revisão para o gerente",
+              "reason": "Ao gerar uma sugestão, criar uma tarefa para o gerente revisar e decidir pela aprovação ou rejeição.",
+              "priority": "soon"
+            }
+          ]
+        },
+        {
+          "workflowId": "lowStockAlert",
+          "title": "Automação de Alerta de Estoque Baixo",
+          "purpose": "Monitorar periodicamente os níveis de estoque e gerar alertas operacionais quando ingredientes estiverem abaixo do nível mínimo configurado.",
+          "executionMode": "automation",
+          "createsTask": false,
+          "priority": "now",
+          "actors": [
+            "gerente"
+          ],
+          "relatedEntities": [
+            "StockItem",
+            "Ingredient"
+          ],
+          "persistenceRefs": [],
+          "usecaseRefs": [],
+          "metricRefs": [
+            "lowStockMetrics"
+          ],
+          "relatedCapabilities": [
+            "gerenciarEstoqueIngredientes",
+            "visualizarDashboard"
+          ],
+          "rulesApplied": [
+            "rule-low-stock-alert"
+          ],
+          "implementationSuggestions": [
+            {
+              "suggestionId": "suggStockDashboardBadge",
+              "title": "Badge de alerta no dashboard operacional",
+              "reason": "O alerta deve ser exibido em destaque no dashboard do gerente para ação imediata.",
+              "priority": "now"
+            },
+            {
+              "suggestionId": "suggStockPushNotification",
+              "title": "Notificação push para o gerente",
+              "reason": "Garantir que o gerente seja notificado fora da aplicação quando o estoque estiver crítico.",
+              "priority": "soon"
+            }
+          ]
+        },
+        {
+          "workflowId": "dailySalesSummaryAgent",
+          "title": "Geração Automática de Resumo de Vendas",
+          "purpose": "Executar a geração do resumo narrativo de vendas do dia via agente de IA, sob demanda ou após o fechamento do turno.",
+          "executionMode": "automation",
+          "createsTask": false,
+          "priority": "soon",
+          "actors": [
+            "assistenteIA",
+            "gerente"
+          ],
+          "relatedEntities": [
+            "SalesSummary",
+            "DailyShift"
+          ],
+          "persistenceRefs": [
+            "salesSummary"
+          ],
+          "usecaseRefs": [
+            "usecaseGerarResumoVendasIA"
+          ],
+          "metricRefs": [],
+          "relatedCapabilities": [
+            "gerarResumoVendasIA"
+          ],
+          "rulesApplied": [],
+          "implementationSuggestions": [
+            {
+              "suggestionId": "suggSummaryTriggerOnShiftClose",
+              "title": "Disparo automático após fechamento de turno",
+              "reason": "O resumo deve ser gerado automaticamente assim que o turno for fechado, reduzindo intervenção manual.",
+              "priority": "soon"
+            },
+            {
+              "suggestionId": "suggSummaryCache",
+              "title": "Cache do resumo narrativo",
+              "reason": "Armazenar o resumo gerado para evitar reprocessamento e custos repetidos de IA para o mesmo turno.",
+              "priority": "later"
+            }
+          ]
+        }
+      ]
+    },
+    "questions": [],
+    "trace": [
+      "Corrigi usecaseRefs do lowStockAlert removendo casos de uso não executados pela automação.",
+      "Removi metricRefs de workflows que apenas consomem métricas sem alimentá-las (sugestão de promoção e resumo de vendas)."
+    ]
+  }
+}

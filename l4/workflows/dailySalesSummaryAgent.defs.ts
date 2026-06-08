@@ -1,0 +1,158 @@
+/// <mls fileReference="_102043_/l4/workflows/dailySalesSummaryAgent.defs.ts" enhancement="_blank"/>
+
+export const dailySalesSummaryAgentDef = {
+  "schemaVersion": "2026-06-06",
+  "artifactType": "workflow",
+  "artifactId": "dailySalesSummaryAgent",
+  "moduleName": "cafeFlow",
+  "status": "draft",
+  "source": {
+    "agentName": "agentPlanWorkflowDefinition",
+    "stepId": 78,
+    "planId": ""
+  },
+  "data": {
+    "workflowDefinition": {
+      "workflowId": "dailySalesSummaryAgent",
+      "title": "Geração Automática de Resumo de Vendas",
+      "purpose": "Executar a geração do resumo narrativo de vendas do dia via agente de IA, sob demanda ou após o fechamento do turno.",
+      "executionMode": "automation",
+      "createsTask": false,
+      "taskConfig": {
+        "taskTitleTemplate": "",
+        "assigneeRules": [],
+        "slaRules": [],
+        "taskRoomRequired": false
+      },
+      "actors": [
+        "assistenteIA",
+        "gerente"
+      ],
+      "states": [
+        {
+          "stateId": "aguardandoResumo",
+          "description": "Aguardando solicitação ou evento de fechamento de turno para iniciar a geração do resumo."
+        },
+        {
+          "stateId": "resumoGerado",
+          "description": "Resumo narrativo de vendas gerado com sucesso para o turno."
+        },
+        {
+          "stateId": "falhaGeracao",
+          "description": "Falha na geração do resumo narrativo do turno."
+        }
+      ],
+      "transitions": [
+        {
+          "from": "aguardandoResumo",
+          "to": "resumoGerado",
+          "trigger": "gerarResumo",
+          "actor": "assistenteIA",
+          "conditions": [
+            "rule-shift-close-required"
+          ],
+          "actions": [],
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ]
+        },
+        {
+          "from": "aguardandoResumo",
+          "to": "falhaGeracao",
+          "trigger": "falhaGeracaoResumo",
+          "actor": "assistenteIA",
+          "conditions": [],
+          "actions": [],
+          "rulesApplied": []
+        },
+        {
+          "from": "falhaGeracao",
+          "to": "aguardandoResumo",
+          "trigger": "reprocessarResumo",
+          "actor": "gerente",
+          "conditions": [
+            "rule-shift-close-required"
+          ],
+          "actions": [],
+          "rulesApplied": [
+            "rule-shift-close-required"
+          ]
+        }
+      ],
+      "requiredEntities": [
+        "SalesSummary",
+        "DailyShift"
+      ],
+      "persistenceRefs": [
+        "salesSummary"
+      ],
+      "usecaseRefs": [
+        "usecaseGerarResumoVendasIA"
+      ],
+      "metricRefs": [],
+      "userActions": [
+        "Solicitar geração de resumo de vendas",
+        "Reprocessar geração após falha"
+      ],
+      "relatedPages": [],
+      "relatedAgents": [
+        "assistenteIA"
+      ],
+      "relatedPlugins": [],
+      "rulesApplied": [],
+      "implementationSuggestions": [
+        {
+          "suggestionId": "suggSummaryTriggerOnShiftClose",
+          "title": "Disparo automático após fechamento de turno",
+          "priority": "soon",
+          "description": "O resumo deve ser gerado automaticamente assim que o turno for fechado, reduzindo intervenção manual.",
+          "tradeoff": "Exige monitoramento de eventos de fechamento do turno para disparo automático."
+        },
+        {
+          "suggestionId": "suggSummaryCache",
+          "title": "Cache do resumo narrativo",
+          "priority": "later",
+          "description": "Armazenar o resumo gerado para evitar reprocessamento e custos repetidos de IA para o mesmo turno.",
+          "tradeoff": "Requer estratégia de invalidação quando dados do turno forem reabertos."
+        },
+        {
+          "suggestionId": "suggNoTaskAutomation",
+          "title": "Sem criação de tarefa para fluxo automatizado",
+          "priority": "now",
+          "description": "A geração do resumo é automatizada e não exige acompanhamento manual; manter sem tarefas evita ruído operacional.",
+          "tradeoff": "Falhas exigem monitoramento externo ou alertas para garantir reprocessamento."
+        }
+      ],
+      "workflowScope": "multiModule",
+      "moduleRefs": [
+        "cafeFlow",
+        "mdm"
+      ],
+      "pageRefsByModule": [],
+      "entityRefsByModule": [
+        {
+          "moduleId": "cafeFlow",
+          "entity": "SalesSummary"
+        },
+        {
+          "moduleId": "mdm",
+          "entity": "DailyShift"
+        }
+      ],
+      "writesArtifacts": [
+        {
+          "moduleId": "cafeFlow",
+          "artifactType": "workflow",
+          "artifactId": "dailySalesSummaryAgent"
+        }
+      ]
+    },
+    "defsPlan": {
+      "fileName": "workflows/dailySalesSummaryAgent.defs.ts",
+      "exportName": "dailySalesSummaryAgentDef",
+      "saveAsDefs": true
+    }
+  }
+} as const;
+
+export default dailySalesSummaryAgentDef;
