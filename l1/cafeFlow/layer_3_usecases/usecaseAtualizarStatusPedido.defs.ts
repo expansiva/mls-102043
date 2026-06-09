@@ -55,6 +55,13 @@ export const usecaseAtualizarStatusPedidoUsecasePlan = {
         "rule-order-status-transition"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "updateOrderStatusPreparing",
+    "inputTypeName": "UpdateOrderStatusPreparingInput",
+    "outputTypeName": "OrderAggregate",
+    "inputTypeDefinition": "export interface UpdateOrderStatusPreparingInput {\n  orderId: string;\n}",
+    "outputTypeDefinition": "export interface OrderAggregate {\n  orderId: string;\n  status: OrderStatus;\n  kitchenTicketStatus?: KitchenTicketStatus;\n  updatedAt?: string;\n}"
   }
 } as const;
 

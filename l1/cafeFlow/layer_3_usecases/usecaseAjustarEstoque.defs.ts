@@ -63,6 +63,13 @@ export const usecaseAjustarEstoqueUsecasePlan = {
         "rule-low-stock-alert"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "adjustStockQuantity",
+    "inputTypeName": "AdjustStockQuantityInput",
+    "outputTypeName": "StockItemOutput",
+    "inputTypeDefinition": "export interface AdjustStockQuantityInput {\n  stockItemId: string;\n  newQuantity: number;\n}",
+    "outputTypeDefinition": "export type StockItemOutput = StockItemRecord;"
   }
 } as const;
 

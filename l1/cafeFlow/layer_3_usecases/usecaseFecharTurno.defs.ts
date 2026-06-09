@@ -67,6 +67,13 @@ export const usecaseFecharTurnoUsecasePlan = {
         "rule-shift-close-required"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "closeDailyShift",
+    "inputTypeName": "CloseDailyShiftInput",
+    "outputTypeName": "CloseDailyShiftOutput",
+    "inputTypeDefinition": "export interface CloseDailyShiftInput {\n  dailyShiftId: string;\n  closedByUserId: string;\n}",
+    "outputTypeDefinition": "export interface CloseDailyShiftOutput {\n  dailyShiftId: string;\n  status: DailyShiftStatus;\n  closedAt: string;\n}"
   }
 } as const;
 

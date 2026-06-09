@@ -53,6 +53,13 @@ export const usecaseGerarResumoVendasIAUsecasePlan = {
       ],
       "rulesApplied": []
     }
+  },
+  "implementation": {
+    "functionName": "generateSalesNarrative",
+    "inputTypeName": "GenerateSalesNarrativeInput",
+    "outputTypeName": "GenerateSalesNarrativeOutput",
+    "inputTypeDefinition": "export interface GenerateSalesNarrativeInput {\n  businessDate?: string;\n  shiftId?: string;\n}",
+    "outputTypeDefinition": "export interface GenerateSalesNarrativeOutput {\n  narrative: string;\n  dataPoints: {\n    totalGrossSales: number;\n    totalNetSales: number;\n    totalOrders: number;\n    avgTicket: number;\n    summariesFound: number;\n    metricsFound: number;\n    shiftsFound: number;\n  };\n}"
   }
 } as const;
 

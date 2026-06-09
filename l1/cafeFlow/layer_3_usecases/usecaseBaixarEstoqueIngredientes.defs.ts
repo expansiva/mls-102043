@@ -72,6 +72,13 @@ export const usecaseBaixarEstoqueIngredientesUsecasePlan = {
         "rule-low-stock-alert"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "deductStockByRecipe",
+    "inputTypeName": "DeductStockByRecipeInput",
+    "outputTypeName": "DeductStockByRecipeOutput",
+    "inputTypeDefinition": "export interface DeductStockByRecipeInput {\n  orderId: string;\n}",
+    "outputTypeDefinition": "export interface DeductStockByRecipeOutput {\n  stockItems: StockItemRecord[];\n}"
   }
 } as const;
 

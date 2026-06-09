@@ -60,6 +60,13 @@ export const usecaseCriarPedidoUsecasePlan = {
         "rule-order-status-transition"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "createOrder",
+    "inputTypeName": "CreateOrderInput",
+    "outputTypeName": "OrderAggregate",
+    "inputTypeDefinition": "export interface CreateOrderInput {\n  shiftId: string;\n  items: CreateOrderItemInput[];\n}",
+    "outputTypeDefinition": "export interface OrderAggregate {\n  orderId: string;\n  shiftId: string;\n  status: OrderStatus;\n  items: OrderItem[];\n  totalAmount: number;\n  createdAt: string;\n  updatedAt: string;\n  kitchenTicketId?: string | null;\n  kitchenSentAt?: string | null;\n}"
   }
 } as const;
 

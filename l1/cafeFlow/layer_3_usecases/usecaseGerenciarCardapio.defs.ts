@@ -71,6 +71,13 @@ export const usecaseGerenciarCardapioUsecasePlan = {
         "rule-menuitem-recipe-required"
       ]
     }
+  },
+  "implementation": {
+    "functionName": "createMenuItem",
+    "inputTypeName": "CreateMenuItemInput",
+    "outputTypeName": "CreateMenuItemOutput",
+    "inputTypeDefinition": "export interface CreateMenuItemInput {\n  name: string;\n  description?: string | null;\n  price: number;\n  isActive?: boolean;\n  recipeLines: RecipeLineInput[];\n}",
+    "outputTypeDefinition": "export interface CreateMenuItemOutput {\n  menuItem: MenuItemRecord;\n  recipeLines: RecipeLineRecord[];\n}"
   }
 } as const;
 

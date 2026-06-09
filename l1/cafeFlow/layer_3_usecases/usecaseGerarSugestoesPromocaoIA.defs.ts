@@ -61,6 +61,13 @@ export const usecaseGerarSugestoesPromocaoIAUsecasePlan = {
       ],
       "rulesApplied": []
     }
+  },
+  "implementation": {
+    "functionName": "analyzeSellingTrends",
+    "inputTypeName": "AnalyzeSellingTrendsInput",
+    "outputTypeName": "AnalyzeSellingTrendsOutput",
+    "inputTypeDefinition": "export interface AnalyzeSellingTrendsInput {\n  limit?: number;\n}",
+    "outputTypeDefinition": "export interface AnalyzeSellingTrendsOutput {\n  trends: SellingTrend[];\n}"
   }
 } as const;
 

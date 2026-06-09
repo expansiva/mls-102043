@@ -59,6 +59,13 @@ export const usecaseCalcularMetricasDashboardUsecasePlan = {
       ],
       "rulesApplied": []
     }
+  },
+  "implementation": {
+    "functionName": "refreshDailySalesMetrics",
+    "inputTypeName": "RefreshDailySalesMetricsInput",
+    "outputTypeName": "RefreshDailySalesMetricsOutput",
+    "inputTypeDefinition": "export interface RefreshDailySalesMetricsInput {\n  metricDate: string; // YYYY-MM-DD\n}",
+    "outputTypeDefinition": "export interface RefreshDailySalesMetricsOutput {\n  metricDate: string;\n  totalSales: number;\n  totalOrders: number;\n  updatedAt: string;\n}"
   }
 } as const;
 
