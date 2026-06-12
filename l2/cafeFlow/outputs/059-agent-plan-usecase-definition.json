@@ -1,0 +1,61 @@
+{
+  "savedAt": "2026-06-12T14:48:06.955Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 59,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "consultarDashboard",
+            "commands": [
+              {
+                "commandId": "consultarDashboard",
+                "input": [],
+                "output": [
+                  {
+                    "name": "pedidos",
+                    "type": "PedidoEntity[]"
+                  },
+                  {
+                    "name": "turnos",
+                    "type": "TurnoEntity[]"
+                  },
+                  {
+                    "name": "estoqueItens",
+                    "type": "EstoqueEntity[]"
+                  },
+                  {
+                    "name": "metricasVendasDiarias",
+                    "type": "DailySalesMetric[]"
+                  },
+                  {
+                    "name": "itensMaisVendidos",
+                    "type": "TopSellingItemMetric[]"
+                  },
+                  {
+                    "name": "alertasBaixoEstoque",
+                    "type": "LowStockMetric[]"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Usecase consultarDashboard consolidado com saída de pedidos, turnos, estoque e métricas lidas das tabelas de métricas."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

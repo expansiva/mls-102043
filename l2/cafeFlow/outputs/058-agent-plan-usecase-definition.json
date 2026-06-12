@@ -1,0 +1,49 @@
+{
+  "savedAt": "2026-06-12T14:48:01.185Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 58,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "obterTurno",
+            "commands": [
+              {
+                "commandId": "obterTurno",
+                "input": [
+                  {
+                    "name": "turnoId",
+                    "type": "string",
+                    "required": true
+                  }
+                ],
+                "output": [
+                  {
+                    "name": "turno",
+                    "type": "TurnoEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Derivei um único comando para obter detalhes de um turno específico.",
+          "Entrada mínima necessária é o identificador do turno.",
+          "Saída retorna a entidade Turno."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

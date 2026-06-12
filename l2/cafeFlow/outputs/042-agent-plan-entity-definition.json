@@ -1,0 +1,93 @@
+{
+  "savedAt": "2026-06-12T14:24:00.302Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 42,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "AiInsightRequest",
+            "title": "Solicitação de Insight IA",
+            "description": "Pedido de geração de resumo de vendas ou sugestão de promoções.",
+            "ownership": "moduleOwned",
+            "kind": "entity",
+            "fields": [
+              {
+                "fieldId": "aiInsightRequestId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único da solicitação de insight IA."
+              },
+              {
+                "fieldId": "insightType",
+                "type": "string",
+                "required": true,
+                "description": "Tipo de insight solicitado.",
+                "enum": [
+                  "resumoVendas",
+                  "sugestaoPromocoes"
+                ]
+              },
+              {
+                "fieldId": "status",
+                "type": "string",
+                "required": true,
+                "description": "Status atual da solicitação de insight.",
+                "enum": [
+                  "solicitado",
+                  "gerado",
+                  "falhou"
+                ]
+              },
+              {
+                "fieldId": "dailyShiftId",
+                "type": "DailyShift",
+                "required": false,
+                "description": "Referência ao turno do dia relacionado à solicitação."
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação da solicitação."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização da solicitação."
+              }
+            ],
+            "statusEnum": [
+              "solicitado",
+              "gerado",
+              "falhou"
+            ],
+            "lifecycleStates": [
+              "solicitado",
+              "gerado",
+              "falhou"
+            ],
+            "rulesApplied": [
+              "aiInsightsUseMetrics"
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Entidade AiInsightRequest detalhada com campos essenciais, relacionamento manyToOne com DailyShift e regra aplicada."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 45,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

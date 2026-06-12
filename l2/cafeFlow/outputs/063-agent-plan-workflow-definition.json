@@ -1,0 +1,235 @@
+{
+  "savedAt": "2026-06-12T14:50:34.900Z",
+  "agentName": "agentPlanWorkflowDefinition",
+  "stepId": 63,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitWorkflowDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "workflowDefinition": {
+            "workflowId": "dailySalesMetricsAutomation",
+            "title": "Consolidação de métricas de vendas",
+            "purpose": "Consolidar dados de pedidos entregues em métricas diárias e de itens mais vendidos, alimentando o dashboard do gerente.",
+            "executionMode": "automation",
+            "createsTask": false,
+            "taskConfig": {
+              "taskTitleTemplate": "",
+              "assigneeRules": [],
+              "slaRules": [],
+              "taskRoomRequired": false
+            },
+            "actors": [
+              "gerente"
+            ],
+            "states": [
+              {
+                "stateId": "idle",
+                "description": "Aguardando eventos de pedidos entregues ou fechamento de turno."
+              },
+              {
+                "stateId": "incrementalUpdate",
+                "description": "Processando consolidação incremental das métricas de vendas."
+              },
+              {
+                "stateId": "shiftCloseFinal",
+                "description": "Executando consolidação final das métricas no fechamento do turno."
+              },
+              {
+                "stateId": "completed",
+                "description": "Métricas atualizadas com sucesso."
+              },
+              {
+                "stateId": "failed",
+                "description": "Falha ao atualizar métricas; aguardando nova tentativa automática."
+              }
+            ],
+            "transitions": [
+              {
+                "from": "idle",
+                "to": "incrementalUpdate",
+                "trigger": "orderDeliveredEvent",
+                "actor": "gerente",
+                "conditions": [
+                  "order.status == entregue"
+                ],
+                "actions": [
+                  "dailySalesMetrics.total_revenue += soma(orderItem.unitPrice * orderItem.quantity)",
+                  "dailySalesMetrics.order_count += 1",
+                  "dailySalesMetrics.items_sold += soma(orderItem.quantity)",
+                  "dailySalesMetrics.average_ticket = dailySalesMetrics.total_revenue / dailySalesMetrics.order_count",
+                  "topSellingItemsMetrics.quantity_sold += orderItem.quantity",
+                  "topSellingItemsMetrics.item_revenue += orderItem.unitPrice * orderItem.quantity",
+                  "topSellingItemsMetrics.order_count += 1"
+                ],
+                "rulesApplied": [
+                  "shiftCloseRequiresOrders"
+                ]
+              },
+              {
+                "from": "incrementalUpdate",
+                "to": "completed",
+                "trigger": "aggregationComplete",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "idle",
+                "to": "shiftCloseFinal",
+                "trigger": "shiftClosedEvent",
+                "actor": "gerente",
+                "conditions": [
+                  "shiftCloseRequiresOrders"
+                ],
+                "actions": [
+                  "dailySalesMetrics.total_revenue = soma(pedidos entregues no turno)",
+                  "dailySalesMetrics.order_count = contagem(pedidos entregues no turno)",
+                  "dailySalesMetrics.items_sold = soma(itens entregues no turno)",
+                  "dailySalesMetrics.average_ticket = dailySalesMetrics.total_revenue / dailySalesMetrics.order_count",
+                  "topSellingItemsMetrics.quantity_sold = soma(itens vendidos no turno)",
+                  "topSellingItemsMetrics.item_revenue = soma(receita por item no turno)",
+                  "topSellingItemsMetrics.order_count = contagem(pedidos com item no turno)"
+                ],
+                "rulesApplied": [
+                  "shiftCloseRequiresOrders"
+                ]
+              },
+              {
+                "from": "shiftCloseFinal",
+                "to": "completed",
+                "trigger": "aggregationComplete",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "incrementalUpdate",
+                "to": "failed",
+                "trigger": "aggregationFailed",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "shiftCloseFinal",
+                "to": "failed",
+                "trigger": "aggregationFailed",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "completed",
+                "to": "idle",
+                "trigger": "scheduleTick",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              }
+            ],
+            "requiredEntities": [
+              "Order",
+              "OrderItem"
+            ],
+            "persistenceRefs": [
+              "order",
+              "dailySalesMetrics",
+              "topSellingItemsMetrics"
+            ],
+            "usecaseRefs": [],
+            "metricRefs": [
+              "dailySalesMetrics",
+              "topSellingItemsMetrics"
+            ],
+            "userActions": [],
+            "relatedPages": [],
+            "relatedAgents": [],
+            "relatedPlugins": [],
+            "rulesApplied": [
+              "shiftCloseRequiresOrders"
+            ],
+            "implementationSuggestions": [
+              {
+                "suggestionId": "incrementalMetricsUpdate",
+                "title": "Atualização incremental das métricas",
+                "priority": "now",
+                "description": "Atualizar dailySalesMetrics e topSellingItemsMetrics a cada pedido entregue para reduzir latência no dashboard.",
+                "tradeoff": "Aumenta o número de escritas em timeseries, exigindo monitoramento de performance."
+              },
+              {
+                "suggestionId": "metricsOnShiftClose",
+                "title": "Cálculo final no fechamento do turno",
+                "priority": "now",
+                "description": "Recalcular métricas do turno ao fechar para garantir consistência de números após ajustes finais.",
+                "tradeoff": "Pode gerar pico de processamento ao final do turno."
+              },
+              {
+                "suggestionId": "noTaskAutomation",
+                "title": "Automação sem tarefa humana",
+                "priority": "now",
+                "description": "Manter o fluxo totalmente automático, já que o gerente apenas consome o dashboard e não precisa aprovar a consolidação.",
+                "tradeoff": "Falhas exigem monitoramento técnico, sem intervenção humana direta."
+              }
+            ],
+            "workflowScope": "singleModule",
+            "moduleRefs": [
+              "cafeFlow"
+            ],
+            "pageRefsByModule": [],
+            "entityRefsByModule": [
+              {
+                "moduleId": "cafeFlow",
+                "entity": "Order"
+              },
+              {
+                "moduleId": "cafeFlow",
+                "entity": "OrderItem"
+              }
+            ],
+            "writesArtifacts": [
+              {
+                "moduleId": "cafeFlow",
+                "artifactType": "workflow",
+                "artifactId": "dailySalesMetricsAutomation"
+              },
+              {
+                "moduleId": "cafeFlow",
+                "artifactType": "metricTable",
+                "artifactId": "dailySalesMetrics"
+              },
+              {
+                "moduleId": "cafeFlow",
+                "artifactType": "metricTable",
+                "artifactId": "topSellingItemsMetrics"
+              }
+            ]
+          },
+          "defsPlan": {
+            "fileName": "workflows/dailySalesMetricsAutomation.defs.ts",
+            "exportName": "dailySalesMetricsAutomationDef",
+            "saveAsDefs": true
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Fluxo mantido como automation e createsTask=false conforme índice.",
+          "Atores preservados do índice; automação representada como eventos agendados e de fechamento vinculados ao gerente."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

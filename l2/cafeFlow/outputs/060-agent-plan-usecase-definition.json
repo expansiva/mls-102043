@@ -1,0 +1,42 @@
+{
+  "savedAt": "2026-06-12T14:48:01.269Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 60,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "listarSolicitacoesIa",
+            "commands": [
+              {
+                "commandId": "listarSolicitacoesIa",
+                "input": [],
+                "output": [
+                  {
+                    "name": "solicitacoes",
+                    "type": "AiInsightEntity[]"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Usecase lista histórico de solicitações de insights IA.",
+          "Sem entidades de entrada; retorno é lista de AiInsightEntity."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

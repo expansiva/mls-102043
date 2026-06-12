@@ -1,0 +1,50 @@
+{
+  "savedAt": "2026-06-12T14:48:06.870Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 62,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "needs_input",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "obterSolicitacaoIa",
+            "commands": [
+              {
+                "commandId": "obterSolicitacaoIa",
+                "input": [
+                  {
+                    "name": "aiInsightId",
+                    "type": "string",
+                    "required": true
+                  }
+                ],
+                "output": [
+                  {
+                    "name": "aiInsight",
+                    "type": "AiInsightEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [
+          "Qual é o identificador usado para buscar a solicitação (por exemplo, aiInsightId ou outro campo)?"
+        ],
+        "trace": [
+          "Usecase retorna detalhes de uma solicitação de insight a partir da tabela ai_insight_request.",
+          "Defini um comando principal para obter a solicitação por identificador e retornar a entidade AiInsightEntity."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

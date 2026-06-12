@@ -1,0 +1,35 @@
+{
+  "savedAt": "2026-06-12T14:22:50.005Z",
+  "agentName": "agentBlueprintReview",
+  "stepId": 10,
+  "planning": {
+    "planId": "plan-blueprint-review",
+    "dependsOn": [
+      "plan-solution-blueprint"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitBlueprintReview",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "issues": [],
+          "recommendedFixes": []
+        },
+        "questions": [],
+        "trace": [
+          "Revisão de blueprint MAP para relações, MDM, métricas, cobertura de capabilities e uso de layer_3."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 35,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

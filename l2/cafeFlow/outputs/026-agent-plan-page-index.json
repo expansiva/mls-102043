@@ -1,0 +1,460 @@
+{
+  "savedAt": "2026-06-12T14:51:36.024Z",
+  "agentName": "agentPlanPageIndex",
+  "stepId": 26,
+  "planning": {
+    "planId": "plan-page-index",
+    "dependsOn": [
+      "plan-metrics-index",
+      "plan-workflow-index",
+      "plan-agents",
+      "plan-user-journeys"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPageIndexPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "pages": [
+            {
+              "pageId": "posRapido",
+              "pageName": "POS rápido",
+              "actor": "atendenteCaixa",
+              "purpose": "Registrar pedidos rapidamente, incluir itens e confirmar ou cancelar antes do preparo.",
+              "capabilities": [
+                "registrarPedidoPos"
+              ],
+              "flowRefs": {
+                "experienceFlows": [],
+                "entityLifecycles": [
+                  "orderLifecycle",
+                  "shiftLifecycle"
+                ],
+                "taskWorkflows": [],
+                "automations": []
+              },
+              "pluginRefs": [],
+              "mdmRefs": [],
+              "primaryUserActions": [
+                "criarPedido",
+                "adicionarItemPedido"
+              ],
+              "pageInputHints": [
+                "shiftId (se turno já aberto)",
+                "orderId (para revisar/cancelar)"
+              ],
+              "navigationRefs": [
+                {
+                  "direction": "outbound",
+                  "pageId": "telaCozinha",
+                  "trigger": "Pedido confirmado e enviado para cozinha"
+                }
+              ],
+              "persistenceHints": [
+                "order",
+                "dailyShift"
+              ],
+              "usecaseHints": [
+                "criarPedido",
+                "adicionarItemPedido",
+                "listarPedidos",
+                "obterPedido",
+                "atualizarStatusPedido"
+              ],
+              "metricRefs": [],
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "shiftMustBeOpenForOrders"
+              ],
+              "bffCommandHints": [
+                {
+                  "name": "criarPedido",
+                  "purpose": "Criar um novo pedido para o cliente no POS",
+                  "input": "itens iniciais, quantidades, canal POS, shiftId",
+                  "output": "orderId, status, totais"
+                },
+                {
+                  "name": "adicionarItemPedido",
+                  "purpose": "Adicionar itens e quantidades ao pedido em andamento",
+                  "input": "orderId, itens e quantidades",
+                  "output": "order atualizado com totais"
+                },
+                {
+                  "name": "listarPedidos",
+                  "purpose": "Listar pedidos recentes do turno para seleção",
+                  "input": "shiftId, filtros de status",
+                  "output": "lista de pedidos"
+                },
+                {
+                  "name": "obterPedido",
+                  "purpose": "Carregar detalhes do pedido para revisão/confirmar/cancelar",
+                  "input": "orderId",
+                  "output": "pedido completo"
+                },
+                {
+                  "name": "atualizarStatusPedido",
+                  "purpose": "Atualizar status do pedido para cancelado quando necessário",
+                  "input": "orderId, status=cancelado, motivo",
+                  "output": "pedido atualizado"
+                }
+              ]
+            },
+            {
+              "pageId": "telaCozinha",
+              "pageName": "Tela da cozinha",
+              "actor": "cozinha",
+              "purpose": "Organizar a fila de pedidos e atualizar o status até a entrega.",
+              "capabilities": [
+                "atualizarStatusCozinha"
+              ],
+              "flowRefs": {
+                "experienceFlows": [],
+                "entityLifecycles": [
+                  "orderLifecycle"
+                ],
+                "taskWorkflows": [],
+                "automations": []
+              },
+              "pluginRefs": [],
+              "mdmRefs": [],
+              "primaryUserActions": [
+                "atualizarStatusPedido"
+              ],
+              "pageInputHints": [
+                "filtros de status (recebido, preparando, pronto)"
+              ],
+              "navigationRefs": [],
+              "persistenceHints": [
+                "order"
+              ],
+              "usecaseHints": [
+                "listarPedidosCozinha",
+                "atualizarStatusPedido"
+              ],
+              "metricRefs": [],
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "kitchenStatusUpdates"
+              ],
+              "bffCommandHints": [
+                {
+                  "name": "listarPedidosCozinha",
+                  "purpose": "Listar pedidos da fila da cozinha por status",
+                  "input": "status, período, shiftId opcional",
+                  "output": "lista de pedidos"
+                },
+                {
+                  "name": "atualizarStatusPedido",
+                  "purpose": "Mover pedido entre recebido, preparando, pronto e entregue",
+                  "input": "orderId, novoStatus",
+                  "output": "pedido atualizado"
+                }
+              ]
+            },
+            {
+              "pageId": "gerenciamentoCardapioEstoque",
+              "pageName": "Gerenciamento de cardápio e estoque",
+              "actor": "gerente",
+              "purpose": "Manter cardápio, ingredientes e estoque básico com ajustes e alertas.",
+              "capabilities": [
+                "gerenciarCardapio",
+                "gerenciarEstoque"
+              ],
+              "flowRefs": {
+                "experienceFlows": [],
+                "entityLifecycles": [
+                  "inventoryAdjustmentLifecycle"
+                ],
+                "taskWorkflows": [],
+                "automations": [
+                  "lowStockAlertAutomation"
+                ]
+              },
+              "pluginRefs": [],
+              "mdmRefs": [
+                "menuItem"
+              ],
+              "primaryUserActions": [
+                "gerenciarItemCardapio",
+                "gerenciarEstoque"
+              ],
+              "pageInputHints": [
+                "aba ativa (cardápio|estoque|ajustes)"
+              ],
+              "navigationRefs": [
+                {
+                  "direction": "outbound",
+                  "pageId": "dashboard",
+                  "trigger": "Ver alertas e métricas de estoque"
+                }
+              ],
+              "persistenceHints": [
+                "menuCategory",
+                "menuItemIngredient",
+                "inventoryItem",
+                "inventoryAdjustment"
+              ],
+              "usecaseHints": [
+                "listarCategoriasCardapio",
+                "criarCategoriaCardapio",
+                "atualizarCategoriaCardapio",
+                "excluirCategoriaCardapio",
+                "listarIngredientesItemCardapio",
+                "criarIngredienteItemCardapio",
+                "atualizarIngredienteItemCardapio",
+                "excluirIngredienteItemCardapio",
+                "listarItensCardapioMdm",
+                "listarItensEstoque",
+                "criarItemEstoque",
+                "atualizarItemEstoque",
+                "excluirItemEstoque",
+                "listarAjustesEstoque",
+                "criarAjusteEstoque",
+                "confirmarAjusteEstoque"
+              ],
+              "metricRefs": [],
+              "rulesApplied": [
+                "inventoryLowStockAlert",
+                "inventoryDecrementPolicy"
+              ],
+              "bffCommandHints": [
+                {
+                  "name": "listarCategoriasCardapio",
+                  "purpose": "Carregar categorias do cardápio",
+                  "input": "filtros básicos",
+                  "output": "lista de categorias"
+                },
+                {
+                  "name": "criarCategoriaCardapio",
+                  "purpose": "Adicionar nova categoria do cardápio",
+                  "input": "nome, descrição",
+                  "output": "categoria criada"
+                },
+                {
+                  "name": "atualizarCategoriaCardapio",
+                  "purpose": "Editar categoria do cardápio",
+                  "input": "categoriaId, campos alterados",
+                  "output": "categoria atualizada"
+                },
+                {
+                  "name": "excluirCategoriaCardapio",
+                  "purpose": "Remover categoria do cardápio",
+                  "input": "categoriaId",
+                  "output": "confirmação de exclusão"
+                },
+                {
+                  "name": "listarIngredientesItemCardapio",
+                  "purpose": "Listar ingredientes vinculados ao item do cardápio",
+                  "input": "menuItemId",
+                  "output": "lista de ingredientes"
+                },
+                {
+                  "name": "criarIngredienteItemCardapio",
+                  "purpose": "Vincular ingrediente ao item do cardápio",
+                  "input": "menuItemId, inventoryItemId, quantidade",
+                  "output": "ingrediente vinculado"
+                },
+                {
+                  "name": "atualizarIngredienteItemCardapio",
+                  "purpose": "Atualizar quantidade ou item vinculado",
+                  "input": "menuItemIngredientId, campos",
+                  "output": "ingrediente atualizado"
+                },
+                {
+                  "name": "excluirIngredienteItemCardapio",
+                  "purpose": "Remover ingrediente do item do cardápio",
+                  "input": "menuItemIngredientId",
+                  "output": "confirmação de exclusão"
+                },
+                {
+                  "name": "listarItensCardapioMdm",
+                  "purpose": "Listar itens do cardápio do MDM para seleção",
+                  "input": "filtros básicos",
+                  "output": "lista de itens MDM"
+                },
+                {
+                  "name": "listarItensEstoque",
+                  "purpose": "Listar itens de estoque e níveis atuais",
+                  "input": "filtros, baixoEstoque=true opcional",
+                  "output": "lista de itens de estoque"
+                },
+                {
+                  "name": "criarItemEstoque",
+                  "purpose": "Cadastrar novo item de estoque",
+                  "input": "nome, unidade, estoqueInicial",
+                  "output": "item criado"
+                },
+                {
+                  "name": "atualizarItemEstoque",
+                  "purpose": "Atualizar dados de item de estoque",
+                  "input": "inventoryItemId, campos",
+                  "output": "item atualizado"
+                },
+                {
+                  "name": "excluirItemEstoque",
+                  "purpose": "Excluir item de estoque",
+                  "input": "inventoryItemId",
+                  "output": "confirmação de exclusão"
+                },
+                {
+                  "name": "listarAjustesEstoque",
+                  "purpose": "Listar ajustes de estoque pendentes e históricos",
+                  "input": "filtros de status/data",
+                  "output": "lista de ajustes"
+                },
+                {
+                  "name": "criarAjusteEstoque",
+                  "purpose": "Criar ajuste de estoque com motivo",
+                  "input": "inventoryItemId, quantidade, motivo",
+                  "output": "ajuste criado (pendente)"
+                },
+                {
+                  "name": "confirmarAjusteEstoque",
+                  "purpose": "Confirmar ajuste pendente e aplicar estoque",
+                  "input": "inventoryAdjustmentId",
+                  "output": "ajuste confirmado e estoque atualizado"
+                }
+              ]
+            },
+            {
+              "pageId": "relatorioFechamentoTurno",
+              "pageName": "Relatório de fechamento do turno",
+              "actor": "gerente",
+              "purpose": "Conferir pedidos, resolver pendências e fechar o turno diário com consolidação.",
+              "capabilities": [
+                "fecharTurnoDiario"
+              ],
+              "flowRefs": {
+                "experienceFlows": [],
+                "entityLifecycles": [
+                  "shiftLifecycle"
+                ],
+                "taskWorkflows": [],
+                "automations": [
+                  "dailySalesMetricsAutomation"
+                ]
+              },
+              "pluginRefs": [],
+              "mdmRefs": [],
+              "primaryUserActions": [
+                "fecharTurno"
+              ],
+              "pageInputHints": [
+                "shiftId selecionado",
+                "período do turno"
+              ],
+              "navigationRefs": [
+                {
+                  "direction": "outbound",
+                  "pageId": "dashboard",
+                  "trigger": "Turno fechado com sucesso"
+                }
+              ],
+              "persistenceHints": [
+                "dailyShift",
+                "order"
+              ],
+              "usecaseHints": [
+                "listarTurnos",
+                "obterTurno",
+                "fecharTurno"
+              ],
+              "metricRefs": [],
+              "rulesApplied": [
+                "shiftCloseRequiresOrders"
+              ],
+              "bffCommandHints": [
+                {
+                  "name": "listarTurnos",
+                  "purpose": "Listar turnos disponíveis para fechamento",
+                  "input": "data, status",
+                  "output": "lista de turnos"
+                },
+                {
+                  "name": "obterTurno",
+                  "purpose": "Obter detalhes do turno e consolidação preliminar",
+                  "input": "shiftId",
+                  "output": "turno, totais e pendências"
+                },
+                {
+                  "name": "fecharTurno",
+                  "purpose": "Confirmar fechamento do turno diário",
+                  "input": "shiftId, confirmação",
+                  "output": "turno fechado e relatório gerado"
+                }
+              ]
+            },
+            {
+              "pageId": "dashboard",
+              "pageName": "Dashboard do gerente",
+              "actor": "gerente",
+              "purpose": "Acompanhar métricas de vendas, itens mais vendidos e alertas de estoque baixo.",
+              "capabilities": [
+                "acompanharDashboard"
+              ],
+              "flowRefs": {
+                "experienceFlows": [],
+                "entityLifecycles": [],
+                "taskWorkflows": [],
+                "automations": [
+                  "dailySalesMetricsAutomation",
+                  "lowStockAlertAutomation"
+                ]
+              },
+              "pluginRefs": [],
+              "mdmRefs": [],
+              "primaryUserActions": [
+                "consultarDashboard"
+              ],
+              "pageInputHints": [
+                "período (dia/turno)"
+              ],
+              "navigationRefs": [
+                {
+                  "direction": "outbound",
+                  "pageId": "gerenciamentoCardapioEstoque",
+                  "trigger": "Ação em alerta de estoque baixo"
+                }
+              ],
+              "persistenceHints": [],
+              "usecaseHints": [
+                "consultarDashboard"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics",
+                "lowStockMetrics"
+              ],
+              "rulesApplied": [],
+              "bffCommandHints": [
+                {
+                  "name": "consultarDashboard",
+                  "purpose": "Carregar métricas consolidadas para o dashboard do gerente",
+                  "input": "período, shiftId opcional",
+                  "output": "métricas de vendas, itens mais vendidos e estoque baixo"
+                }
+              ]
+            }
+          ]
+        },
+        "questions": [
+          "Há necessidade de uma página separada para abertura de turno pelo gerente, ou a abertura pode ser feita no POS rápido pelo atendente?"
+        ],
+        "trace": [
+          "Páginas derivadas diretamente dos pageHints nas jornadas: posRapido, telaCozinha, gerenciamentoCardapioEstoque, relatorioFechamentoTurno, dashboard.",
+          "Dashboard incluído por initialMetricsRequested=true e métrica habilitada."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

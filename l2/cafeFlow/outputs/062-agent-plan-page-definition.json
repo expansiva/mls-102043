@@ -1,0 +1,519 @@
+{
+  "savedAt": "2026-06-12T14:53:59.015Z",
+  "agentName": "agentPlanPageDefinition",
+  "stepId": 62,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPageDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "pageDefinition": {
+            "pageId": "posRapido",
+            "pageName": "POS rápido",
+            "actor": "atendenteCaixa",
+            "purpose": "Registrar pedidos rapidamente, incluir itens e confirmar ou cancelar antes do preparo.",
+            "capabilities": [
+              "registrarPedidoPos"
+            ],
+            "flowRefs": {
+              "experienceFlows": [],
+              "entityLifecycles": [
+                "orderLifecycle",
+                "shiftLifecycle"
+              ],
+              "taskWorkflows": [],
+              "automations": []
+            },
+            "pluginRefs": [],
+            "mdmRefs": [],
+            "pageInputs": [
+              {
+                "name": "orderId",
+                "type": "Order",
+                "required": true,
+                "sources": [
+                  "routeParam",
+                  "previousStepResult",
+                  "selectionFromList"
+                ],
+                "description": "Identificador do pedido para revisão, inclusão de itens ou cancelamento.",
+                "entityRef": "Order",
+                "fieldRef": "orderId"
+              },
+              {
+                "name": "shiftId",
+                "type": "DailyShift",
+                "required": false,
+                "sources": [
+                  "routeParam",
+                  "sessionContext"
+                ],
+                "description": "Turno diário aberto para registrar pedidos no POS.",
+                "entityRef": "DailyShift",
+                "fieldRef": "dailyShiftId"
+              }
+            ],
+            "navigationRefs": [
+              {
+                "direction": "outbound",
+                "pageId": "telaCozinha",
+                "trigger": "Pedido confirmado e enviado para cozinha",
+                "description": "Após confirmação do pedido, encaminhar para a fila da cozinha."
+              }
+            ],
+            "sections": [
+              {
+                "sectionName": "Pedidos do turno",
+                "mode": "list",
+                "organisms": [
+                  {
+                    "organismName": "listaPedidosRecentes",
+                    "purpose": "Listar pedidos recentes do turno para seleção rápida e revisão.",
+                    "userActions": [
+                      "selecionarPedido",
+                      "filtrarPorStatus"
+                    ],
+                    "requiredEntities": [
+                      "Order",
+                      "DailyShift"
+                    ],
+                    "readsFields": [
+                      "Order.orderId",
+                      "Order.status",
+                      "Order.serviceType",
+                      "Order.tableNumber",
+                      "Order.createdAt",
+                      "Order.updatedAt",
+                      "Order.dailyShiftId"
+                    ],
+                    "writesFields": [],
+                    "rulesApplied": [
+                      "orderStatusLifecycle",
+                      "shiftMustBeOpenForOrders"
+                    ]
+                  }
+                ]
+              },
+              {
+                "sectionName": "Detalhes do pedido",
+                "mode": "edit",
+                "organisms": [
+                  {
+                    "organismName": "detalhesPedido",
+                    "purpose": "Exibir e editar os dados principais do pedido selecionado antes da confirmação.",
+                    "userActions": [
+                      "editarTipoAtendimento",
+                      "editarMesa",
+                      "adicionarObservacoes"
+                    ],
+                    "requiredEntities": [
+                      "Order"
+                    ],
+                    "readsFields": [
+                      "Order.orderId",
+                      "Order.status",
+                      "Order.serviceType",
+                      "Order.tableNumber",
+                      "Order.notes",
+                      "Order.createdAt",
+                      "Order.updatedAt",
+                      "Order.dailyShiftId"
+                    ],
+                    "writesFields": [
+                      "Order.serviceType",
+                      "Order.tableNumber",
+                      "Order.notes"
+                    ],
+                    "rulesApplied": [
+                      "orderStatusLifecycle"
+                    ]
+                  }
+                ]
+              },
+              {
+                "sectionName": "Itens do pedido",
+                "mode": "edit",
+                "organisms": [
+                  {
+                    "organismName": "itensPedido",
+                    "purpose": "Registrar itens e quantidades do pedido em andamento.",
+                    "userActions": [
+                      "adicionarItem",
+                      "atualizarQuantidade",
+                      "removerItem"
+                    ],
+                    "requiredEntities": [
+                      "Order"
+                    ],
+                    "readsFields": [
+                      "Order.orderId",
+                      "Order.updatedAt"
+                    ],
+                    "writesFields": [
+                      "Order.updatedAt"
+                    ],
+                    "rulesApplied": [
+                      "inventoryDecrementPolicy"
+                    ]
+                  }
+                ]
+              },
+              {
+                "sectionName": "Ações do pedido",
+                "mode": "confirm",
+                "organisms": [
+                  {
+                    "organismName": "acoesPedido",
+                    "purpose": "Confirmar envio para cozinha ou cancelar o pedido quando necessário.",
+                    "userActions": [
+                      "confirmarPedido",
+                      "cancelarPedido"
+                    ],
+                    "requiredEntities": [
+                      "Order"
+                    ],
+                    "readsFields": [
+                      "Order.orderId",
+                      "Order.status"
+                    ],
+                    "writesFields": [
+                      "Order.status",
+                      "Order.updatedAt"
+                    ],
+                    "rulesApplied": [
+                      "orderStatusLifecycle",
+                      "shiftMustBeOpenForOrders"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "bffCommands": [
+            {
+              "commandName": "listarPedidos",
+              "purpose": "Listar pedidos recentes do turno para seleção no POS.",
+              "kind": "query",
+              "input": [
+                {
+                  "name": "shiftId",
+                  "type": "DailyShift",
+                  "required": false
+                },
+                {
+                  "name": "status",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "name": "limit",
+                  "type": "number",
+                  "required": false
+                }
+              ],
+              "output": [
+                {
+                  "name": "orders",
+                  "type": "OrderSummary[]"
+                }
+              ],
+              "readsEntities": [
+                "Order",
+                "DailyShift"
+              ],
+              "writesEntities": [],
+              "readsTables": [
+                "order"
+              ],
+              "writesTables": [],
+              "usecaseRefs": [
+                "listarPedidos"
+              ],
+              "layerContract": {
+                "controllerLayer": "layer_2_controllers",
+                "mustCallLayer": "layer_3_usecases",
+                "directTableAccessForbidden": true
+              },
+              "rulesApplied": []
+            },
+            {
+              "commandName": "obterPedido",
+              "purpose": "Carregar detalhes completos do pedido para revisão e edição.",
+              "kind": "query",
+              "input": [
+                {
+                  "name": "orderId",
+                  "type": "Order",
+                  "required": true
+                }
+              ],
+              "output": [
+                {
+                  "name": "orderId",
+                  "type": "Order"
+                },
+                {
+                  "name": "dailyShiftId",
+                  "type": "DailyShift"
+                },
+                {
+                  "name": "status",
+                  "type": "string"
+                },
+                {
+                  "name": "serviceType",
+                  "type": "string"
+                },
+                {
+                  "name": "tableNumber",
+                  "type": "string"
+                },
+                {
+                  "name": "notes",
+                  "type": "string"
+                },
+                {
+                  "name": "createdAt",
+                  "type": "datetime"
+                },
+                {
+                  "name": "updatedAt",
+                  "type": "datetime"
+                }
+              ],
+              "readsEntities": [
+                "Order"
+              ],
+              "writesEntities": [],
+              "readsTables": [
+                "order"
+              ],
+              "writesTables": [],
+              "usecaseRefs": [
+                "obterPedido"
+              ],
+              "layerContract": {
+                "controllerLayer": "layer_2_controllers",
+                "mustCallLayer": "layer_3_usecases",
+                "directTableAccessForbidden": true
+              },
+              "rulesApplied": []
+            },
+            {
+              "commandName": "criarPedido",
+              "purpose": "Criar um novo pedido no POS vinculado ao turno aberto.",
+              "kind": "command",
+              "input": [
+                {
+                  "name": "shiftId",
+                  "type": "DailyShift",
+                  "required": false
+                },
+                {
+                  "name": "serviceType",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "tableNumber",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "name": "notes",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "name": "orderItems",
+                  "type": "OrderItemInput[]",
+                  "required": true
+                },
+                {
+                  "name": "channel",
+                  "type": "string",
+                  "required": true
+                }
+              ],
+              "output": [
+                {
+                  "name": "orderId",
+                  "type": "Order"
+                },
+                {
+                  "name": "status",
+                  "type": "string"
+                },
+                {
+                  "name": "createdAt",
+                  "type": "datetime"
+                },
+                {
+                  "name": "updatedAt",
+                  "type": "datetime"
+                }
+              ],
+              "readsEntities": [
+                "DailyShift"
+              ],
+              "writesEntities": [
+                "Order"
+              ],
+              "readsTables": [
+                "daily_shift"
+              ],
+              "writesTables": [
+                "order",
+                "daily_sales_metrics",
+                "top_selling_items_metrics"
+              ],
+              "usecaseRefs": [
+                "criarPedido"
+              ],
+              "layerContract": {
+                "controllerLayer": "layer_2_controllers",
+                "mustCallLayer": "layer_3_usecases",
+                "directTableAccessForbidden": true
+              },
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "shiftMustBeOpenForOrders",
+                "inventoryDecrementPolicy"
+              ]
+            },
+            {
+              "commandName": "adicionarItemPedido",
+              "purpose": "Adicionar itens e quantidades ao pedido em andamento.",
+              "kind": "command",
+              "input": [
+                {
+                  "name": "orderId",
+                  "type": "Order",
+                  "required": true
+                },
+                {
+                  "name": "orderItems",
+                  "type": "OrderItemInput[]",
+                  "required": true
+                }
+              ],
+              "output": [
+                {
+                  "name": "orderId",
+                  "type": "Order"
+                },
+                {
+                  "name": "status",
+                  "type": "string"
+                },
+                {
+                  "name": "updatedAt",
+                  "type": "datetime"
+                }
+              ],
+              "readsEntities": [
+                "Order"
+              ],
+              "writesEntities": [
+                "Order"
+              ],
+              "readsTables": [
+                "order"
+              ],
+              "writesTables": [
+                "order",
+                "top_selling_items_metrics"
+              ],
+              "usecaseRefs": [
+                "adicionarItemPedido"
+              ],
+              "layerContract": {
+                "controllerLayer": "layer_2_controllers",
+                "mustCallLayer": "layer_3_usecases",
+                "directTableAccessForbidden": true
+              },
+              "rulesApplied": [
+                "inventoryDecrementPolicy"
+              ]
+            },
+            {
+              "commandName": "atualizarStatusPedido",
+              "purpose": "Cancelar o pedido quando solicitado pelo atendente.",
+              "kind": "command",
+              "input": [
+                {
+                  "name": "orderId",
+                  "type": "Order",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "motivo",
+                  "type": "string",
+                  "required": false
+                }
+              ],
+              "output": [
+                {
+                  "name": "orderId",
+                  "type": "Order"
+                },
+                {
+                  "name": "status",
+                  "type": "string"
+                },
+                {
+                  "name": "updatedAt",
+                  "type": "datetime"
+                }
+              ],
+              "readsEntities": [
+                "Order"
+              ],
+              "writesEntities": [
+                "Order"
+              ],
+              "readsTables": [
+                "order"
+              ],
+              "writesTables": [
+                "order",
+                "daily_sales_metrics"
+              ],
+              "usecaseRefs": [
+                "atualizarStatusPedido"
+              ],
+              "layerContract": {
+                "controllerLayer": "layer_2_controllers",
+                "mustCallLayer": "layer_3_usecases",
+                "directTableAccessForbidden": true
+              },
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "kitchenStatusUpdates"
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Plan page posRapido using pageIndexItem data.",
+          "Mapped capabilities to sections: list pedidos, detalhes, itens, ações.",
+          "Bound commands to usecase hints and lifecycle rules."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 49,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

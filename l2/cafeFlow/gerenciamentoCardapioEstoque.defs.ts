@@ -1,0 +1,1186 @@
+/// <mls fileReference="_102043_/l2/cafeFlow/gerenciamentoCardapioEstoque.defs.ts" enhancement="_blank"/>
+
+export const gerenciamentoCardapioEstoquePagePlan = {
+  "schemaVersion": "2026-06-06",
+  "artifactType": "page",
+  "artifactId": "gerenciamentoCardapioEstoque",
+  "moduleName": "cafeFlow",
+  "status": "draft",
+  "source": {
+    "agentName": "agentPlanPageDefinition",
+    "stepId": 64,
+    "planId": ""
+  },
+  "data": {
+    "pageDefinition": {
+      "pageId": "gerenciamentoCardapioEstoque",
+      "pageName": "Gerenciamento de cardápio e estoque",
+      "actor": "gerente",
+      "purpose": "Manter cardápio, ingredientes e estoque básico com ajustes e alertas.",
+      "capabilities": [
+        "gerenciarCardapio",
+        "gerenciarEstoque"
+      ],
+      "flowRefs": {
+        "experienceFlows": [],
+        "entityLifecycles": [
+          "inventoryAdjustmentLifecycle"
+        ],
+        "taskWorkflows": [],
+        "automations": [
+          "lowStockAlertAutomation"
+        ]
+      },
+      "pluginRefs": [],
+      "mdmRefs": [
+        "menuItem"
+      ],
+      "pageInputs": [
+        {
+          "name": "abaAtiva",
+          "type": "string",
+          "required": false,
+          "sources": [
+            "queryParam",
+            "state"
+          ],
+          "description": "Aba inicial exibida: cardápio|estoque|ajustes"
+        }
+      ],
+      "navigationRefs": [
+        {
+          "direction": "outbound",
+          "pageId": "dashboard",
+          "trigger": "Ver alertas e métricas de estoque",
+          "description": "Abrir dashboard do gerente"
+        }
+      ],
+      "sections": [
+        {
+          "sectionName": "Categorias do cardápio",
+          "mode": "manage",
+          "organisms": [
+            {
+              "organismName": "ListaCategoriasCardapio",
+              "purpose": "Listar e filtrar categorias do cardápio para edição.",
+              "userActions": [
+                "filtrarCategorias",
+                "selecionarCategoria"
+              ],
+              "requiredEntities": [
+                "MenuCategory"
+              ],
+              "readsFields": [
+                "MenuCategory.menuCategoryId",
+                "MenuCategory.name",
+                "MenuCategory.description",
+                "MenuCategory.sortOrder",
+                "MenuCategory.color",
+                "MenuCategory.isActive",
+                "MenuCategory.updatedAt"
+              ],
+              "writesFields": [],
+              "rulesApplied": []
+            },
+            {
+              "organismName": "EditorCategoriaCardapio",
+              "purpose": "Criar, atualizar e excluir categorias do cardápio.",
+              "userActions": [
+                "criarCategoria",
+                "editarCategoria",
+                "excluirCategoria"
+              ],
+              "requiredEntities": [
+                "MenuCategory"
+              ],
+              "readsFields": [
+                "MenuCategory.menuCategoryId",
+                "MenuCategory.name",
+                "MenuCategory.description",
+                "MenuCategory.sortOrder",
+                "MenuCategory.color",
+                "MenuCategory.isActive"
+              ],
+              "writesFields": [
+                "MenuCategory.name",
+                "MenuCategory.description",
+                "MenuCategory.sortOrder",
+                "MenuCategory.color",
+                "MenuCategory.isActive"
+              ],
+              "rulesApplied": []
+            }
+          ]
+        },
+        {
+          "sectionName": "Ingredientes por item do cardápio",
+          "mode": "manage",
+          "organisms": [
+            {
+              "organismName": "SeletorItemCardapioMdm",
+              "purpose": "Selecionar item do cardápio MDM para gerenciar ingredientes.",
+              "userActions": [
+                "buscarItemCardapio",
+                "selecionarItemCardapio"
+              ],
+              "requiredEntities": [
+                "MenuItem"
+              ],
+              "readsFields": [
+                "MenuItem.menuItemId",
+                "MenuItem.name"
+              ],
+              "writesFields": [],
+              "rulesApplied": []
+            },
+            {
+              "organismName": "ListaIngredientesItem",
+              "purpose": "Listar ingredientes vinculados ao item selecionado.",
+              "userActions": [
+                "listarIngredientes",
+                "selecionarIngrediente"
+              ],
+              "requiredEntities": [
+                "MenuItemIngredient",
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "MenuItemIngredient.id",
+                "MenuItemIngredient.menuItemId",
+                "MenuItemIngredient.inventoryItemId",
+                "MenuItemIngredient.quantity",
+                "MenuItemIngredient.unit",
+                "MenuItemIngredient.isOptional",
+                "MenuItemIngredient.updatedAt",
+                "InventoryItem.name"
+              ],
+              "writesFields": [],
+              "rulesApplied": []
+            },
+            {
+              "organismName": "EditorIngredienteItem",
+              "purpose": "Vincular, atualizar ou remover ingredientes do item do cardápio.",
+              "userActions": [
+                "criarIngrediente",
+                "editarIngrediente",
+                "excluirIngrediente"
+              ],
+              "requiredEntities": [
+                "MenuItemIngredient",
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "MenuItemIngredient.id",
+                "MenuItemIngredient.menuItemId",
+                "MenuItemIngredient.inventoryItemId",
+                "MenuItemIngredient.quantity",
+                "MenuItemIngredient.unit",
+                "MenuItemIngredient.isOptional"
+              ],
+              "writesFields": [
+                "MenuItemIngredient.inventoryItemId",
+                "MenuItemIngredient.quantity",
+                "MenuItemIngredient.unit",
+                "MenuItemIngredient.isOptional"
+              ],
+              "rulesApplied": []
+            }
+          ]
+        },
+        {
+          "sectionName": "Itens de estoque",
+          "mode": "manage",
+          "organisms": [
+            {
+              "organismName": "ListaItensEstoque",
+              "purpose": "Listar itens de estoque e níveis atuais, com filtro de baixo estoque.",
+              "userActions": [
+                "filtrarEstoque",
+                "selecionarItemEstoque"
+              ],
+              "requiredEntities": [
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "InventoryItem.inventoryItemId",
+                "InventoryItem.name",
+                "InventoryItem.quantityAvailable",
+                "InventoryItem.minimumLevel",
+                "InventoryItem.updatedAt"
+              ],
+              "writesFields": [],
+              "rulesApplied": [
+                "inventoryLowStockAlert"
+              ]
+            },
+            {
+              "organismName": "EditorItemEstoque",
+              "purpose": "Criar, atualizar ou excluir itens de estoque.",
+              "userActions": [
+                "criarItemEstoque",
+                "editarItemEstoque",
+                "excluirItemEstoque"
+              ],
+              "requiredEntities": [
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "InventoryItem.inventoryItemId",
+                "InventoryItem.name",
+                "InventoryItem.quantityAvailable",
+                "InventoryItem.minimumLevel"
+              ],
+              "writesFields": [
+                "InventoryItem.name",
+                "InventoryItem.quantityAvailable",
+                "InventoryItem.minimumLevel"
+              ],
+              "rulesApplied": [
+                "inventoryLowStockAlert"
+              ]
+            }
+          ]
+        },
+        {
+          "sectionName": "Ajustes de estoque",
+          "mode": "manage",
+          "organisms": [
+            {
+              "organismName": "ListaAjustesEstoque",
+              "purpose": "Listar ajustes pendentes e históricos.",
+              "userActions": [
+                "filtrarAjustes",
+                "selecionarAjuste"
+              ],
+              "requiredEntities": [
+                "InventoryAdjustment",
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "InventoryAdjustment.inventoryAdjustmentId",
+                "InventoryAdjustment.inventoryItemId",
+                "InventoryAdjustment.status",
+                "InventoryAdjustment.createdAt",
+                "InventoryItem.name"
+              ],
+              "writesFields": [],
+              "rulesApplied": []
+            },
+            {
+              "organismName": "CriarAjusteEstoque",
+              "purpose": "Registrar ajuste de estoque com motivo.",
+              "userActions": [
+                "criarAjuste"
+              ],
+              "requiredEntities": [
+                "InventoryAdjustment",
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "InventoryItem.inventoryItemId",
+                "InventoryItem.name",
+                "InventoryItem.quantityAvailable"
+              ],
+              "writesFields": [
+                "InventoryAdjustment.inventoryItemId",
+                "InventoryAdjustment.status"
+              ],
+              "rulesApplied": [
+                "inventoryDecrementPolicy"
+              ]
+            },
+            {
+              "organismName": "ConfirmarAjusteEstoque",
+              "purpose": "Confirmar ajuste pendente e aplicar movimentação no estoque.",
+              "userActions": [
+                "confirmarAjuste"
+              ],
+              "requiredEntities": [
+                "InventoryAdjustment",
+                "InventoryItem"
+              ],
+              "readsFields": [
+                "InventoryAdjustment.inventoryAdjustmentId",
+                "InventoryAdjustment.status",
+                "InventoryAdjustment.inventoryItemId",
+                "InventoryItem.name",
+                "InventoryItem.quantityAvailable"
+              ],
+              "writesFields": [
+                "InventoryAdjustment.status",
+                "InventoryItem.quantityAvailable"
+              ],
+              "rulesApplied": [
+                "inventoryLowStockAlert",
+                "inventoryDecrementPolicy"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "bffCommands": [
+      {
+        "commandName": "listarCategoriasCardapio",
+        "purpose": "Carregar categorias do cardápio",
+        "kind": "query",
+        "input": [
+          {
+            "name": "textoBusca",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "apenasAtivas",
+            "type": "boolean",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "menuCategoryId",
+            "type": "uuid"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "type": "number"
+          },
+          {
+            "name": "color",
+            "type": "string"
+          },
+          {
+            "name": "isActive",
+            "type": "boolean"
+          },
+          {
+            "name": "updatedAt",
+            "type": "datetime"
+          }
+        ],
+        "readsEntities": [
+          "MenuCategory"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "menu_category"
+        ],
+        "writesTables": [],
+        "usecaseRefs": [
+          "listarCategoriasCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "criarCategoriaCardapio",
+        "purpose": "Adicionar nova categoria do cardápio",
+        "kind": "command",
+        "input": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "sortOrder",
+            "type": "number",
+            "required": false
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "isActive",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "menuCategoryId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [],
+        "writesEntities": [
+          "MenuCategory"
+        ],
+        "readsTables": [],
+        "writesTables": [
+          "menu_category"
+        ],
+        "usecaseRefs": [
+          "criarCategoriaCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "atualizarCategoriaCardapio",
+        "purpose": "Editar categoria do cardápio",
+        "kind": "command",
+        "input": [
+          {
+            "name": "menuCategoryId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "sortOrder",
+            "type": "number",
+            "required": false
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "isActive",
+            "type": "boolean",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "menuCategoryId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [
+          "MenuCategory"
+        ],
+        "writesEntities": [
+          "MenuCategory"
+        ],
+        "readsTables": [
+          "menu_category"
+        ],
+        "writesTables": [
+          "menu_category"
+        ],
+        "usecaseRefs": [
+          "atualizarCategoriaCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "excluirCategoriaCardapio",
+        "purpose": "Remover categoria do cardápio",
+        "kind": "command",
+        "input": [
+          {
+            "name": "menuCategoryId",
+            "type": "uuid",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "excluido",
+            "type": "boolean"
+          }
+        ],
+        "readsEntities": [
+          "MenuCategory"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "menu_category"
+        ],
+        "writesTables": [
+          "menu_category"
+        ],
+        "usecaseRefs": [
+          "excluirCategoriaCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "listarItensCardapioMdm",
+        "purpose": "Listar itens do cardápio do MDM para seleção",
+        "kind": "query",
+        "input": [
+          {
+            "name": "textoBusca",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "categoriaId",
+            "type": "uuid",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "menuItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ],
+        "readsEntities": [
+          "MenuItem"
+        ],
+        "writesEntities": [],
+        "readsTables": [],
+        "writesTables": [],
+        "usecaseRefs": [
+          "listarItensCardapioMdm"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "listarIngredientesItemCardapio",
+        "purpose": "Listar ingredientes vinculados ao item do cardápio",
+        "kind": "query",
+        "input": [
+          {
+            "name": "menuItemId",
+            "type": "uuid",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "menuItemIngredientId",
+            "type": "uuid"
+          },
+          {
+            "name": "menuItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "inventoryItemName",
+            "type": "string"
+          },
+          {
+            "name": "quantity",
+            "type": "number"
+          },
+          {
+            "name": "unit",
+            "type": "string"
+          },
+          {
+            "name": "isOptional",
+            "type": "boolean"
+          }
+        ],
+        "readsEntities": [
+          "MenuItemIngredient",
+          "InventoryItem"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "menu_item_ingredient",
+          "inventory_item"
+        ],
+        "writesTables": [],
+        "usecaseRefs": [
+          "listarIngredientesItemCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "criarIngredienteItemCardapio",
+        "purpose": "Vincular ingrediente ao item do cardápio",
+        "kind": "command",
+        "input": [
+          {
+            "name": "menuItemId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "inventoryItemId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "quantity",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "isOptional",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "menuItemIngredientId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [
+          "InventoryItem"
+        ],
+        "writesEntities": [
+          "MenuItemIngredient"
+        ],
+        "readsTables": [
+          "inventory_item"
+        ],
+        "writesTables": [
+          "menu_item_ingredient"
+        ],
+        "usecaseRefs": [
+          "criarIngredienteItemCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "atualizarIngredienteItemCardapio",
+        "purpose": "Atualizar quantidade ou item vinculado",
+        "kind": "command",
+        "input": [
+          {
+            "name": "menuItemIngredientId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "inventoryItemId",
+            "type": "uuid",
+            "required": false
+          },
+          {
+            "name": "quantity",
+            "type": "number",
+            "required": false
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "isOptional",
+            "type": "boolean",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "menuItemIngredientId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [
+          "MenuItemIngredient"
+        ],
+        "writesEntities": [
+          "MenuItemIngredient"
+        ],
+        "readsTables": [
+          "menu_item_ingredient"
+        ],
+        "writesTables": [
+          "menu_item_ingredient"
+        ],
+        "usecaseRefs": [
+          "atualizarIngredienteItemCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "excluirIngredienteItemCardapio",
+        "purpose": "Remover ingrediente do item do cardápio",
+        "kind": "command",
+        "input": [
+          {
+            "name": "menuItemIngredientId",
+            "type": "uuid",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "excluido",
+            "type": "boolean"
+          }
+        ],
+        "readsEntities": [
+          "MenuItemIngredient"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "menu_item_ingredient"
+        ],
+        "writesTables": [
+          "menu_item_ingredient"
+        ],
+        "usecaseRefs": [
+          "excluirIngredienteItemCardapio"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "listarItensEstoque",
+        "purpose": "Listar itens de estoque e níveis atuais",
+        "kind": "query",
+        "input": [
+          {
+            "name": "textoBusca",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "baixoEstoque",
+            "type": "boolean",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "quantityAvailable",
+            "type": "number"
+          },
+          {
+            "name": "minimumLevel",
+            "type": "number"
+          },
+          {
+            "name": "updatedAt",
+            "type": "datetime"
+          }
+        ],
+        "readsEntities": [
+          "InventoryItem"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "inventory_item"
+        ],
+        "writesTables": [],
+        "usecaseRefs": [
+          "listarItensEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": [
+          "inventoryLowStockAlert"
+        ]
+      },
+      {
+        "commandName": "criarItemEstoque",
+        "purpose": "Cadastrar novo item de estoque",
+        "kind": "command",
+        "input": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "unidade",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "estoqueInicial",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "minimumLevel",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [],
+        "writesEntities": [
+          "InventoryItem"
+        ],
+        "readsTables": [],
+        "writesTables": [
+          "inventory_item",
+          "low_stock_metrics"
+        ],
+        "usecaseRefs": [
+          "criarItemEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": [
+          "inventoryLowStockAlert"
+        ]
+      },
+      {
+        "commandName": "atualizarItemEstoque",
+        "purpose": "Atualizar dados de item de estoque",
+        "kind": "command",
+        "input": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "quantityAvailable",
+            "type": "number",
+            "required": false
+          },
+          {
+            "name": "minimumLevel",
+            "type": "number",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          }
+        ],
+        "readsEntities": [
+          "InventoryItem"
+        ],
+        "writesEntities": [
+          "InventoryItem"
+        ],
+        "readsTables": [
+          "inventory_item"
+        ],
+        "writesTables": [
+          "inventory_item",
+          "low_stock_metrics"
+        ],
+        "usecaseRefs": [
+          "atualizarItemEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": [
+          "inventoryLowStockAlert"
+        ]
+      },
+      {
+        "commandName": "excluirItemEstoque",
+        "purpose": "Excluir item de estoque",
+        "kind": "command",
+        "input": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "excluido",
+            "type": "boolean"
+          }
+        ],
+        "readsEntities": [
+          "InventoryItem"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "inventory_item"
+        ],
+        "writesTables": [
+          "inventory_item",
+          "low_stock_metrics"
+        ],
+        "usecaseRefs": [
+          "excluirItemEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "listarAjustesEstoque",
+        "purpose": "Listar ajustes de estoque pendentes e históricos",
+        "kind": "query",
+        "input": [
+          {
+            "name": "status",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "dataInicio",
+            "type": "date",
+            "required": false
+          },
+          {
+            "name": "dataFim",
+            "type": "date",
+            "required": false
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryAdjustmentId",
+            "type": "uuid"
+          },
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "inventoryItemName",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "createdAt",
+            "type": "datetime"
+          }
+        ],
+        "readsEntities": [
+          "InventoryAdjustment",
+          "InventoryItem"
+        ],
+        "writesEntities": [],
+        "readsTables": [
+          "inventory_adjustment",
+          "inventory_item"
+        ],
+        "writesTables": [],
+        "usecaseRefs": [
+          "listarAjustesEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "criarAjusteEstoque",
+        "purpose": "Criar ajuste de estoque com motivo",
+        "kind": "command",
+        "input": [
+          {
+            "name": "inventoryItemId",
+            "type": "uuid",
+            "required": true
+          },
+          {
+            "name": "quantidade",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "motivo",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryAdjustmentId",
+            "type": "uuid"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          }
+        ],
+        "readsEntities": [
+          "InventoryItem"
+        ],
+        "writesEntities": [
+          "InventoryAdjustment"
+        ],
+        "readsTables": [
+          "inventory_item"
+        ],
+        "writesTables": [
+          "inventory_adjustment",
+          "low_stock_metrics"
+        ],
+        "usecaseRefs": [
+          "criarAjusteEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": []
+      },
+      {
+        "commandName": "confirmarAjusteEstoque",
+        "purpose": "Confirmar ajuste pendente e aplicar estoque",
+        "kind": "command",
+        "input": [
+          {
+            "name": "inventoryAdjustmentId",
+            "type": "uuid",
+            "required": true
+          }
+        ],
+        "output": [
+          {
+            "name": "inventoryAdjustmentId",
+            "type": "uuid"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "inventoryItemId",
+            "type": "uuid"
+          },
+          {
+            "name": "quantityAvailable",
+            "type": "number"
+          }
+        ],
+        "readsEntities": [
+          "InventoryAdjustment",
+          "InventoryItem"
+        ],
+        "writesEntities": [
+          "InventoryAdjustment",
+          "InventoryItem"
+        ],
+        "readsTables": [
+          "inventory_adjustment",
+          "inventory_item"
+        ],
+        "writesTables": [
+          "inventory_adjustment",
+          "inventory_item",
+          "low_stock_metrics"
+        ],
+        "usecaseRefs": [
+          "confirmarAjusteEstoque"
+        ],
+        "layerContract": {
+          "controllerLayer": "layer_2_controllers",
+          "mustCallLayer": "layer_3_usecases",
+          "directTableAccessForbidden": true
+        },
+        "rulesApplied": [
+          "inventoryLowStockAlert"
+        ]
+      }
+    ]
+  }
+} as const;
+
+export default gerenciamentoCardapioEstoquePagePlan;

@@ -1,0 +1,219 @@
+{
+  "savedAt": "2026-06-12T14:50:16.136Z",
+  "agentName": "agentPlanWorkflowDefinition",
+  "stepId": 61,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitWorkflowDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "workflowDefinition": {
+            "workflowId": "shiftLifecycle",
+            "title": "Ciclo de vida do turno diário",
+            "purpose": "Controlar a abertura, operação e fechamento do turno, garantindo que apenas turnos abertos aceitem pedidos e que o fechamento consolide as informações do dia.",
+            "executionMode": "entityLifecycle",
+            "createsTask": false,
+            "taskConfig": {
+              "taskTitleTemplate": "",
+              "assigneeRules": [],
+              "slaRules": [],
+              "taskRoomRequired": false
+            },
+            "actors": [
+              "gerente"
+            ],
+            "states": [
+              {
+                "stateId": "aberto",
+                "description": "Turno diário aberto e apto a receber pedidos."
+              },
+              {
+                "stateId": "fechado",
+                "description": "Turno diário encerrado com consolidação e relatório gerado."
+              }
+            ],
+            "transitions": [
+              {
+                "from": "aberto",
+                "to": "aberto",
+                "trigger": "listarTurnos",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "aberto",
+                "to": "aberto",
+                "trigger": "obterTurno",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "fechado",
+                "to": "fechado",
+                "trigger": "listarTurnos",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "fechado",
+                "to": "fechado",
+                "trigger": "obterTurno",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [],
+                "rulesApplied": []
+              },
+              {
+                "from": "fechado",
+                "to": "aberto",
+                "trigger": "abrirTurno",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [
+                  "DailyShift.status=aberto",
+                  "DailyShift.openedAt=now()",
+                  "DailyShift.openingCashAmount=input.openingCashAmount",
+                  "DailyShift.notes=input.notes",
+                  "DailyShift.updatedAt=now()"
+                ],
+                "rulesApplied": []
+              },
+              {
+                "from": "aberto",
+                "to": "fechado",
+                "trigger": "fecharTurno",
+                "actor": "gerente",
+                "conditions": [
+                  "shiftCloseRequiresOrders"
+                ],
+                "actions": [
+                  "DailyShift.status=fechado",
+                  "DailyShift.closedAt=now()",
+                  "DailyShift.closingCashAmount=input.closingCashAmount",
+                  "DailyShift.totalSalesAmount=consolidation.totalSalesAmount",
+                  "DailyShift.totalOrders=consolidation.totalOrders",
+                  "ShiftClosingReport.dailyShiftId=DailyShift.dailyShiftId",
+                  "ShiftClosingReport.totalSales=consolidation.totalSalesAmount",
+                  "ShiftClosingReport.totalOrders=consolidation.totalOrders",
+                  "ShiftClosingReport.totalItems=consolidation.totalItems",
+                  "ShiftClosingReport.cashTotal=consolidation.cashTotal",
+                  "ShiftClosingReport.cardTotal=consolidation.cardTotal",
+                  "ShiftClosingReport.pixTotal=consolidation.pixTotal",
+                  "ShiftClosingReport.cancellationsTotal=consolidation.cancellationsTotal",
+                  "ShiftClosingReport.notes=input.notes",
+                  "DailyShift.shiftClosingReportId=ShiftClosingReport.shiftClosingReportId",
+                  "DailyShift.updatedAt=now()"
+                ],
+                "rulesApplied": [
+                  "shiftCloseRequiresOrders"
+                ]
+              }
+            ],
+            "requiredEntities": [
+              "DailyShift",
+              "ShiftClosingReport",
+              "Order"
+            ],
+            "persistenceRefs": [
+              "dailyShift",
+              "order"
+            ],
+            "usecaseRefs": [
+              "abrirTurno",
+              "fecharTurno",
+              "listarTurnos",
+              "obterTurno"
+            ],
+            "metricRefs": [],
+            "userActions": [
+              "abrir turno",
+              "fechar turno",
+              "listar turnos",
+              "consultar turno"
+            ],
+            "relatedPages": [],
+            "relatedAgents": [],
+            "relatedPlugins": [],
+            "rulesApplied": [
+              "shiftCloseRequiresOrders"
+            ],
+            "implementationSuggestions": [
+              {
+                "suggestionId": "shiftOpenValidation",
+                "title": "Validação de turno aberto ao criar pedido",
+                "priority": "now",
+                "description": "No fluxo de criação de pedidos, validar se existe DailyShift com status aberto antes de aceitar o pedido.",
+                "tradeoff": "Pode bloquear pedidos em caso de falhas no registro de turno."
+              },
+              {
+                "suggestionId": "autoConsolidateOnClose",
+                "title": "Consolidação automática ao fechar turno",
+                "priority": "now",
+                "description": "No usecase fecharTurno, consolidar pedidos do turno e preencher totais no DailyShift e no ShiftClosingReport.",
+                "tradeoff": "A consolidação pode aumentar o tempo de resposta no fechamento do turno."
+              },
+              {
+                "suggestionId": "noTaskCreation",
+                "title": "Sem tarefas de acompanhamento",
+                "priority": "now",
+                "description": "Este fluxo não cria tarefas; garantir que o fechamento do turno seja concluído no próprio usecase e que falhas sejam retornadas ao gerente.",
+                "tradeoff": "Sem tarefas, pendências de fechamento exigem reabertura manual do fluxo."
+              }
+            ],
+            "workflowScope": "singleModule",
+            "moduleRefs": [
+              "cafeFlow"
+            ],
+            "pageRefsByModule": [],
+            "entityRefsByModule": [
+              {
+                "moduleId": "cafeFlow",
+                "entity": "DailyShift"
+              },
+              {
+                "moduleId": "cafeFlow",
+                "entity": "ShiftClosingReport"
+              },
+              {
+                "moduleId": "cafeFlow",
+                "entity": "Order"
+              }
+            ],
+            "writesArtifacts": [
+              {
+                "moduleId": "cafeFlow",
+                "artifactType": "workflow",
+                "artifactId": "shiftLifecycle"
+              }
+            ]
+          },
+          "defsPlan": {
+            "fileName": "workflows/shiftLifecycle.defs.ts",
+            "exportName": "shiftLifecycleDef",
+            "saveAsDefs": true
+          }
+        },
+        "questions": [],
+        "trace": [
+          "createsTask é false conforme índice; taskConfig incluído apenas como placeholder técnico.",
+          "relatedPages retornado como array vazio conforme regra.",
+          "Transições de listagem/obtenção não alteram estado; mantidas para cobrir triggers de consulta via usecases."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 50,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

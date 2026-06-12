@@ -1,0 +1,273 @@
+{
+  "savedAt": "2026-06-12T14:20:20.810Z",
+  "agentName": "agentDiscoverSolutionScope",
+  "stepId": 5,
+  "planning": {
+    "planId": "req-discover-scope",
+    "dependsOn": [
+      "req-clarification-answer"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitSolutionScopeDraft",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "domain": "cafeFlow",
+          "summary": "Aplicativo CafeFlow para cafeterias e lanchonetes pequenas, focado em POS rápido, coordenação de cozinha, estoque básico e gestão de turno, com dashboard e assistente IA para insights de vendas e promoções.",
+          "actors": [
+            {
+              "actorId": "atendenteCaixa",
+              "title": "Atendente/Caixa",
+              "description": "Registra pedidos rapidamente no POS e acompanha status básico do pedido."
+            },
+            {
+              "actorId": "cozinha",
+              "title": "Cozinha",
+              "description": "Acompanha e atualiza o status de preparo dos pedidos."
+            },
+            {
+              "actorId": "gerente",
+              "title": "Gerente",
+              "description": "Gerencia cardápio, estoque, turnos e acompanha relatórios e dashboard."
+            }
+          ],
+          "capabilities": [
+            {
+              "capabilityId": "registrarPedidoPos",
+              "title": "Registrar pedido no POS",
+              "description": "Lançar pedidos de mesa ou takeout com itens do cardápio de forma touch-friendly.",
+              "actor": "atendenteCaixa",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "atualizarStatusCozinha",
+              "title": "Atualizar status do pedido",
+              "description": "Mover pedidos no fluxo recebido → preparando → pronto → entregue/cancelado.",
+              "actor": "cozinha",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "gerenciarCardapio",
+              "title": "Gerenciar cardápio",
+              "description": "Criar e editar itens do cardápio, categorias, preços e ingredientes vinculados.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "gerenciarEstoque",
+              "title": "Gerenciar estoque",
+              "description": "Controlar itens de estoque e níveis mínimos/alertas de baixo estoque.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "fecharTurnoDiario",
+              "title": "Fechar turno diário",
+              "description": "Consolidar vendas e gerar relatório de fechamento do turno.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "acompanharDashboard",
+              "title": "Acompanhar dashboard",
+              "description": "Ver vendas do dia, itens mais vendidos, estoque baixo e sugestões automáticas.",
+              "actor": "gerente",
+              "priority": "now"
+            },
+            {
+              "capabilityId": "consultarAssistenteIa",
+              "title": "Consultar assistente IA",
+              "description": "Gerar resumo de vendas do dia e sugerir itens para promover com base nos últimos 7 dias.",
+              "actor": "gerente",
+              "priority": "soon"
+            }
+          ],
+          "artifactSignals": {
+            "pages": [
+              {
+                "signal": "dashboardPage",
+                "title": "Dashboard",
+                "actor": "gerente",
+                "reason": "Mostra vendas do dia, itens mais vendidos, estoque baixo e painel de sugestões automáticas.",
+                "priority": "now"
+              },
+              {
+                "signal": "posRapidoPage",
+                "title": "POS rápido",
+                "actor": "atendenteCaixa",
+                "reason": "Tela touch para lançamento rápido de pedidos e visão do status da cozinha.",
+                "priority": "now"
+              },
+              {
+                "signal": "cozinhaPedidosPage",
+                "title": "Tela da cozinha",
+                "actor": "cozinha",
+                "reason": "Lista e atualiza status de pedidos em preparo.",
+                "priority": "now"
+              },
+              {
+                "signal": "cardapioEstoquePage",
+                "title": "Gerenciamento de cardápio e estoque",
+                "actor": "gerente",
+                "reason": "Cadastro e manutenção de itens do cardápio e estoque.",
+                "priority": "now"
+              },
+              {
+                "signal": "fechamentoTurnoReportPage",
+                "title": "Relatório de fechamento de turno",
+                "actor": "gerente",
+                "reason": "Resumo do turno diário para conferência e fechamento.",
+                "priority": "now"
+              },
+              {
+                "signal": "adminDashboardPage",
+                "title": "Dashboard administrativo",
+                "actor": "gerente",
+                "reason": "Dashboard de gestão para métricas básicas solicitadas.",
+                "priority": "now"
+              }
+            ],
+            "workflows": [
+              {
+                "signal": "pedidoWorkflow",
+                "title": "Workflow de pedido",
+                "actor": "cozinha",
+                "reason": "Fluxo de status recebido → preparando → pronto → entregue/cancelado.",
+                "priority": "now"
+              },
+              {
+                "signal": "fechamentoTurnoWorkflow",
+                "title": "Workflow de fechamento de turno",
+                "actor": "gerente",
+                "reason": "Processo de consolidação das vendas e fechamento diário.",
+                "priority": "now"
+              }
+            ],
+            "plugins": [],
+            "agents": [
+              {
+                "signal": "assistenteIaVendas",
+                "title": "Assistente IA de vendas",
+                "actor": "gerente",
+                "reason": "Gera resumo de vendas do dia e sugere itens para promover com base nos últimos 7 dias.",
+                "priority": "soon"
+              }
+            ],
+            "horizontalModules": [
+              {
+                "signal": "authRolesModule",
+                "title": "Perfis de acesso",
+                "actor": "gerente",
+                "reason": "Há papéis distintos (atendente/caixa, cozinha, gerente) que precisam de permissões.",
+                "priority": "now"
+              }
+            ],
+            "mdm": [
+              {
+                "signal": "menuItemMdm",
+                "title": "MDM de item do cardápio",
+                "actor": "gerente",
+                "reason": "Item do cardápio é entidade central usada por pedidos, estoque e relatórios.",
+                "priority": "now",
+                "mdmKind": "masterData"
+              }
+            ],
+            "metrics": [
+              {
+                "signal": "vendasDiaMetric",
+                "title": "Métrica de vendas do dia",
+                "actor": "gerente",
+                "reason": "Necessário para o dashboard com vendas de hoje.",
+                "priority": "now"
+              },
+              {
+                "signal": "itensMaisVendidosMetric",
+                "title": "Métrica de itens mais vendidos",
+                "actor": "gerente",
+                "reason": "Base do painel de itens mais vendidos.",
+                "priority": "now"
+              },
+              {
+                "signal": "estoqueBaixoMetric",
+                "title": "Métrica de estoque baixo",
+                "actor": "gerente",
+                "reason": "Suporta alertas de baixo estoque no dashboard.",
+                "priority": "now"
+              }
+            ],
+            "usecases": [
+              {
+                "signal": "criarPedido",
+                "title": "Criar pedido",
+                "actor": "atendenteCaixa",
+                "reason": "Pedido é compromisso principal (mesa ou takeout) e precisa ser criado no POS.",
+                "priority": "now"
+              },
+              {
+                "signal": "mudarStatusPedido",
+                "title": "Mudar status do pedido",
+                "actor": "cozinha",
+                "reason": "Atualiza ciclo de vida do pedido para coordenação de cozinha.",
+                "priority": "now"
+              },
+              {
+                "signal": "gerenciarItemCardapio",
+                "title": "Gerenciar item do cardápio",
+                "actor": "gerente",
+                "reason": "Manutenção do cardápio e preços.",
+                "priority": "now"
+              },
+              {
+                "signal": "ajustarEstoque",
+                "title": "Ajustar estoque",
+                "actor": "gerente",
+                "reason": "Controle simples de estoque para food service.",
+                "priority": "now"
+              },
+              {
+                "signal": "fecharTurno",
+                "title": "Fechar turno",
+                "actor": "gerente",
+                "reason": "Consolidação diária e relatório de fechamento.",
+                "priority": "now"
+              },
+              {
+                "signal": "gerarResumoIa",
+                "title": "Gerar resumo IA",
+                "actor": "gerente",
+                "reason": "Solicitar resumo de vendas e sugestões de promoção.",
+                "priority": "soon"
+              }
+            ]
+          },
+          "businessRisks": [
+            "Sem definição de métodos de pagamento e momento de quitação, o fechamento do turno pode ficar incompleto.",
+            "Sem regra clara de baixa de estoque por pedido, o controle de estoque pode ficar inconsistente."
+          ],
+          "missingContext": [
+            "Definir se o estoque é baixado automaticamente ao lançar pedido ou no fechamento.",
+            "Definir métodos de pagamento e quando o pedido é considerado pago."
+          ]
+        },
+        "questions": [
+          "O estoque deve ser baixado automaticamente no lançamento do pedido ou apenas no fechamento do turno?",
+          "Quais métodos de pagamento devem ser suportados e em que momento o pedido é considerado pago?"
+        ],
+        "trace": [
+          "Entradas principais: entidades (Item do Cardápio, Pedido, Turno Diário, Item de Estoque), telas chave (Dashboard, POS rápido, gerenciamento, fechamento de turno), LLM assistente, foco em atendimento rápido e cozinha.",
+          "Clarificação: papéis (atendente/caixa, cozinha, gerente), estilo moderno e touch, métricas básicas e painel de sugestões automáticas."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 34,
+    "interaction": null,
+    "nextSteps": null
+  }
+}
