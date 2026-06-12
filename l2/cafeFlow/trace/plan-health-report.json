@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "2026-06-06",
+  "artifactType": "planHealthReport",
+  "moduleName": "cafeFlow",
+  "savedAt": "2026-06-12T14:54:54.617Z",
+  "source": {
+    "agentName": "agentValidateSolutionCoverage",
+    "stepId": 30,
+    "planId": "org-materialization"
+  },
+  "report": {
+    "summary": {
+      "passed": true,
+      "errorCount": 0,
+      "warningCount": 9
+    },
+    "issues": [
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field menuCategoryId maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.menuCategoryId",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field name maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.name",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field description maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.description",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field sortOrder maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.sortOrder",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field color maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.color",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity CardapioEntity field isActive maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+        "path": "entity.CardapioEntity.fields.isActive",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity EstoqueEntity field name maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+        "path": "entity.EstoqueEntity.fields.name",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity EstoqueEntity field quantityAvailable maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+        "path": "entity.EstoqueEntity.fields.quantityAvailable",
+        "evidence": []
+      },
+      {
+        "severity": "warning",
+        "code": "entity.fieldColumn.unmapped",
+        "message": "entity EstoqueEntity field minimumLevel maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+        "path": "entity.EstoqueEntity.fields.minimumLevel",
+        "evidence": []
+      }
+    ],
+    "checklistResults": null,
+    "readyToSaveDefs": true,
+    "deterministicOnly": true,
+    "refreshedAt": "2026-06-12T14:54:54.617Z",
+    "refreshedBy": "agentNewSolutionFinal (T-016 deterministic re-validation)"
+  }
+}

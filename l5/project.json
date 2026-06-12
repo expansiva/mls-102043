@@ -20,5 +20,33 @@
   "links": [],
   "servicesConfigEnabled": false,
   "modules": [
+    {
+      "moduleName": "cafeFlow",
+      "module": {
+        "moduleName": "cafeFlow",
+        "purpose": "Acelerar o atendimento e organizar pedidos, cozinha e estoque básico para cafeterias e lanchonetes pequenas.",
+        "businessDomain": "Food service / cafeterias e lanchonetes",
+        "languages": [
+          "pt-BR",
+          "en"
+        ],
+        "visualStyle": {
+          "tone": "Moderno e minimalista",
+          "layout": "Touch-first, foco em velocidade no POS",
+          "palette": [
+            "#D35400",
+            "#F5CBA7",
+            "#FFF8F0",
+            "#2C3E50"
+          ]
+        }
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "projectId": "102034",
+      "kind": "mdm-infrastructure"
+    }
   ]
 }
