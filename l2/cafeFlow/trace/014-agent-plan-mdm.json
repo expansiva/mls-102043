@@ -1,0 +1,64 @@
+{
+  "savedAt": "2026-06-12T14:37:19.805Z",
+  "agentName": "agentPlanMDM",
+  "stepId": 14,
+  "planning": {
+    "planId": "plan-mdm",
+    "dependsOn": [
+      "plan-finalize-solution-plan"
+    ],
+    "executionMode": "parallel_static",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitMdmPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "mdmDomains": [
+            {
+              "domainId": "menuItem",
+              "title": "Item do Cardápio",
+              "masterEntities": [
+                "MenuItem"
+              ],
+              "sourceOfTruth": "102034",
+              "consumers": [
+                "posRapidoPage",
+                "cardapioEstoquePage",
+                "dashboardPage",
+                "pedidoWorkflow",
+                "orderUsecaseEntity",
+                "topItemsMetricTable",
+                "gerenteSalesDashboard",
+                "assistenteIaVendas"
+              ],
+              "governanceRules": [
+                "Criação, edição e desativação de itens do cardápio são restritas ao ator gerente.",
+                "Todo item do cardápio deve estar vinculado a uma categoria ativa do cardápio.",
+                "Mudanças de preço e composição de ingredientes são auditadas pela infraestrutura MDM compartilhada."
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Prompt inicial: app CafeFlow para cafeterias e lanchonetes pequenas com POS, cozinha, estoque, turnos, dashboard e IA.",
+          "Clarificações: papéis (atendente/caixa, cozinha, gerente), visual moderno e minimalista, foco touch, métricas básicas e painel de sugestões automáticas.",
+          "Decisões aceitas: MDM de item do cardápio, páginas POS/cozinha/cardápio/fechamento, workflows de pedido e turno, métricas básicas e agente IA.",
+          "Revisão de blueprint MAP para relações, MDM, métricas, cobertura de capabilities e uso de layer_3.",
+          "MDM planejado: domínio menuItem com entidade mestre MenuItem, fonte na infraestrutura MDM compartilhada (projeto 102034).",
+          "Consumidores mapeados: páginas POS, cardápio/estoque e dashboard; workflow de pedido; entidade de caso de uso de pedido; métricas de itens mais vendidos e dashboard de métricas; agente IA de vendas.",
+          "Regras de governança definidas para controle de alterações por perfil, vínculo com categoria e auditoria via MDM compartilhado."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 38,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

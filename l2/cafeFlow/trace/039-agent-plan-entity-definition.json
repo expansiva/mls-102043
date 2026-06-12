@@ -1,0 +1,59 @@
+{
+  "savedAt": "2026-06-12T14:24:10.954Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 39,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "needs_input",
+        "result": {
+          "entityDefinition": {
+            "entityId": "InventoryAdjustmentUsecase",
+            "title": "Ajuste de Estoque (Caso de Uso)",
+            "description": "Entidade operacional para comandos de ajuste/baixa de estoque.",
+            "ownership": "moduleOwned",
+            "fields": [
+              {
+                "fieldId": "inventoryAdjustmentUsecaseId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador do caso de uso de ajuste de estoque."
+              },
+              {
+                "fieldId": "commandType",
+                "type": "string",
+                "required": true,
+                "description": "Tipo de comando de estoque executado (ajuste ou baixa).",
+                "enum": [
+                  "ajuste",
+                  "baixa"
+                ]
+              }
+            ],
+            "rulesApplied": [
+              "inventoryDecrementPolicy"
+            ]
+          }
+        },
+        "questions": [
+          "Quais são todos os atributos obrigatórios deste caso de uso (ex.: motivo, quantidade, item-alvo, origem do comando, usuário responsável)?",
+          "Este caso de uso é persistido? Se sim, devo incluir createdAt/updatedAt?",
+          "Há estados/lifecycle (ex.: rascunho, validado, executado, cancelado) para este caso de uso?",
+          "Existem relações obrigatórias com outras entidades (ex.: InventoryAdjustment, InventoryItem, Order, DailyShift) que devem virar campos de referência?"
+        ],
+        "trace": [
+          "Campos derivam apenas do nome e descrição fornecidos; faltam atributos funcionais explícitos.",
+          "Nenhum relacionamento foi informado para este entity selector."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 45,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

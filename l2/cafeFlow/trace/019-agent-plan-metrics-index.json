@@ -1,0 +1,348 @@
+{
+  "savedAt": "2026-06-12T14:39:49.841Z",
+  "agentName": "agentPlanMetricsIndex",
+  "stepId": 19,
+  "planning": {
+    "planId": "plan-metrics-index",
+    "dependsOn": [
+      "plan-persistence-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitMetricsIndex",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "metricsPlan": {
+            "moduleId": "cafeFlow",
+            "title": "Plano de Métricas do cafeFlow",
+            "description": "Métricas operacionais para vendas, itens mais vendidos e níveis de estoque do cafeFlow.",
+            "enabled": true,
+            "storageEngine": "postgresTimescaleDB",
+            "updateResponsibility": "layer_3_usecases",
+            "derivationSources": [
+              "baseTableUpdates",
+              "lifecycleTransitions",
+              "operationalRisks"
+            ]
+          },
+          "metricTables": [
+            {
+              "metricTableId": "dailySalesMetrics",
+              "tableName": "daily_sales_metrics",
+              "title": "Tabela de métricas: Vendas do dia",
+              "purpose": "Consolidar métricas de vendas por turno e período.",
+              "storageEngine": "postgresTimescaleDB",
+              "sourceBaseTables": [
+                "order",
+                "daily_shift"
+              ],
+              "sourceEntities": [
+                "Order",
+                "OrderItem",
+                "DailyShift"
+              ],
+              "sourceWriteEvents": [
+                "orderCreated",
+                "orderItemAdded",
+                "orderStatusUpdated",
+                "shiftClosed"
+              ],
+              "timeColumn": "eventTime",
+              "dimensions": [
+                {
+                  "dimensionId": "shiftId",
+                  "column": "shift_id",
+                  "type": "string",
+                  "description": "Identificador do turno diário."
+                },
+                {
+                  "dimensionId": "orderId",
+                  "column": "order_id",
+                  "type": "string",
+                  "description": "Identificador do pedido."
+                },
+                {
+                  "dimensionId": "menuItemId",
+                  "column": "menu_item_id",
+                  "type": "string",
+                  "description": "Identificador do item do cardápio."
+                },
+                {
+                  "dimensionId": "categoryId",
+                  "column": "category_id",
+                  "type": "string",
+                  "description": "Identificador da categoria do cardápio."
+                }
+              ],
+              "measures": [
+                {
+                  "measureId": "totalRevenue",
+                  "column": "total_revenue",
+                  "type": "numeric",
+                  "aggregation": "sum",
+                  "unit": "BRL",
+                  "description": "Receita total gerada."
+                },
+                {
+                  "measureId": "orderCount",
+                  "column": "order_count",
+                  "type": "integer",
+                  "aggregation": "count",
+                  "unit": "orders",
+                  "description": "Quantidade de pedidos."
+                },
+                {
+                  "measureId": "itemsSold",
+                  "column": "items_sold",
+                  "type": "integer",
+                  "aggregation": "sum",
+                  "unit": "items",
+                  "description": "Quantidade total de itens vendidos."
+                },
+                {
+                  "measureId": "averageTicket",
+                  "column": "average_ticket",
+                  "type": "numeric",
+                  "aggregation": "avg",
+                  "unit": "BRL",
+                  "description": "Ticket médio por pedido."
+                }
+              ],
+              "aggregationWindows": [
+                "1m",
+                "5m",
+                "1h",
+                "1d"
+              ],
+              "retentionPolicy": "1 year",
+              "priority": "now",
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "shiftCloseRequiresOrders"
+              ],
+              "reason": "Acompanhar faturamento e volume de pedidos em tempo real para decisões de turno."
+            },
+            {
+              "metricTableId": "topSellingItemsMetrics",
+              "tableName": "top_selling_items_metrics",
+              "title": "Tabela de métricas: Itens mais vendidos",
+              "purpose": "Rastrear desempenho e popularidade dos itens do cardápio.",
+              "storageEngine": "postgresTimescaleDB",
+              "sourceBaseTables": [
+                "order"
+              ],
+              "sourceEntities": [
+                "OrderItem",
+                "MenuItem",
+                "MenuCategory"
+              ],
+              "sourceWriteEvents": [
+                "orderItemAdded",
+                "orderStatusUpdated"
+              ],
+              "timeColumn": "eventTime",
+              "dimensions": [
+                {
+                  "dimensionId": "menuItemId",
+                  "column": "menu_item_id",
+                  "type": "string",
+                  "description": "Identificador do item do cardápio."
+                },
+                {
+                  "dimensionId": "categoryId",
+                  "column": "category_id",
+                  "type": "string",
+                  "description": "Identificador da categoria do cardápio."
+                },
+                {
+                  "dimensionId": "orderId",
+                  "column": "order_id",
+                  "type": "string",
+                  "description": "Identificador do pedido."
+                }
+              ],
+              "measures": [
+                {
+                  "measureId": "quantitySold",
+                  "column": "quantity_sold",
+                  "type": "integer",
+                  "aggregation": "sum",
+                  "unit": "items",
+                  "description": "Quantidade vendida do item."
+                },
+                {
+                  "measureId": "itemRevenue",
+                  "column": "item_revenue",
+                  "type": "numeric",
+                  "aggregation": "sum",
+                  "unit": "BRL",
+                  "description": "Receita gerada pelo item."
+                },
+                {
+                  "measureId": "orderCount",
+                  "column": "order_count",
+                  "type": "integer",
+                  "aggregation": "count",
+                  "unit": "orders",
+                  "description": "Número de pedidos que incluíram o item."
+                }
+              ],
+              "aggregationWindows": [
+                "1h",
+                "1d",
+                "7d",
+                "30d"
+              ],
+              "retentionPolicy": "2 years",
+              "priority": "now",
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "kitchenStatusUpdates"
+              ],
+              "reason": "Identificar preferências dos clientes e otimizar o cardápio e a produção."
+            },
+            {
+              "metricTableId": "lowStockMetrics",
+              "tableName": "low_stock_metrics",
+              "title": "Tabela de métricas: Estoque baixo",
+              "purpose": "Monitorar níveis de estoque e alertas de baixa quantidade.",
+              "storageEngine": "postgresTimescaleDB",
+              "sourceBaseTables": [
+                "inventory_item",
+                "inventory_adjustment"
+              ],
+              "sourceEntities": [
+                "InventoryItem",
+                "InventoryAdjustment",
+                "MenuItemIngredient"
+              ],
+              "sourceWriteEvents": [
+                "inventoryAdjusted",
+                "inventoryItemUpdated"
+              ],
+              "timeColumn": "eventTime",
+              "dimensions": [
+                {
+                  "dimensionId": "inventoryItemId",
+                  "column": "inventory_item_id",
+                  "type": "string",
+                  "description": "Identificador do item de estoque."
+                },
+                {
+                  "dimensionId": "menuItemId",
+                  "column": "menu_item_id",
+                  "type": "string",
+                  "description": "Identificador do item do cardápio relacionado."
+                },
+                {
+                  "dimensionId": "adjustmentId",
+                  "column": "adjustment_id",
+                  "type": "string",
+                  "description": "Identificador do ajuste de estoque."
+                }
+              ],
+              "measures": [
+                {
+                  "measureId": "currentQuantity",
+                  "column": "current_quantity",
+                  "type": "numeric",
+                  "aggregation": "last",
+                  "unit": "units",
+                  "description": "Quantidade atual em estoque."
+                },
+                {
+                  "measureId": "thresholdQuantity",
+                  "column": "threshold_quantity",
+                  "type": "numeric",
+                  "aggregation": "last",
+                  "unit": "units",
+                  "description": "Quantidade mínima definida para alerta."
+                },
+                {
+                  "measureId": "lowStockCount",
+                  "column": "low_stock_count",
+                  "type": "integer",
+                  "aggregation": "count",
+                  "unit": "alerts",
+                  "description": "Contagem de ocorrências de estoque baixo."
+                }
+              ],
+              "aggregationWindows": [
+                "5m",
+                "1h",
+                "1d"
+              ],
+              "retentionPolicy": "6 months",
+              "priority": "now",
+              "rulesApplied": [
+                "inventoryLowStockAlert",
+                "inventoryDecrementPolicy"
+              ],
+              "reason": "Prevenir rupturas de insumos críticos e garantir continuidade do atendimento."
+            }
+          ],
+          "dashboardPages": [
+            {
+              "metricDashboardId": "managerMetricsDashboard",
+              "title": "Dashboard de métricas do gerente",
+              "actor": "gerente",
+              "accessPolicy": "admin-only",
+              "priority": "now",
+              "sources": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics",
+                "lowStockMetrics"
+              ],
+              "rulesApplied": [
+                "aiInsightsUseMetrics"
+              ],
+              "description": "Painel consolidado de vendas, itens mais vendidos e alertas de estoque para o gerente.",
+              "widgets": [
+                {
+                  "widgetId": "dailySalesChart",
+                  "title": "Vendas do dia",
+                  "metricId": "totalRevenue",
+                  "type": "line",
+                  "sourceMetricTable": "dailySalesMetrics"
+                },
+                {
+                  "widgetId": "topItemsTable",
+                  "title": "Itens mais vendidos",
+                  "metricId": "quantitySold",
+                  "type": "bar",
+                  "sourceMetricTable": "topSellingItemsMetrics"
+                },
+                {
+                  "widgetId": "lowStockList",
+                  "title": "Alertas de estoque baixo",
+                  "metricId": "lowStockCount",
+                  "type": "list",
+                  "sourceMetricTable": "lowStockMetrics"
+                }
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Iniciado planejamento do índice de métricas do módulo cafeFlow.",
+          "Mapeadas 3 tabelas de métricas aprovadas: Vendas do dia, Itens mais vendidos e Estoque baixo.",
+          "Definidas dimensões com base nas relações diretas das entidades da ontologia.",
+          "Configuradas medidas e janelas de agregação adequadas ao contexto operacional de cafeteria.",
+          "Criado dashboard do gerente com política de acesso admin-only por padrão.",
+          "Métricas vinculadas a eventos de escrita das tabelas base e atualizadas por layer_3_usecases."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 40,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

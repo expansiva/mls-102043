@@ -1,0 +1,321 @@
+{
+  "savedAt": "2026-06-12T14:48:48.772Z",
+  "agentName": "agentPlanWorkflowIndex",
+  "stepId": 23,
+  "planning": {
+    "planId": "plan-workflow-index",
+    "dependsOn": [
+      "plan-usecase-entities"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitWorkflowIndex",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "workflows": [
+            {
+              "workflowId": "orderLifecycle",
+              "title": "Ciclo de vida do pedido",
+              "purpose": "Gerenciar o fluxo completo de um pedido desde o registro no POS até a entrega ou cancelamento, coordenando atendente e cozinha.",
+              "actors": [
+                "atendenteCaixa",
+                "cozinha"
+              ],
+              "executionMode": "entityLifecycle",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "registrarPedidoPos",
+                "atualizarStatusCozinha"
+              ],
+              "relatedEntities": [
+                "Order",
+                "OrderItem"
+              ],
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "kitchenStatusUpdates",
+                "shiftMustBeOpenForOrders",
+                "inventoryDecrementPolicy"
+              ],
+              "persistenceRefs": [
+                "order",
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "usecaseRefs": [
+                "criarPedido",
+                "adicionarItemPedido",
+                "atualizarStatusPedido",
+                "listarPedidos",
+                "listarPedidosCozinha",
+                "obterPedido"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "posTouchInterface",
+                  "title": "Interface touch otimizada para POS",
+                  "reason": "O atendente precisa registrar pedidos rapidamente em dispositivos touch",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "kitchenDisplayIntegration",
+                  "title": "Integração com tela da cozinha em tempo real",
+                  "reason": "A cozinha precisa visualizar novos pedidos e atualizações instantaneamente",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "shiftLifecycle",
+              "title": "Ciclo de vida do turno diário",
+              "purpose": "Controlar a abertura, operação e fechamento do turno, garantindo que apenas turnos abertos aceitem pedidos e que o fechamento consolide as informações do dia.",
+              "actors": [
+                "gerente"
+              ],
+              "executionMode": "entityLifecycle",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "fecharTurnoDiario"
+              ],
+              "relatedEntities": [
+                "DailyShift",
+                "ShiftClosingReport"
+              ],
+              "rulesApplied": [
+                "shiftCloseRequiresOrders"
+              ],
+              "persistenceRefs": [
+                "dailyShift",
+                "order"
+              ],
+              "metricRefs": [],
+              "usecaseRefs": [
+                "abrirTurno",
+                "fecharTurno",
+                "listarTurnos",
+                "obterTurno"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "shiftOpenValidation",
+                  "title": "Validação de turno aberto ao criar pedido",
+                  "reason": "Garantir conformidade com a regra de negócio que exige turno aberto",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "autoConsolidateOnClose",
+                  "title": "Consolidação automática ao fechar turno",
+                  "reason": "O fechamento deve consolidar pedidos e métricas do dia",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "inventoryAdjustmentLifecycle",
+              "title": "Ciclo de vida do ajuste de estoque",
+              "purpose": "Gerenciar solicitações de ajuste de estoque com confirmação do gerente, evitando alterações acidentais no estoque.",
+              "actors": [
+                "gerente"
+              ],
+              "executionMode": "entityLifecycle",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "gerenciarEstoque"
+              ],
+              "relatedEntities": [
+                "InventoryAdjustment",
+                "InventoryItem"
+              ],
+              "rulesApplied": [],
+              "persistenceRefs": [
+                "inventoryAdjustment",
+                "inventoryItem"
+              ],
+              "metricRefs": [],
+              "usecaseRefs": [
+                "criarAjusteEstoque",
+                "confirmarAjusteEstoque",
+                "listarAjustesEstoque"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "pendingAdjustmentReview",
+                  "title": "Revisão de ajustes pendentes antes de confirmar",
+                  "reason": "Evitar erros de baixa ou acréscimo no estoque",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "adjustmentAuditTrail",
+                  "title": "Rastreamento de auditoria do ajuste",
+                  "reason": "Manter histórico de quem criou e confirmou cada ajuste",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "dailySalesMetricsAutomation",
+              "title": "Consolidação de métricas de vendas",
+              "purpose": "Consolidar dados de pedidos entregues em métricas diárias e de itens mais vendidos, alimentando o dashboard do gerente.",
+              "actors": [
+                "gerente"
+              ],
+              "executionMode": "automation",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "acompanharDashboard",
+                "fecharTurnoDiario"
+              ],
+              "relatedEntities": [
+                "Order",
+                "OrderItem"
+              ],
+              "rulesApplied": [
+                "shiftCloseRequiresOrders"
+              ],
+              "persistenceRefs": [
+                "order",
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "usecaseRefs": [],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "incrementalMetricsUpdate",
+                  "title": "Atualização incremental das métricas",
+                  "reason": "Evitar recalcular todo o histórico a cada pedido entregue",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "metricsOnShiftClose",
+                  "title": "Cálculo final no fechamento do turno",
+                  "reason": "Garantir consistência dos números do dia após fechamento",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "lowStockAlertAutomation",
+              "title": "Automação de alerta de estoque baixo",
+              "purpose": "Monitorar os níveis de estoque e gerar alertas quando itens atingirem o limite mínimo, alimentando o dashboard do gerente.",
+              "actors": [
+                "gerente"
+              ],
+              "executionMode": "automation",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "gerenciarEstoque",
+                "acompanharDashboard"
+              ],
+              "relatedEntities": [
+                "InventoryItem"
+              ],
+              "rulesApplied": [
+                "inventoryLowStockAlert"
+              ],
+              "persistenceRefs": [
+                "inventoryItem",
+                "lowStockMetrics"
+              ],
+              "metricRefs": [
+                "lowStockMetrics"
+              ],
+              "usecaseRefs": [],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "scheduledStockCheck",
+                  "title": "Verificação agendada de estoque",
+                  "reason": "Garantir atualização periódica dos alertas mesmo sem movimentação",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "realTimeStockUpdate",
+                  "title": "Atualização em tempo real após baixa de pedido",
+                  "reason": "O estoque baixo deve refletir imediatamente após a venda",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "aiInsightAutomation",
+              "title": "Automação de insights por IA",
+              "purpose": "Processar solicitações de resumo e análise de vendas via assistente IA, consumindo métricas consolidadas e gerando respostas assíncronas.",
+              "actors": [
+                "gerente"
+              ],
+              "executionMode": "automation",
+              "createsTask": false,
+              "relatedCapabilities": [
+                "consultarAssistenteIa"
+              ],
+              "relatedEntities": [
+                "AiInsightRequest"
+              ],
+              "rulesApplied": [
+                "aiInsightsUseMetrics"
+              ],
+              "persistenceRefs": [
+                "aiInsightRequest"
+              ],
+              "metricRefs": [],
+              "usecaseRefs": [
+                "solicitarResumoIa",
+                "listarSolicitacoesIa",
+                "obterSolicitacaoIa"
+              ],
+              "priority": "soon",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "asyncAiProcessing",
+                  "title": "Processamento assíncrono da solicitação IA",
+                  "reason": "A geração de insights pode demorar e não deve bloquear a interface do gerente",
+                  "priority": "soon"
+                },
+                {
+                  "suggestionId": "metricsCacheForAi",
+                  "title": "Cache de métricas para consulta da IA",
+                  "reason": "Otimizar o tempo de resposta do assistente reduzindo consultas repetidas",
+                  "priority": "soon"
+                }
+              ]
+            }
+          ]
+        },
+        "questions": [
+          "A cozinha deve receber notificação push sonora/visual para novos pedidos ou apenas atualização silenciosa na tela?",
+          "O alerta de estoque baixo deve gerar uma tarefa formal no sistema ou apenas uma métrica no dashboard?",
+          "A consolidação das métricas de vendas deve ser incremental a cada pedido ou batch no fechamento do turno?"
+        ],
+        "trace": [
+          "Mapeados 6 workflows cobrindo ciclo de vida de pedidos, turnos, ajustes de estoque, automação de métricas, alertas de estoque e insights de IA.",
+          "Workflows de entidade escolhidos para pedidos, turnos e ajustes devido a multi-step state e coordenação entre atores.",
+          "Workflows de automação escolhidos para métricas, alertas e IA devido a integrações externas, processamento assíncrono e atualizações agendadas.",
+          "Métricas dailySalesMetrics e topSellingItemsMetrics vinculadas ao workflow de pedido pois a transição para entregue alimenta as medidas.",
+          "Métrica lowStockMetrics vinculada ao workflow de alerta de estoque baixo."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

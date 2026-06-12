@@ -1,0 +1,45 @@
+{
+  "savedAt": "2026-06-12T14:49:54.891Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 58,
+  "planning": {
+    "planId": "plan-index-critic:workflowIndex:1",
+    "dependsOn": [
+      "plan-workflow-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": []
+        },
+        "questions": [],
+        "trace": [
+          "Verificação de executionMode: todos os 6 workflows com modos válidos (entityLifecycle/automation).",
+          "Verificação de createsTask: nenhum workflow cria tarefas; false está correto.",
+          "Verificação de actors: todos os atores (atendenteCaixa, cozinha, gerente) existem no finalPlan.actorIds.",
+          "Verificação de persistenceRefs: apenas tabelas do módulo e métricas alimentadas; nenhuma tabela MDM/horizontal/plugin incluída.",
+          "Verificação de metricRefs vs persistenceRefs: toda métrica alimentada aparece em ambos.",
+          "Verificação de usecaseRefs: todos os IDs existem na lista de usecases aprovados.",
+          "Verificação de relatedEntities: todas as entidades existem na ontologia.",
+          "Verificação de rulesApplied e relatedCapabilities: todos os IDs existem nos artefatos aprovados.",
+          "Verificação de necessidade dos workflows: todos mapeiam para ciclo de entidade, aprovação, consolidação agendada ou automação assíncrona.",
+          "Nenhum erro ou aviso identificado."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

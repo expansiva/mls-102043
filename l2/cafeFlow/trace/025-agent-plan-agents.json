@@ -1,0 +1,78 @@
+{
+  "savedAt": "2026-06-12T14:51:03.463Z",
+  "agentName": "agentPlanAgents",
+  "stepId": 25,
+  "planning": {
+    "planId": "plan-agents",
+    "dependsOn": [
+      "plan-plugins",
+      "plan-usecase-entities",
+      "plan-workflow-definition"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitAgentPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "agents": [
+            {
+              "agentId": "assistenteIaVendas",
+              "title": "Assistente IA de vendas",
+              "purpose": "Gerar resumo diário de vendas e sugestões de promoções com base nas métricas consolidadas dos últimos 7 dias.",
+              "priority": "soon",
+              "trigger": "Quando o gerente solicitar resumo IA no dashboard.",
+              "input": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics",
+                "lowStockMetrics",
+                "parâmetros de período (padrão: últimos 7 dias)"
+              ],
+              "output": [
+                "AiInsightRequest com status gerado ou falhou",
+                "Resumo e sugestões exibidos no dashboard"
+              ],
+              "persistenceRefs": [
+                "aiInsightRequest"
+              ],
+              "usecaseRefs": [
+                "solicitarResumoIa",
+                "listarSolicitacoesIa",
+                "obterSolicitacaoIa"
+              ],
+              "metricRefs": [
+                "salesDailyMetricTable",
+                "topItemsMetricTable",
+                "lowStockMetricTable"
+              ],
+              "allowedTools": [],
+              "permissions": [
+                "read:metrics",
+                "write:aiInsightRequest"
+              ],
+              "stopCriteria": [
+                "Insight gerado e persistido",
+                "Falha registrada com status falhou"
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Planejado 1 agente operacional para processar solicitações de insight IA conforme artefato aprovado.",
+          "Vinculado a métricas consolidadas e usecases de IA para respeitar as regras de negócio.",
+          "Sem agentes adicionais porque workflows existentes são automações sem necessidade de atuação autônoma extra."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

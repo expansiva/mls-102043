@@ -1,0 +1,211 @@
+{
+  "savedAt": "2026-06-12T14:54:54.061Z",
+  "agentName": "agentValidateSolutionCoverage",
+  "stepId": 29,
+  "planning": {
+    "planId": "plan-validate-solution-coverage",
+    "dependsOn": [
+      "plan-mdm",
+      "plan-horizontals",
+      "plan-plugins",
+      "plan-persistence-index",
+      "plan-table-definition",
+      "plan-metrics-index",
+      "plan-metric-table-definition",
+      "plan-usecase-entities",
+      "plan-usecase-definition",
+      "plan-workflow-definition",
+      "plan-agents",
+      "plan-page-definition",
+      "plan-entity-definition",
+      "plan-user-journeys",
+      "plan-ui-consolidation"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitSolutionCoverageValidation",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "summary": {
+            "passed": false,
+            "errorCount": 10,
+            "warningCount": 9
+          },
+          "issues": [
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Página deve declarar navigationRefs como array (mesmo que vazio).",
+              "path": "pages[0].navigationRefs",
+              "evidence": [
+                "pageId=dashboard"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Página deve declarar navigationRefs como array (mesmo que vazio).",
+              "path": "pages[1].navigationRefs",
+              "evidence": [
+                "pageId=gerenciamentoCardapioEstoque"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Página deve declarar navigationRefs como array (mesmo que vazio).",
+              "path": "pages[2].navigationRefs",
+              "evidence": [
+                "pageId=posRapido"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Página deve declarar navigationRefs como array (mesmo que vazio).",
+              "path": "pages[3].navigationRefs",
+              "evidence": [
+                "pageId=relatorioFechamentoTurno"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Página deve declarar navigationRefs como array (mesmo que vazio).",
+              "path": "pages[4].navigationRefs",
+              "evidence": [
+                "pageId=telaCozinha"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "metricTable.missingRequiredFields",
+              "message": "Tabela de métricas deve declarar timeColumn, hypertable, dimensions, measures e updatePolicy (updatedByLayer=layer_3_usecases).",
+              "path": "metricTables[dailySalesMetrics]",
+              "evidence": [
+                "storageEngine=postgresTimescaleDB"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "metricTable.missingRequiredFields",
+              "message": "Tabela de métricas deve declarar timeColumn, hypertable, dimensions, measures e updatePolicy (updatedByLayer=layer_3_usecases).",
+              "path": "metricTables[lowStockMetrics]",
+              "evidence": [
+                "storageEngine=postgresTimescaleDB"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "metricTable.missingRequiredFields",
+              "message": "Tabela de métricas deve declarar timeColumn, hypertable, dimensions, measures e updatePolicy (updatedByLayer=layer_3_usecases).",
+              "path": "metricTables[topSellingItemsMetrics]",
+              "evidence": [
+                "storageEngine=postgresTimescaleDB"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "defsPlan.missing",
+              "message": "Faltam definições com defsPlan.saveAsDefs=true para cada tabela transacional e de métricas (fileName/exportName estável).",
+              "path": "defsPlan",
+              "evidence": [
+                "tables=7",
+                "metricTables=3"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "mdm.incomplete",
+              "message": "MDM deve estar presente e completo; domínio menuItem não tem definição detalhada no snapshot.",
+              "path": "mdmDomains[0]",
+              "evidence": [
+                "domainId=menuItem"
+              ]
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field menuCategoryId maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.menuCategoryId",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field name maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.name",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field description maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.description",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field sortOrder maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.sortOrder",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field color maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.color",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity CardapioEntity field isActive maps to no column of table menu_item_ingredient (and the table has no details JSONB)",
+              "path": "entity.CardapioEntity.fields.isActive",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity EstoqueEntity field name maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+              "path": "entity.EstoqueEntity.fields.name",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity EstoqueEntity field quantityAvailable maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+              "path": "entity.EstoqueEntity.fields.quantityAvailable",
+              "evidence": []
+            },
+            {
+              "severity": "warning",
+              "code": "entity.fieldColumn.unmapped",
+              "message": "entity EstoqueEntity field minimumLevel maps to no column of table inventory_adjustment (and the table has no details JSONB)",
+              "path": "entity.EstoqueEntity.fields.minimumLevel",
+              "evidence": []
+            }
+          ],
+          "readyToSaveDefs": false
+        },
+        "questions": [],
+        "trace": [
+          "Validação final cruzando regras de cobertura, páginas, workflows e métricas.",
+          "Erros: navigationRefs ausentes nas páginas, definições de métricas incompletas, defsPlan ausente e MDM incompleto.",
+          "Avisos: campos de entidades sem mapeamento de coluna."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 49,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

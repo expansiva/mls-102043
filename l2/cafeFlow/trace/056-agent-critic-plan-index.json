@@ -1,0 +1,102 @@
+{
+  "savedAt": "2026-06-12T14:47:13.909Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 56,
+  "planning": {
+    "planId": "plan-index-critic:usecasePlan:1",
+    "dependsOn": [
+      "plan-usecase-entities"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": [
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase criarPedido writes metric table dailySalesMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[0]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase criarPedido writes metric table topSellingItemsMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[0]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase adicionarItemPedido writes metric table topSellingItemsMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[1]"
+            },
+            {
+              "code": "useusecase.metricWrite.unjustified",
+              "message": "usecase criarItemEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[15]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase atualizarItemEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[16]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase excluirItemEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[17]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase criarAjusteEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[19]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase confirmarAjusteEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[20]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase fecharTurno writes metric table dailySalesMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[23]"
+            },
+            {
+              "code": "usecase.search.missing",
+              "message": "PedidoEntity, CardapioEntity and EstoqueEntity declare 'search' in allowedOperations but no corresponding search usecases are defined",
+              "path": "usecaseEntities"
+            },
+            {
+              "code": "usecase.read.missing",
+              "message": "Missing obterCategoriaCardapio and obterIngredienteItemCardapio usecases for individual read operations consistent with other entities",
+              "path": "usecases"
+            }
+          ],
+          "notes": [
+            "All module-owned tables have read and write usecase coverage.",
+            "All lifecycle transitions are covered by existing usecases.",
+            "All read usecases have empty writesTables as required.",
+            "Layer 3 is correctly the only layer accessing external (MDM) tables."
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Analyzed all module-owned tables for read/write usecase coverage",
+          "Verified lifecycle transitions are covered by usecases",
+          "Checked metric table writes against base transactional table updates",
+          "Confirmed deterministic warnings about unjustified metric writes",
+          "Added warnings for missing search usecases and inconsistent get-by-id coverage"
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

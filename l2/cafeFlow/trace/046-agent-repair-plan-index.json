@@ -1,0 +1,266 @@
+{
+  "savedAt": "2026-06-12T14:38:12.814Z",
+  "agentName": "agentRepairPlanIndex",
+  "stepId": 46,
+  "planning": {
+    "planId": "plan-index-repair:persistenceIndex:1",
+    "dependsOn": [
+      "plan-persistence-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitRepairedPersistenceIndex",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "persistenceScope": {
+            "moduleId": "cafeFlow",
+            "newTablesRequired": true,
+            "metricsTablesRequired": true,
+            "excludedEntities": [
+              {
+                "entityId": "MenuItem",
+                "ownership": "mdmOwned",
+                "reason": "rule:mdmOwned"
+              },
+              {
+                "entityId": "OrderUsecase",
+                "ownership": "existingModuleOwned",
+                "reason": "Entidade de caso de uso não persiste no módulo; tratada no fluxo/aplicação."
+              },
+              {
+                "entityId": "InventoryAdjustmentUsecase",
+                "ownership": "existingModuleOwned",
+                "reason": "Entidade de caso de uso não persiste no módulo; tratada no fluxo/aplicação."
+              },
+              {
+                "entityId": "ShiftCloseUsecase",
+                "ownership": "existingModuleOwned",
+                "reason": "Entidade de caso de uso não persiste no módulo; tratada no fluxo/aplicação."
+              }
+            ]
+          },
+          "tables": [
+            {
+              "tableId": "menuCategory",
+              "tableName": "menu_category",
+              "title": "Categorias do cardápio",
+              "purpose": "Organizar itens do cardápio por categoria para gestão e exibição no POS.",
+              "ownership": "moduleOwned",
+              "rootEntity": "MenuCategory",
+              "sourceEntities": [
+                "MenuCategory"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "gerenciarItemCardapio",
+                "criarPedido"
+              ],
+              "writesByArtifacts": [
+                "gerenciarItemCardapio"
+              ],
+              "rulesApplied": [],
+              "reason": "rule:moduleOwned.newTransactional"
+            },
+            {
+              "tableId": "inventoryItem",
+              "tableName": "inventory_item",
+              "title": "Itens de estoque",
+              "purpose": "Controlar estoque básico e níveis para alertas e baixa de insumos.",
+              "ownership": "moduleOwned",
+              "rootEntity": "InventoryItem",
+              "sourceEntities": [
+                "InventoryItem"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "gerenciarEstoque",
+                "consultarDashboard",
+                "fecharTurno"
+              ],
+              "writesByArtifacts": [
+                "gerenciarEstoque",
+                "gerenciarEstoque"
+              ],
+              "rulesApplied": [
+                "inventoryLowStockAlert",
+                "inventoryDecrementPolicy"
+              ],
+              "reason": "rule:moduleOwned.newTransactional"
+            },
+            {
+              "tableId": "menuItemIngredient",
+              "tableName": "menu_item_ingredient",
+              "title": "Ingredientes por item do cardápio",
+              "purpose": "Mapear insumos usados por item do cardápio para baixa e alerta de estoque.",
+              "ownership": "moduleOwned",
+              "rootEntity": "MenuItemIngredient",
+              "sourceEntities": [
+                "MenuItemIngredient"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "gerenciarItemCardapio",
+                "gerenciarEstoque"
+              ],
+              "writesByArtifacts": [
+                "gerenciarItemCardapio"
+              ],
+              "rulesApplied": [
+                "inventoryDecrementPolicy"
+              ],
+              "reason": "rule:moduleOwned.newTransactional"
+            },
+            {
+              "tableId": "order",
+              "tableName": "order",
+              "title": "Pedidos",
+              "purpose": "Registrar pedidos do POS com itens e status para cozinha e atendimento.",
+              "ownership": "moduleOwned",
+              "rootEntity": "Order",
+              "sourceEntities": [
+                "Order",
+                "OrderItem"
+              ],
+              "embeddedEntities": [
+                "OrderItem"
+              ],
+              "persistencePattern": "aggregateJsonDetails",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": true,
+              "priority": "now",
+              "readsByArtifacts": [
+                "criarPedido",
+                "adicionarItemPedido",
+                "atualizarStatusPedido",
+                "consultarDashboard"
+              ],
+              "writesByArtifacts": [
+                "criarPedido",
+                "adicionarItemPedido",
+                "atualizarStatusPedido"
+              ],
+              "rulesApplied": [
+                "orderStatusLifecycle",
+                "kitchenStatusUpdates",
+                "shiftMustBeOpenForOrders"
+              ],
+              "reason": "rule:aggregateJsonDetails.withChildren"
+            },
+            {
+              "tableId": "dailyShift",
+              "tableName": "daily_shift",
+              "title": "Turnos diários",
+              "purpose": "Controlar abertura e fechamento de turno e consolidar relatório do dia.",
+              "ownership": "moduleOwned",
+              "rootEntity": "DailyShift",
+              "sourceEntities": [
+                "DailyShift",
+                "ShiftClosingReport"
+              ],
+              "embeddedEntities": [
+                "ShiftClosingReport"
+              ],
+              "persistencePattern": "aggregateJsonDetails",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": true,
+              "priority": "now",
+              "readsByArtifacts": [
+                "fecharTurno",
+                "consultarDashboard"
+              ],
+              "writesByArtifacts": [
+                "fecharTurno"
+              ],
+              "rulesApplied": [
+                "shiftMustBeOpenForOrders",
+                "shiftCloseRequiresOrders"
+              ],
+              "reason": "rule:aggregateJsonDetails.withChildren"
+            },
+            {
+              "tableId": "inventoryAdjustment",
+              "tableName": "inventory_adjustment",
+              "title": "Ajustes de estoque",
+              "purpose": "Registrar ajustes de estoque com status de confirmação.",
+              "ownership": "moduleOwned",
+              "rootEntity": "InventoryAdjustment",
+              "sourceEntities": [
+                "InventoryAdjustment"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "gerenciarEstoque"
+              ],
+              "writesByArtifacts": [
+                "gerenciarEstoque"
+              ],
+              "rulesApplied": [
+                "inventoryDecrementPolicy",
+                "inventoryLowStockAlert"
+              ],
+              "reason": "rule:moduleOwned.newTransactional"
+            },
+            {
+              "tableId": "aiInsightRequest",
+              "tableName": "ai_insight_request",
+              "title": "Solicitações de insight IA",
+              "purpose": "Rastrear solicitações e resultados do assistente IA usando métricas consolidadas.",
+              "ownership": "moduleOwned",
+              "rootEntity": "AiInsightRequest",
+              "sourceEntities": [
+                "AiInsightRequest"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "soon",
+              "readsByArtifacts": [
+                "solicitarResumoIa"
+              ],
+              "writesByArtifacts": [
+                "solicitarResumoIa"
+              ],
+              "rulesApplied": [
+                "aiInsightsUseMetrics"
+              ],
+              "reason": "rule:moduleOwned.newTransactional"
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Adicionadas entidades de caso de uso a excludedEntities para cobrir ontology entities moduleOwned sem tabela.",
+          "Nenhuma nova tabela criada; tabelas existentes mantidas.",
+          "Aviso de ausência de regras em menuCategory mantido por falta de regra aplicável no contexto."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 39,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

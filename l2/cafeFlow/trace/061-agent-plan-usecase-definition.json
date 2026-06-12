@@ -1,0 +1,41 @@
+{
+  "savedAt": "2026-06-12T14:48:01.354Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 61,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "solicitarResumoIa",
+            "commands": [
+              {
+                "commandId": "solicitarResumoIa",
+                "input": [],
+                "output": [
+                  {
+                    "name": "aiInsight",
+                    "type": "AiInsightEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Definição de comando único para solicitar resumo IA com saída AiInsightEntity."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 49,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

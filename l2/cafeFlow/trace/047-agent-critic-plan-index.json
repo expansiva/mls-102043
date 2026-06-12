@@ -1,0 +1,54 @@
+{
+  "savedAt": "2026-06-12T14:39:12.822Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 47,
+  "planning": {
+    "planId": "plan-index-critic:persistenceIndex:2",
+    "dependsOn": [
+      "plan-persistence-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": [
+            {
+              "code": "persistence.noRules",
+              "message": "table menuCategory has no rulesApplied",
+              "path": "tables[0]"
+            },
+            {
+              "code": "persistence.duplicateArtifactRef",
+              "message": "table inventoryItem lists 'gerenciarEstoque' twice in writesByArtifacts",
+              "path": "tables[1].writesByArtifacts"
+            }
+          ],
+          "notes": []
+        },
+        "questions": [],
+        "trace": [
+          "Checked ownership: all tables are moduleOwned; excludedEntities correctly contains MenuItem (mdmOwned) and usecase entities.",
+          "Checked tableKind: all tables are transactional; no metric tables present.",
+          "Checked necessity: all tables map to ontology entities and are referenced by approved artifacts/actions.",
+          "Checked readsByArtifacts/writesByArtifacts: all tables have at least one reader and one writer.",
+          "Checked embedded pattern: OrderItem and ShiftClosingReport correctly use aggregateJsonDetails with detailsColumnRecommended=true.",
+          "Confirmed deterministic warning: menuCategory has no applicable rules.",
+          "Added warning: inventoryItem writesByArtifacts contains duplicate artifact reference."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 40,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

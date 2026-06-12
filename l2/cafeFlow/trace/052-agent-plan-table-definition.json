@@ -1,0 +1,164 @@
+{
+  "savedAt": "2026-06-12T14:39:31.942Z",
+  "agentName": "agentPlanTableDefinition",
+  "stepId": 52,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitTableDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "tableDefinition": {
+            "tableId": "order",
+            "tableName": "order",
+            "moduleId": "cafeFlow",
+            "title": "Pedidos",
+            "purpose": "Registrar pedidos do POS com itens e status para cozinha e atendimento.",
+            "ownership": "moduleOwned",
+            "rootEntity": "Order",
+            "layer": "layer_1_external",
+            "tableKind": "transactional",
+            "columns": [
+              {
+                "name": "order_id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true,
+                "description": "Identificador único do pedido."
+              },
+              {
+                "name": "daily_shift_id",
+                "type": "uuid",
+                "nullable": false,
+                "description": "Referência ao turno diário ao qual o pedido pertence."
+              },
+              {
+                "name": "status",
+                "type": "string",
+                "nullable": false,
+                "description": "Status atual do pedido."
+              },
+              {
+                "name": "service_type",
+                "type": "string",
+                "nullable": false,
+                "description": "Tipo de atendimento do pedido (mesa ou takeout)."
+              },
+              {
+                "name": "table_number",
+                "type": "string",
+                "nullable": true,
+                "description": "Número/identificador da mesa quando o atendimento é em mesa."
+              },
+              {
+                "name": "notes",
+                "type": "text",
+                "nullable": true,
+                "description": "Observações gerais do pedido."
+              },
+              {
+                "name": "created_at",
+                "type": "datetime",
+                "nullable": false,
+                "description": "Data e hora de criação do pedido."
+              },
+              {
+                "name": "updated_at",
+                "type": "datetime",
+                "nullable": false,
+                "description": "Data e hora da última atualização do pedido."
+              }
+            ],
+            "primaryKey": [
+              "order_id"
+            ],
+            "foreignRefs": [
+              {
+                "fieldName": "daily_shift_id",
+                "targetEntity": "DailyShift",
+                "targetOwnership": "existingModuleOwned",
+                "reason": "Turno diário necessário para validar criação do pedido."
+              }
+            ],
+            "indexes": [
+              {
+                "indexName": "idx_order_daily_shift_status",
+                "columns": [
+                  "daily_shift_id",
+                  "status"
+                ],
+                "unique": false,
+                "reason": "Listagens operacionais por turno e status."
+              },
+              {
+                "indexName": "idx_order_created_at",
+                "columns": [
+                  "created_at"
+                ],
+                "unique": false,
+                "reason": "Consultas por período para dashboard."
+              },
+              {
+                "indexName": "idx_order_status",
+                "columns": [
+                  "status"
+                ],
+                "unique": false,
+                "reason": "Filtragem rápida por status de preparo."
+              }
+            ],
+            "detailsColumn": {
+              "enabled": true,
+              "columnName": "details",
+              "jsonSchemaRef": "OrderItemsDetails",
+              "reason": "Itens do pedido e observações de item são agregados e acessados junto ao pedido."
+            },
+            "metricUpdatePolicy": {
+              "feedsMetrics": true,
+              "metricRefs": [],
+              "updatedByLayer": "layer_3_usecases"
+            },
+            "accessPolicy": {
+              "directAccessAllowedFor": [
+                "layer_3_usecases"
+              ],
+              "forbiddenFor": [
+                "pages",
+                "layer_2_controllers",
+                "agents"
+              ]
+            },
+            "rulesApplied": [
+              "orderStatusLifecycle",
+              "kitchenStatusUpdates",
+              "shiftMustBeOpenForOrders"
+            ]
+          },
+          "defsPlan": {
+            "fileName": "tables/order.defs.ts",
+            "exportName": "orderTableDefinition",
+            "saveAsDefs": true
+          }
+        },
+        "questions": [],
+        "trace": [
+          "selector:order",
+          "ownership:moduleOwned",
+          "pattern:aggregateJsonDetails",
+          "details:enabled",
+          "layer:layer_1_external",
+          "tableKind:transactional",
+          "access:layer_3_usecases_only",
+          "metrics:feeds"
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 41,
+    "interaction": null,
+    "nextSteps": null
+  }
+}
