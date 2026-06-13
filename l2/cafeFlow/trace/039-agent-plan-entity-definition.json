@@ -1,0 +1,97 @@
+{
+  "savedAt": "2026-06-13T12:45:20.517Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 39,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "StockMovement",
+            "title": "Movimentação de Estoque",
+            "description": "Entrada, saída e ajuste de estoque vinculado a itens e pedidos.",
+            "ownership": "moduleOwned",
+            "fields": [
+              {
+                "fieldId": "stockMovementId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único da movimentação de estoque."
+              },
+              {
+                "fieldId": "stockItemId",
+                "type": "StockItem",
+                "required": true,
+                "description": "Item de estoque associado à movimentação."
+              },
+              {
+                "fieldId": "orderId",
+                "type": "Order",
+                "required": false,
+                "description": "Pedido vinculado à saída de estoque, quando aplicável."
+              },
+              {
+                "fieldId": "movementType",
+                "type": "string",
+                "required": true,
+                "description": "Tipo de movimentação realizada.",
+                "enum": [
+                  "entrada",
+                  "saida",
+                  "ajuste"
+                ]
+              },
+              {
+                "fieldId": "quantity",
+                "type": "number",
+                "required": true,
+                "description": "Quantidade movimentada do item de estoque."
+              },
+              {
+                "fieldId": "reason",
+                "type": "text",
+                "required": false,
+                "description": "Motivo ou observação da movimentação, especialmente para ajustes."
+              },
+              {
+                "fieldId": "occurredAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora em que a movimentação ocorreu."
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação do registro."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização do registro."
+              }
+            ],
+            "rulesApplied": [
+              "lowStockThresholdRule"
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Mapeado StockMovement com relações manyToOne para StockItem e Order (opcional).",
+          "Incluídos campos de tipo de movimentação, quantidade, motivo e timestamps de auditoria."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

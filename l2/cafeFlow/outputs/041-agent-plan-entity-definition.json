@@ -1,0 +1,94 @@
+{
+  "savedAt": "2026-06-13T12:45:20.531Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 41,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "Shift",
+            "title": "Turno Diário",
+            "description": "Período operacional com abertura e fechamento.",
+            "ownership": "moduleOwned",
+            "fields": [
+              {
+                "fieldId": "shiftId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único do turno."
+              },
+              {
+                "fieldId": "shiftConfigId",
+                "type": "ShiftConfig",
+                "required": true,
+                "description": "Configuração de turno aplicada ao período operacional."
+              },
+              {
+                "fieldId": "status",
+                "type": "string",
+                "required": true,
+                "description": "Status atual do turno.",
+                "enum": [
+                  "aberto",
+                  "emFechamento",
+                  "fechado"
+                ]
+              },
+              {
+                "fieldId": "openedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de abertura do turno."
+              },
+              {
+                "fieldId": "closedAt",
+                "type": "datetime",
+                "required": false,
+                "description": "Data e hora de fechamento do turno."
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação do registro."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização do registro."
+              }
+            ],
+            "statusEnum": [
+              "aberto",
+              "emFechamento",
+              "fechado"
+            ],
+            "rulesApplied": [
+              "shiftClosureRequiresNoOpenOrders"
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Entidade selecionada: Shift.",
+          "Status enum fornecido em entityMap aplicado ao campo status e statusEnum.",
+          "Relacionamento manyToOne com ShiftConfig gera shiftConfigId obrigatório em Shift.",
+          "Relacionamentos com Order e ShiftReport são o lado 1; referências ficam no lado muitos/um correspondente, portanto não adicionadas em Shift.",
+          "Incluídos campos operacionais de abertura/fechamento conforme descrição do turno.",
+          "Incluídos campos de auditoria createdAt e updatedAt."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 45,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

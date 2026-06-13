@@ -1,0 +1,72 @@
+{
+  "savedAt": "2026-06-13T12:48:53.014Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 47,
+  "planning": {
+    "planId": "plan-index-critic:metricsIndex:1",
+    "dependsOn": [
+      "plan-metrics-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": [
+            {
+              "code": "metrics.sourceBaseTable.unknown",
+              "message": "metric table dailySalesMetrics sources unknown base table orders",
+              "path": "metricTables[0]"
+            },
+            {
+              "code": "metrics.sourceBaseTable.unknown",
+              "message": "metric table dailySalesMetrics sources unknown base table shifts",
+              "path": "metricTables[0]"
+            },
+            {
+              "code": "metrics.sourceBaseTable.unknown",
+              "message": "metric table topSellingItemsMetrics sources unknown base table orders",
+              "path": "metricTables[1]"
+            },
+            {
+              "code": "metrics.sourceBaseTable.unknown",
+              "message": "metric table lowStockMetrics sources unknown base table low_stock_alerts",
+              "path": "metricTables[2]"
+            },
+            {
+              "code": "metrics.sourceBaseTable.unknown",
+              "message": "metric table lowStockMetrics sources unknown base table stock_movements",
+              "path": "metricTables[2]"
+            },
+            {
+              "code": "metrics.dashboard.sources.idMismatch",
+              "message": "dashboard sources list tableName strings instead of metricTableId; ensure references match index identifiers",
+              "path": "dashboardPages[0].sources"
+            }
+          ],
+          "notes": []
+        },
+        "questions": [],
+        "trace": [
+          "checked storageEngine postgresTimescaleDB for all metric tables",
+          "validated dashboard actor gerente exists in finalPlan actors",
+          "checked metric tables cover approved metrics (vendas diárias, itens mais vendidos, estoque baixo)",
+          "evaluated T-013 dimensions for source entity relationships; no missing FK dimensions found",
+          "flagged deterministic warnings from local findings"
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 40,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "savedAt": "2026-06-13T12:51:58.057Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 55,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "listarTurnos",
+            "commands": [
+              {
+                "commandId": "listarTurnos",
+                "input": [],
+                "output": [
+                  {
+                    "name": "turnos",
+                    "type": "turnoEntity[]"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Definido comando único para listar turnos conforme leitura da tabela shifts sem entradas explícitas."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "savedAt": "2026-06-13T12:52:04.028Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 52,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "consultarDashboardGerente",
+            "commands": [
+              {
+                "commandId": "consultarDashboardGerente",
+                "input": [],
+                "output": [
+                  {
+                    "name": "metricas",
+                    "type": "metricasEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Definido comando único para consulta do dashboard do gerente.",
+          "Sem entradas explícitas; retorna métricas agregadas em metricasEntity."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 41,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

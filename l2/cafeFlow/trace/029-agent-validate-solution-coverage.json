@@ -1,0 +1,124 @@
+{
+  "savedAt": "2026-06-13T12:56:48.040Z",
+  "agentName": "agentValidateSolutionCoverage",
+  "stepId": 29,
+  "planning": {
+    "planId": "plan-validate-solution-coverage",
+    "dependsOn": [
+      "plan-mdm",
+      "plan-horizontals",
+      "plan-plugins",
+      "plan-persistence-index",
+      "plan-table-definition",
+      "plan-metrics-index",
+      "plan-metric-table-definition",
+      "plan-usecase-entities",
+      "plan-usecase-definition",
+      "plan-workflow-definition",
+      "plan-agents",
+      "plan-page-definition",
+      "plan-entity-definition",
+      "plan-user-journeys",
+      "plan-ui-consolidation"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitSolutionCoverageValidation",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "summary": {
+            "passed": false,
+            "errorCount": 6,
+            "warningCount": 1
+          },
+          "issues": [
+            {
+              "severity": "error",
+              "code": "mdm.missing.definitions",
+              "message": "MDM domains are listed but no MDM schema/entities are provided; MDM must be present and complete.",
+              "path": "mdmDomains",
+              "evidence": [
+                "mdmDomains only include domainId values: menu, stock, shiftConfig"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "table.id.mismatch",
+              "message": "Usecase table references do not match module table ids; inconsistent naming (snake_case/plural) vs declared tableIds.",
+              "path": "usecases",
+              "evidence": [
+                "usecase escrever/ler uses orders/order_status_history/daily_sales_metrics/top_selling_items_metrics vs tables ids order/orderStatusHistory/dailySalesMetrics/topSellingItemsMetrics",
+                "usecase writes stock_movements/low_stock_alerts/low_stock_metrics vs tables ids stockMovement/lowStockAlert/lowStockMetrics",
+                "usecase writes shifts/shift_reports/sales_summary_requests vs tables ids shift/shiftReport/salesSummaryRequest"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "page.navigationRefs.missing",
+              "message": "Every page must declare navigationRefs array; page definitions omit it.",
+              "path": "pages",
+              "evidence": [
+                "pages[*] only include pageInputs and bffCommands, no navigationRefs"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "workflow.taskConfig.missing",
+              "message": "Workflows with createsTask=true must define taskConfig.",
+              "path": "workflows",
+              "evidence": [
+                "lowStockAlertWorkflow, orderStatusWorkflow, salesSummaryWorkflow, shiftClosureWorkflow have createsTask=true without taskConfig"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "metrics.definition.incomplete",
+              "message": "Metric tables must declare timeColumn/hypertable, dimensions, measures, and updatePolicy(updatedByLayer=layer_3_usecases).",
+              "path": "metricTables",
+              "evidence": [
+                "dailySalesMetrics, topSellingItemsMetrics, lowStockMetrics only specify storageEngine"
+              ]
+            },
+            {
+              "severity": "error",
+              "code": "workflow.persistenceRefs.metric",
+              "message": "Workflows include metric tables in persistenceRefs but persistenceRefs should reference module tables by id; metrics should be in metricRefs only.",
+              "path": "workflows",
+              "evidence": [
+                "orderStatusWorkflow persistenceRefs includes dailySalesMetrics/topSellingItemsMetrics",
+                "shiftClosureWorkflow persistenceRefs includes dailySalesMetrics",
+                "lowStockAlertWorkflow persistenceRefs includes lowStockMetrics"
+              ]
+            },
+            {
+              "severity": "warning",
+              "code": "usecase.consumer.missing",
+              "message": "usecase obterPedido has no consumer (no page BFF command, workflow or agent references it)",
+              "path": "usecase.obterPedido",
+              "evidence": []
+            }
+          ],
+          "readyToSaveDefs": false
+        },
+        "questions": [],
+        "trace": [
+          "Validado snapshot de cobertura do fluxo newSolution para o módulo cafeFlow.",
+          "Contagens conferidas e regras de validação aplicadas (MDM, tabelas, métricas, páginas, workflows).",
+          "Erros encontrados: MDM incompleto, inconsistência de IDs de tabela, navigationRefs ausentes, taskConfig ausente, métricas sem esquema, métricas em persistenceRefs.",
+          "Aviso mantido: usecase obterPedido sem consumidor.",
+          "readyToSaveDefs=false porque há erros."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

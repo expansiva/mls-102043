@@ -1,0 +1,45 @@
+{
+  "savedAt": "2026-06-13T12:53:40.038Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 51,
+  "planning": {
+    "planId": "plan-index-critic:workflowIndex:1",
+    "dependsOn": [
+      "plan-workflow-index"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": []
+        },
+        "questions": [],
+        "trace": [
+          "Verificado executionMode de todos os workflows: valores válidos e condizentes com a natureza de cada fluxo.",
+          "Verificado createsTask: true apenas para workflows que criam ou coordenam tarefas (orderStatusWorkflow, shiftClosureWorkflow, lowStockAlertWorkflow, salesSummaryWorkflow); false para uiState (posOrderCaptureWorkflow).",
+          "Verificado actors: todos os IDs (atendente, cozinha, gerente) pertencem ao conjunto finalPlan.actorIds.",
+          "Verificado persistenceRefs: contém apenas module-owned tables e metric tables; todas as metric tables presentes também aparecem em metricRefs.",
+          "Verificado usecaseRefs: todos os IDs existem em usecaseIds.",
+          "Verificado metricRefs: todos os IDs existem em metricTableIds.",
+          "Verificado relatedCapabilities e rulesApplied: todos os IDs existem nos conjuntos aprovados.",
+          "Verificado relatedEntities: todas as entidades existem em ontologyEntityIds.",
+          "Avaliada necessidade de cada workflow: todos mapeiam para multi-step state, coordination, integration ou automation conforme o contrato.",
+          "Nenhuma violação de contrato identificada."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 42,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

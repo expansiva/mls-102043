@@ -1,0 +1,289 @@
+{
+  "savedAt": "2026-06-13T12:52:40.030Z",
+  "agentName": "agentPlanWorkflowIndex",
+  "stepId": 23,
+  "planning": {
+    "planId": "plan-workflow-index",
+    "dependsOn": [
+      "plan-usecase-entities"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitWorkflowIndex",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "workflows": [
+            {
+              "workflowId": "orderStatusWorkflow",
+              "title": "Workflow de status do pedido",
+              "purpose": "Controlar o ciclo de vida de um pedido desde o recebimento até a entrega ou cancelamento, coordenando a cozinha e registrando histórico.",
+              "executionMode": "entityLifecycle",
+              "createsTask": true,
+              "actors": [
+                "atendente",
+                "cozinha"
+              ],
+              "relatedCapabilities": [
+                "registrarPedido",
+                "atualizarStatusCozinha"
+              ],
+              "relatedEntities": [
+                "Order",
+                "OrderItem",
+                "OrderStatusHistory"
+              ],
+              "rulesApplied": [
+                "orderStatusTransition",
+                "orderRequiresItem"
+              ],
+              "persistenceRefs": [
+                "order",
+                "orderStatusHistory",
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics",
+                "topSellingItemsMetrics"
+              ],
+              "usecaseRefs": [
+                "criarPedido",
+                "listarPedidos",
+                "listarPedidosCozinha",
+                "atualizarStatusPedido"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "taskOnPreparo",
+                  "title": "Criar tarefa para cozinha ao mudar para 'emPreparo'",
+                  "reason": "Garante que a cozinha veja o pedido no painel de status sem depender apenas de atualização de tela.",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "historyOnTransition",
+                  "title": "Registrar histórico em OrderStatusHistory a cada transição válida",
+                  "reason": "Auditoria e métricas de tempo de preparo.",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "shiftClosureWorkflow",
+              "title": "Workflow de fechamento de turno",
+              "purpose": "Gerenciar o ciclo de vida do turno diário, garantindo que todos os pedidos estejam finalizados antes do fechamento e gerando o relatório consolidado.",
+              "executionMode": "entityLifecycle",
+              "createsTask": true,
+              "actors": [
+                "gerente"
+              ],
+              "relatedCapabilities": [
+                "fecharTurno"
+              ],
+              "relatedEntities": [
+                "Shift",
+                "ShiftReport"
+              ],
+              "rulesApplied": [
+                "shiftClosureRequiresNoOpenOrders"
+              ],
+              "persistenceRefs": [
+                "shift",
+                "shiftReport",
+                "dailySalesMetrics"
+              ],
+              "metricRefs": [
+                "dailySalesMetrics"
+              ],
+              "usecaseRefs": [
+                "abrirTurno",
+                "fecharTurno",
+                "listarTurnos",
+                "obterRelatorioTurno"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "blockClosureOpenOrders",
+                  "title": "Bloquear transição para 'fechado' se houver pedidos abertos",
+                  "reason": "Regra de negócio obrigatória para integridade do fechamento.",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "generateReportOnClosure",
+                  "title": "Gerar ShiftReport automaticamente ao concluir o fechamento",
+                  "reason": "Documenta o fechamento para conferência e auditoria.",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "taskReviewOnClosure",
+                  "title": "Criar tarefa de revisão para o gerente ao iniciar 'emFechamento'",
+                  "reason": "Garante que o gerente confirme valores e pendências antes de finalizar.",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "lowStockAlertWorkflow",
+              "title": "Workflow de alerta de estoque baixo",
+              "purpose": "Monitorar movimentações de estoque e gerar alertas automáticos quando itens atingirem o limite mínimo configurado.",
+              "executionMode": "automation",
+              "createsTask": true,
+              "actors": [
+                "gerente"
+              ],
+              "relatedCapabilities": [
+                "gerenciarEstoque"
+              ],
+              "relatedEntities": [
+                "StockMovement",
+                "LowStockAlert"
+              ],
+              "rulesApplied": [
+                "lowStockThresholdRule"
+              ],
+              "persistenceRefs": [
+                "stockMovement",
+                "lowStockAlert",
+                "lowStockMetrics"
+              ],
+              "metricRefs": [
+                "lowStockMetrics"
+              ],
+              "usecaseRefs": [
+                "registrarMovimentacaoEstoque",
+                "listarMovimentacoesEstoque",
+                "listarAlertasEstoqueBaixo"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "autoAlertOnMovement",
+                  "title": "Disparar alerta automaticamente após movimentação que cruze o limite",
+                  "reason": "Permite reação imediata do gerente sem consulta manual.",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "deduplicateAlerts",
+                  "title": "Evitar duplicidade de alertas para o mesmo item enquanto não reabastecido",
+                  "reason": "Reduz ruído operacional no painel do gerente.",
+                  "priority": "soon"
+                }
+              ]
+            },
+            {
+              "workflowId": "posOrderCaptureWorkflow",
+              "title": "Workflow de lançamento rápido de pedido no POS",
+              "purpose": "Guiar o atendente no processo de captura rápida de itens, confirmação e envio para a cozinha diretamente na interface do POS.",
+              "executionMode": "uiState",
+              "createsTask": false,
+              "actors": [
+                "atendente"
+              ],
+              "relatedCapabilities": [
+                "registrarPedido"
+              ],
+              "relatedEntities": [
+                "Order",
+                "OrderItem"
+              ],
+              "rulesApplied": [
+                "orderRequiresItem"
+              ],
+              "persistenceRefs": [
+                "order"
+              ],
+              "metricRefs": [],
+              "usecaseRefs": [
+                "criarPedido"
+              ],
+              "priority": "now",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "fastAddItems",
+                  "title": "Manter estado local de itens antes de persistir o pedido completo",
+                  "reason": "Permite adicionar/remover itens rapidamente sem múltiplas requisições.",
+                  "priority": "now"
+                },
+                {
+                  "suggestionId": "oneTapSend",
+                  "title": "Botão único de enviar para cozinha que dispara o orderStatusWorkflow",
+                  "reason": "Integração fluida entre captura no POS e início do preparo.",
+                  "priority": "now"
+                }
+              ]
+            },
+            {
+              "workflowId": "salesSummaryWorkflow",
+              "title": "Workflow de solicitação de resumo de vendas",
+              "purpose": "Coordenar a solicitação do gerente, processamento assíncrono pelo assistente de IA e entrega do resumo de vendas.",
+              "executionMode": "taskWorkflow",
+              "createsTask": true,
+              "actors": [
+                "gerente"
+              ],
+              "relatedCapabilities": [
+                "usarAssistenteIA"
+              ],
+              "relatedEntities": [
+                "SalesSummaryRequest"
+              ],
+              "rulesApplied": [
+                "salesSummaryUsesLast7Days"
+              ],
+              "persistenceRefs": [
+                "salesSummaryRequest"
+              ],
+              "metricRefs": [],
+              "usecaseRefs": [
+                "solicitarResumoVendasDia",
+                "listarSolicitacoesResumoVendas"
+              ],
+              "priority": "soon",
+              "implementationSuggestions": [
+                {
+                  "suggestionId": "asyncProcessing",
+                  "title": "Processar solicitação de forma assíncrona via plugin de LLM",
+                  "reason": "Chamadas a LLM podem ter latência; não devem bloquear a interface.",
+                  "priority": "soon"
+                },
+                {
+                  "suggestionId": "notifyOnComplete",
+                  "title": "Notificar gerente quando o resumo estiver pronto",
+                  "reason": "Melhora a experiência sem necessidade de polling contínuo.",
+                  "priority": "soon"
+                }
+              ]
+            }
+          ]
+        },
+        "questions": [
+          "O atendente pode cancelar um pedido diretamente no POS ou apenas o gerente?",
+          "O fechamento de turno deve permitir reabertura em caso de erro operacional?",
+          "O alerta de estoque baixo deve gerar uma tarefa atribuída a um gerente específico ou apenas uma notificação geral?"
+        ],
+        "trace": [
+          "Mapeados 5 workflows a partir das capabilities, entidades de ciclo de vida e artefatos aprovados.",
+          "orderStatusWorkflow definido como entityLifecycle com createsTask=true devido à coordenação com a cozinha.",
+          "shiftClosureWorkflow definido como entityLifecycle com createsTask=true para revisão do gerente.",
+          "lowStockAlertWorkflow definido como automation com createsTask=true para alertas automáticos.",
+          "posOrderCaptureWorkflow definido como uiState para progresso cross-page no POS.",
+          "salesSummaryWorkflow definido como taskWorkflow com createsTask=true devido ao processamento assíncrono via plugin de LLM.",
+          "persistenceRefs preenchidos com tabelas do módulo e metric tables alimentadas conforme regra T-009.",
+          "metricRefs incluídos apenas nos workflows cujas transições escrevem medidas.",
+          "usecaseRefs vinculados aos casos de uso da layer_3 que executarão as transições."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 41,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

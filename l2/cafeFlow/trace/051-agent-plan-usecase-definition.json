@@ -1,0 +1,43 @@
+{
+  "savedAt": "2026-06-13T12:52:10.022Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 51,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "listarSolicitacoesResumoVendas",
+            "commands": [
+              {
+                "commandId": "listarSolicitacoesResumoVendas",
+                "input": [],
+                "output": [
+                  {
+                    "name": "solicitacoes",
+                    "type": "resumoVendasEntity[]"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Derive single list command for usecase listarSolicitacoesResumoVendas.",
+          "No explicit filters or inputs in context, so input is empty.",
+          "Output returns list of resumoVendasEntity from sales_summary_requests."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 41,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

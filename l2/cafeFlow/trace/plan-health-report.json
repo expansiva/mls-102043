@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "2026-06-06",
+  "artifactType": "planHealthReport",
+  "moduleName": "cafeFlow",
+  "savedAt": "2026-06-13T12:56:48.157Z",
+  "source": {
+    "agentName": "agentValidateSolutionCoverage",
+    "stepId": 30,
+    "planId": "org-materialization"
+  },
+  "report": {
+    "summary": {
+      "passed": true,
+      "errorCount": 0,
+      "warningCount": 1
+    },
+    "issues": [
+      {
+        "severity": "warning",
+        "code": "usecase.consumer.missing",
+        "message": "usecase obterPedido has no consumer (no page BFF command, workflow or agent references it)",
+        "path": "usecase.obterPedido",
+        "evidence": []
+      }
+    ],
+    "checklistResults": null,
+    "readyToSaveDefs": true,
+    "deterministicOnly": true,
+    "refreshedAt": "2026-06-13T12:56:48.157Z",
+    "refreshedBy": "agentNewSolutionFinal (T-016 deterministic re-validation)"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "savedAt": "2026-06-13T12:45:25.819Z",
+  "agentName": "agentPlanMDM",
+  "stepId": 14,
+  "planning": {
+    "planId": "plan-mdm",
+    "dependsOn": [
+      "plan-finalize-solution-plan"
+    ],
+    "executionMode": "parallel_static",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitMdmPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "mdmDomains": [
+            {
+              "domainId": "menu",
+              "title": "Cardápio",
+              "masterEntities": [
+                "MenuItem",
+                "MenuCategory"
+              ],
+              "sourceOfTruth": "102034",
+              "consumers": [
+                "posPage",
+                "menuStockManagementPage",
+                "orderUsecaseEntity",
+                "menuUsecaseEntity",
+                "topSellingItemsMetricTable",
+                "salesInsightAgent"
+              ],
+              "governanceRules": [
+                "Todo item do cardápio deve estar associado a uma categoria ativa (regra menuItemRequiresCategory).",
+                "Apenas o ator gerente pode criar, editar ou inativar itens e categorias do cardápio.",
+                "Itens inativados não devem aparecer no POS para novos pedidos."
+              ]
+            },
+            {
+              "domainId": "stock",
+              "title": "Estoque e Insumos",
+              "masterEntities": [
+                "StockItem",
+                "UnitOfMeasure"
+              ],
+              "sourceOfTruth": "102034",
+              "consumers": [
+                "menuStockManagementPage",
+                "dashboardPage",
+                "adminMetricsDashboardPage",
+                "lowStockAlertWorkflow",
+                "stockUsecaseEntity",
+                "orderUsecaseEntity",
+                "lowStockMetricTable"
+              ],
+              "governanceRules": [
+                "Gerar alerta quando nível de estoque ficar abaixo do mínimo definido (regra lowStockThresholdRule).",
+                "Apenas o ator gerente pode cadastrar ou ajustar itens de estoque e unidades de medida.",
+                "Unidades de medida não podem ser excluídas se estiverem vinculadas a itens de estoque."
+              ]
+            },
+            {
+              "domainId": "shiftConfig",
+              "title": "Configuração de Turno",
+              "masterEntities": [
+                "ShiftConfig"
+              ],
+              "sourceOfTruth": "102034",
+              "consumers": [
+                "shiftReportPage",
+                "shiftUsecaseEntity",
+                "shiftClosureWorkflow"
+              ],
+              "governanceRules": [
+                "Apenas o ator gerente pode alterar configurações de turno.",
+                "Configurações de turno não podem ser removidas se houver turnos históricos vinculados."
+              ]
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Identificados 3 domínios MDM a partir das entidades mdmOwned: Cardápio, Estoque e Insumos, e Configuração de Turno.",
+          "Não há entidades de partes externas (clientes, fornecedores), portanto MDM de party não é necessário.",
+          "Fonte de verdade definida como a infraestrutura compartilhada de MDM do projeto 102034.",
+          "Mapeados consumidores nas páginas, entidades de caso de uso, workflows, tabelas de métricas e agentes que referenciam os dados mestres."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 45,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

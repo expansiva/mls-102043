@@ -1,0 +1,70 @@
+{
+  "savedAt": "2026-06-13T12:51:30.021Z",
+  "agentName": "agentCriticPlanIndex",
+  "stepId": 49,
+  "planning": {
+    "planId": "plan-index-critic:usecasePlan:1",
+    "dependsOn": [
+      "plan-usecase-entities"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPlanIndexCritique",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "approved": true,
+          "errors": [],
+          "warnings": [
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase criarPedido writes metric table dailySalesMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[0]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase criarPedido writes metric table topSellingItemsMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[0]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase registrarMovimentacaoEstoque writes metric table lowStockMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[10]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase abrirTurno writes metric table dailySalesMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[13]"
+            },
+            {
+              "code": "usecase.metricWrite.unjustified",
+              "message": "usecase fecharTurno writes metric table dailySalesMetrics but does not map to any of its measures/sourceWriteEvents; remove the write or propose the missing measure in the metrics index",
+              "path": "usecases[14]"
+            }
+          ],
+          "notes": [
+            "Todas as tabelas module-owned possuem usecases de escrita e leitura correspondentes.",
+            "Todas as transições de ciclo de vida identificadas estão cobertas por usecases.",
+            "Acesso a tabelas externas (MDM) ocorre exclusivamente em usecases layer_3."
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Verificada cobertura de leitura (list/search com writesTables vazio) para todas as tabelas module-owned escritas.",
+          "Verificada cobertura de escrita de métricas nos usecases que alteram tabelas transacionais.",
+          "Verificado que apenas layer_3_usecases acessa tabelas layer_1_external (MDM).",
+          "Confirmados 5 warnings de metricWrite.unjustified do check determinístico."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 41,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "savedAt": "2026-06-13T12:51:58.086Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 53,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "solicitarResumoVendasDia",
+            "commands": [
+              {
+                "commandId": "solicitarResumoVendasDia",
+                "input": [
+                  {
+                    "name": "resumoVendas",
+                    "type": "resumoVendasEntity",
+                    "required": true
+                  }
+                ],
+                "output": [
+                  {
+                    "name": "resumoVendas",
+                    "type": "resumoVendasEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Comando único para registrar solicitação de resumo de vendas do dia.",
+          "Input e output baseados na entidade resumoVendasEntity informada no caso de uso."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 56,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

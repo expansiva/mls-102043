@@ -1,0 +1,166 @@
+{
+  "savedAt": "2026-06-13T12:54:05.094Z",
+  "agentName": "agentPlanWorkflowDefinition",
+  "stepId": 57,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitWorkflowDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "workflowDefinition": {
+            "workflowId": "salesSummaryWorkflow",
+            "title": "Workflow de solicitação de resumo de vendas",
+            "purpose": "Coordenar a solicitação do gerente, processamento assíncrono pelo assistente de IA e entrega do resumo de vendas.",
+            "executionMode": "taskWorkflow",
+            "createsTask": true,
+            "taskConfig": {
+              "taskTitleTemplate": "Resumo de vendas solicitado para o turno {{shiftReportId}}",
+              "assigneeRules": [
+                "gerente"
+              ],
+              "slaRules": [
+                "responderEm24h"
+              ],
+              "taskRoomRequired": false
+            },
+            "actors": [
+              "gerente"
+            ],
+            "states": [
+              {
+                "stateId": "requested",
+                "description": "Solicitação registrada e pronta para processamento."
+              },
+              {
+                "stateId": "processing",
+                "description": "Resumo sendo processado de forma assíncrona."
+              },
+              {
+                "stateId": "completed",
+                "description": "Resumo pronto para consulta."
+              },
+              {
+                "stateId": "failed",
+                "description": "Falha ao processar o resumo."
+              }
+            ],
+            "transitions": [
+              {
+                "from": "requested",
+                "to": "processing",
+                "trigger": "startProcessing",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [
+                  "set SalesSummaryRequest.updatedAt = now()"
+                ],
+                "rulesApplied": [
+                  "salesSummaryUsesLast7Days"
+                ]
+              },
+              {
+                "from": "processing",
+                "to": "completed",
+                "trigger": "finalizeSummary",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [
+                  "set SalesSummaryRequest.updatedAt = now()"
+                ],
+                "rulesApplied": [
+                  "salesSummaryUsesLast7Days"
+                ]
+              },
+              {
+                "from": "processing",
+                "to": "failed",
+                "trigger": "markFailed",
+                "actor": "gerente",
+                "conditions": [],
+                "actions": [
+                  "set SalesSummaryRequest.updatedAt = now()"
+                ],
+                "rulesApplied": []
+              }
+            ],
+            "requiredEntities": [
+              "SalesSummaryRequest"
+            ],
+            "persistenceRefs": [
+              "salesSummaryRequest"
+            ],
+            "usecaseRefs": [
+              "solicitarResumoVendasDia",
+              "listarSolicitacoesResumoVendas"
+            ],
+            "metricRefs": [],
+            "userActions": [
+              "solicitarResumoVendas",
+              "acompanharStatusResumo"
+            ],
+            "relatedPages": [],
+            "relatedAgents": [],
+            "relatedPlugins": [],
+            "rulesApplied": [
+              "salesSummaryUsesLast7Days"
+            ],
+            "implementationSuggestions": [
+              {
+                "suggestionId": "asyncProcessing",
+                "title": "Processar solicitação de forma assíncrona via plugin de LLM",
+                "priority": "soon",
+                "description": "Executar a geração do resumo em job assíncrono para evitar bloqueio da interface do gerente.",
+                "tradeoff": "Aumenta complexidade operacional e demanda orquestração de status."
+              },
+              {
+                "suggestionId": "notifyOnComplete",
+                "title": "Notificar gerente quando o resumo estiver pronto",
+                "priority": "soon",
+                "description": "Disparar notificação quando o processamento for concluído para reduzir polling.",
+                "tradeoff": "Requer canal de notificação e controle de preferências."
+              }
+            ],
+            "workflowScope": "singleModule",
+            "moduleRefs": [
+              "cafeFlow"
+            ],
+            "pageRefsByModule": [],
+            "entityRefsByModule": [
+              {
+                "moduleId": "cafeFlow",
+                "entity": "SalesSummaryRequest"
+              }
+            ],
+            "writesArtifacts": [
+              {
+                "moduleId": "cafeFlow",
+                "artifactType": "workflow",
+                "artifactId": "salesSummaryWorkflow"
+              }
+            ]
+          },
+          "defsPlan": {
+            "fileName": "workflows/salesSummaryWorkflow.defs.ts",
+            "exportName": "salesSummaryWorkflowDef",
+            "saveAsDefs": true
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Fluxo mantido como taskWorkflow com criação de tarefa conforme índice.",
+          "Atores mantidos apenas como gerente; transições usam o gerente como disparador.",
+          "Ações limitadas a atualizar updatedAt da entidade SalesSummaryRequest, evitando campos não declarados no modelo.",
+          "Referências de persistência e usecases alinhadas às tabelas e casos de uso fornecidos."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 58,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

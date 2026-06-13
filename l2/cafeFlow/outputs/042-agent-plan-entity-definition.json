@@ -1,0 +1,63 @@
+{
+  "savedAt": "2026-06-13T12:45:25.809Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 42,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "SalesSummaryRequest",
+            "title": "Solicitação de Resumo de Vendas",
+            "description": "Pedido de geração de resumo e recomendações via IA.",
+            "ownership": "moduleOwned",
+            "fields": [
+              {
+                "fieldId": "salesSummaryRequestId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único da solicitação de resumo de vendas."
+              },
+              {
+                "fieldId": "shiftReportId",
+                "type": "ShiftReport",
+                "required": true,
+                "description": "Referência à consolidação de vendas usada na solicitação."
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação da solicitação."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização da solicitação."
+              }
+            ],
+            "rulesApplied": [
+              "salesSummaryUsesLast7Days"
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Definidos campos mínimos de identidade, referência obrigatória a ShiftReport e auditoria.",
+          "Relacionamento manyToOne exige campo shiftReportId.",
+          "Aplicada regra salesSummaryUsesLast7Days ao nível da entidade."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "savedAt": "2026-06-13T12:51:58.072Z",
+  "agentName": "agentPlanUsecaseDefinition",
+  "stepId": 54,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitUsecaseDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "usecaseDefinition": {
+            "usecaseId": "obterRelatorioTurno",
+            "commands": [
+              {
+                "commandId": "obterRelatorioTurno",
+                "input": [
+                  {
+                    "name": "turnoId",
+                    "type": "string",
+                    "required": true
+                  }
+                ],
+                "output": [
+                  {
+                    "name": "turno",
+                    "type": "turnoEntity"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Definido comando único para consultar relatório de fechamento de turno.",
+          "Entrada inclui identificador do turno para leitura em shift_reports.",
+          "Saída retorna entidade turno com dados do relatório."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 43,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

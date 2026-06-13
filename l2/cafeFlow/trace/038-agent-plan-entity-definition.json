@@ -1,0 +1,85 @@
+{
+  "savedAt": "2026-06-13T12:45:20.542Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 38,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "ShiftReport",
+            "title": "Relatório de Fechamento de Turno",
+            "description": "Consolidação de vendas e indicadores do turno.",
+            "ownership": "moduleOwned",
+            "fields": [
+              {
+                "fieldId": "shiftReportId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único do relatório de fechamento de turno."
+              },
+              {
+                "fieldId": "shiftId",
+                "type": "Shift",
+                "required": true,
+                "description": "Referência ao turno consolidado por este relatório."
+              },
+              {
+                "fieldId": "totalSalesAmount",
+                "type": "money",
+                "required": true,
+                "description": "Total de vendas consolidadas no turno."
+              },
+              {
+                "fieldId": "totalOrders",
+                "type": "number",
+                "required": true,
+                "description": "Quantidade total de pedidos no turno."
+              },
+              {
+                "fieldId": "totalItems",
+                "type": "number",
+                "required": false,
+                "description": "Quantidade total de itens vendidos no turno."
+              },
+              {
+                "fieldId": "notes",
+                "type": "text",
+                "required": false,
+                "description": "Observações adicionais do fechamento do turno."
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação do relatório."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização do relatório."
+              }
+            ],
+            "rulesApplied": []
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Entidade selecionada: ShiftReport.",
+          "Relacionamentos analisados: shiftHasReport (Shift 1:1 ShiftReport) exige shiftId no relatório; salesSummaryUsesMetrics é o lado 'um' para SalesSummaryRequest, sem campo adicional.",
+          "Campos básicos, de consolidação e auditoria definidos conforme descrição da entidade."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 47,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

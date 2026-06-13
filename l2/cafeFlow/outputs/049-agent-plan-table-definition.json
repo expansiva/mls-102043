@@ -1,0 +1,135 @@
+{
+  "savedAt": "2026-06-13T12:46:47.012Z",
+  "agentName": "agentPlanTableDefinition",
+  "stepId": 49,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitTableDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "tableDefinition": {
+            "tableId": "salesSummaryRequest",
+            "tableName": "sales_summary_requests",
+            "moduleId": "cafeFlow",
+            "title": "Solicitações de Resumo de Vendas",
+            "purpose": "Rastrear solicitações de resumo de vendas para o assistente IA.",
+            "ownership": "moduleOwned",
+            "rootEntity": "SalesSummaryRequest",
+            "layer": "layer_1_external",
+            "tableKind": "transactional",
+            "columns": [
+              {
+                "name": "sales_summary_request_id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true,
+                "description": "Identificador único da solicitação de resumo de vendas."
+              },
+              {
+                "name": "shift_report_id",
+                "type": "uuid",
+                "nullable": false,
+                "description": "Referência à consolidação de vendas usada na solicitação."
+              },
+              {
+                "name": "request_status",
+                "type": "text",
+                "nullable": false,
+                "default": "pending",
+                "description": "Status da solicitação de resumo de vendas."
+              },
+              {
+                "name": "created_at",
+                "type": "datetime",
+                "nullable": false,
+                "description": "Data e hora de criação da solicitação."
+              },
+              {
+                "name": "updated_at",
+                "type": "datetime",
+                "nullable": false,
+                "description": "Data e hora da última atualização da solicitação."
+              }
+            ],
+            "primaryKey": [
+              "sales_summary_request_id"
+            ],
+            "foreignRefs": [
+              {
+                "fieldName": "shift_report_id",
+                "targetEntity": "ShiftReport",
+                "targetOwnership": "existingModuleOwned",
+                "reason": "Solicitação depende da consolidação de vendas."
+              }
+            ],
+            "indexes": [
+              {
+                "indexName": "ix_sales_summary_requests_shift_report_id",
+                "columns": [
+                  "shift_report_id"
+                ],
+                "reason": "Busca por solicitações vinculadas ao relatório de turno."
+              },
+              {
+                "indexName": "ix_sales_summary_requests_created_at",
+                "columns": [
+                  "created_at"
+                ],
+                "reason": "Filtro por período para geração e auditoria."
+              },
+              {
+                "indexName": "ix_sales_summary_requests_status",
+                "columns": [
+                  "request_status"
+                ],
+                "reason": "Filtrar solicitações pendentes ou concluídas."
+              }
+            ],
+            "detailsColumn": {
+              "enabled": false
+            },
+            "metricUpdatePolicy": {
+              "feedsMetrics": false,
+              "updatedByLayer": "layer_3_usecases"
+            },
+            "accessPolicy": {
+              "directAccessAllowedFor": [
+                "layer_3_usecases"
+              ],
+              "forbiddenFor": [
+                "pages",
+                "layer_2_controllers",
+                "agents"
+              ]
+            },
+            "rulesApplied": [
+              "salesSummaryUsesLast7Days"
+            ]
+          },
+          "defsPlan": {
+            "fileName": "tables/salesSummaryRequest.defs.ts",
+            "exportName": "salesSummaryRequestTableDefinition",
+            "saveAsDefs": true
+          }
+        },
+        "questions": [],
+        "trace": [
+          "tableSelector:salesSummaryRequest",
+          "moduleId:cafeFlow",
+          "ownership:moduleOwned",
+          "layer:layer_1_external",
+          "tableKind:transactional",
+          "rulesApplied:salesSummaryUsesLast7Days"
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 39,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

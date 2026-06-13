@@ -1,0 +1,104 @@
+{
+  "savedAt": "2026-06-13T12:45:20.537Z",
+  "agentName": "agentPlanEntityDefinition",
+  "stepId": 40,
+  "planning": null,
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitEntityDefinitionPlan",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "entityDefinition": {
+            "entityId": "LowStockAlert",
+            "title": "Alerta de Estoque Baixo",
+            "description": "Sinalização de itens abaixo do nível mínimo.",
+            "ownership": "moduleOwned",
+            "kind": "event",
+            "fields": [
+              {
+                "fieldId": "lowStockAlertId",
+                "type": "uuid",
+                "required": true,
+                "description": "Identificador único do alerta de estoque baixo."
+              },
+              {
+                "fieldId": "stockItemId",
+                "type": "StockItem",
+                "required": true,
+                "description": "Item de estoque associado ao alerta."
+              },
+              {
+                "fieldId": "triggeredAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora em que o alerta foi gerado."
+              },
+              {
+                "fieldId": "currentQuantity",
+                "type": "number",
+                "required": true,
+                "description": "Quantidade atual do item quando o alerta foi gerado."
+              },
+              {
+                "fieldId": "minimumQuantity",
+                "type": "number",
+                "required": true,
+                "description": "Quantidade mínima configurada para o item."
+              },
+              {
+                "fieldId": "status",
+                "type": "string",
+                "required": true,
+                "description": "Situação atual do alerta.",
+                "enum": [
+                  "ativo",
+                  "resolvido",
+                  "ignorado"
+                ]
+              },
+              {
+                "fieldId": "createdAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora de criação do registro."
+              },
+              {
+                "fieldId": "updatedAt",
+                "type": "datetime",
+                "required": true,
+                "description": "Data e hora da última atualização do registro."
+              }
+            ],
+            "statusEnum": [
+              "ativo",
+              "resolvido",
+              "ignorado"
+            ],
+            "lifecycleStates": [
+              "ativo",
+              "resolvido",
+              "ignorado"
+            ],
+            "rulesApplied": [
+              "lowStockThresholdRule"
+            ]
+          }
+        },
+        "questions": [],
+        "trace": [
+          "Entidade selecionada LowStockAlert detalhada conforme contexto fornecido.",
+          "Relacionamento manyToOne com StockItem exige campo stockItemId.",
+          "Incluídos campos de auditoria por entidade persistida.",
+          "Aplicada regra lowStockThresholdRule por escopo informado."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 46,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

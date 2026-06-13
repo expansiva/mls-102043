@@ -1,0 +1,98 @@
+{
+  "savedAt": "2026-06-13T12:44:04.965Z",
+  "agentName": "agentBlueprintReview",
+  "stepId": 10,
+  "planning": {
+    "planId": "plan-blueprint-review",
+    "dependsOn": [
+      "plan-solution-blueprint"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitBlueprintReview",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "issues": [
+            {
+              "severity": "error",
+              "path": "relationships",
+              "code": "missing_relationship",
+              "message": "Falta relacionamento entre StockItem e UnitOfMeasure.",
+              "evidence": [
+                "UnitOfMeasure está declarada como mdmOwned mas não possui nenhum relacionamento no blueprint",
+                "StockItem descrição menciona 'Insumo controlado com unidade e nível mínimo'"
+              ]
+            },
+            {
+              "severity": "error",
+              "path": "relationships",
+              "code": "missing_relationship",
+              "message": "Falta relacionamento entre Shift e ShiftConfig.",
+              "evidence": [
+                "ShiftConfig está declarada como mdmOwned mas não possui nenhum relacionamento no blueprint",
+                "ShiftConfig descrição menciona 'Parâmetros e horários de turnos usados no fechamento diário'"
+              ]
+            },
+            {
+              "severity": "error",
+              "path": "artifactPlan.usecaseEntities",
+              "code": "missing_layer3_usecase",
+              "message": "Falta entidade de caso de uso (usecaseEntity) para o gerenciamento de cardápio.",
+              "evidence": [
+                "userAction 'manageMenuItem' é commandType upsert (escrita BFF)",
+                "capability 'gerenciarCardapio' é priority now",
+                "outras capacidades de escrita possuem usecaseEntity correspondente (orderUsecaseEntity, stockUsecaseEntity, shiftUsecaseEntity)"
+              ]
+            },
+            {
+              "severity": "warning",
+              "path": "artifactPlan.usecaseEntities",
+              "code": "missing_layer3_usecase",
+              "message": "Falta entidade de caso de uso (usecaseEntity) para a solicitação de resumo de vendas via IA.",
+              "evidence": [
+                "userAction 'requestSalesSummary' é commandType create",
+                "capability 'usarAssistenteIA' depende de processamento layer_3"
+              ]
+            },
+            {
+              "severity": "warning",
+              "path": "userActions.createOrder",
+              "code": "missing_commitment_resource_link",
+              "message": "Criação de pedido não aciona movimentação de estoque, apesar do domínio incluir controle de estoque e existir relacionamento StockMovement-Order.",
+              "evidence": [
+                "createOrder afeta apenas Order e OrderItem",
+                "StockMovement possui relacionamento stockMovementLinkedToOrder",
+                "propósito do módulo menciona 'controle simples de estoque'"
+              ]
+            }
+          ],
+          "recommendedFixes": [
+            "Adicionar relacionamento manyToOne de StockItem para UnitOfMeasure no array relationships.",
+            "Adicionar relacionamento manyToOne de Shift para ShiftConfig no array relationships.",
+            "Adicionar usecaseEntity 'menuUsecaseEntity' em artifactPlan.usecaseEntities referenciando MenuItem e MenuCategory.",
+            "Adicionar usecaseEntity 'salesSummaryUsecaseEntity' em artifactPlan.usecaseEntities referenciando SalesSummaryRequest.",
+            "Adicionar workflow 'orderStockDeductionWorkflow' em artifactPlan.workflows referenciando Order, OrderItem, StockItem e StockMovement, ou incluir StockMovement nas affectedEntities do userAction createOrder."
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "Revisão estrutural do blueprint cafeFlow concluída.",
+          "Verificadas entidades, relacionamentos, ações, regras, cobertura de capacidades e artefatos.",
+          "Identificadas entidades isoladas (UnitOfMeasure, ShiftConfig) sem relacionamentos no domínio.",
+          "Identificada ausência de usecaseEntity layer_3 para comandos de escrita de cardápio (manageMenuItem).",
+          "Identificada ausência de vínculo comportamental entre criação de pedido e consumo de estoque."
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 35,
+    "interaction": null,
+    "nextSteps": null
+  }
+}

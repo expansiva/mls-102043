@@ -1,0 +1,277 @@
+{
+  "savedAt": "2026-06-13T12:45:51.342Z",
+  "agentName": "agentPlanPersistenceIndex",
+  "stepId": 17,
+  "planning": {
+    "planId": "plan-persistence-index",
+    "dependsOn": [
+      "plan-mdm",
+      "plan-horizontals",
+      "plan-plugins",
+      "plan-entity-definition"
+    ],
+    "executionMode": "sequential",
+    "executionHost": "client"
+  },
+  "status": "waiting_after_prompt",
+  "payload": {
+    "type": "flexible",
+    "result": {
+      "toolName": "submitPersistenceIndex",
+      "arguments": {
+        "status": "ok",
+        "result": {
+          "persistenceScope": {
+            "moduleId": "cafeFlow",
+            "newTablesRequired": true,
+            "metricsTablesRequired": true,
+            "excludedEntities": [
+              {
+                "entityId": "MenuItem",
+                "ownership": "mdmOwned",
+                "reason": "mdm.masterEntity"
+              },
+              {
+                "entityId": "MenuCategory",
+                "ownership": "mdmOwned",
+                "reason": "mdm.masterEntity"
+              },
+              {
+                "entityId": "StockItem",
+                "ownership": "mdmOwned",
+                "reason": "mdm.masterEntity"
+              },
+              {
+                "entityId": "UnitOfMeasure",
+                "ownership": "mdmOwned",
+                "reason": "mdm.masterEntity"
+              },
+              {
+                "entityId": "ShiftConfig",
+                "ownership": "mdmOwned",
+                "reason": "mdm.masterEntity"
+              }
+            ]
+          },
+          "tables": [
+            {
+              "tableId": "order",
+              "tableName": "orders",
+              "title": "Pedidos",
+              "purpose": "Persistir pedidos do POS com itens para operação e status atual.",
+              "ownership": "moduleOwned",
+              "rootEntity": "Order",
+              "sourceEntities": [
+                "Order",
+                "OrderItem"
+              ],
+              "embeddedEntities": [
+                "OrderItem"
+              ],
+              "persistencePattern": "aggregateJsonDetails",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": true,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Interface rápida de POS",
+                "Painel de status da cozinha",
+                "Dashboard",
+                "Workflow de status do pedido"
+              ],
+              "writesByArtifacts": [
+                "Lançar pedido",
+                "Atualizar status do pedido"
+              ],
+              "rulesApplied": [
+                "orderRequiresItem",
+                "orderStatusTransition",
+                "shiftClosureRequiresNoOpenOrders"
+              ],
+              "reason": "r.transaction.order.aggregate"
+            },
+            {
+              "tableId": "orderStatusHistory",
+              "tableName": "order_status_history",
+              "title": "Histórico de Status do Pedido",
+              "purpose": "Registrar transições de status do pedido para auditoria e acompanhamento de cozinha.",
+              "ownership": "moduleOwned",
+              "rootEntity": "OrderStatusHistory",
+              "sourceEntities": [
+                "OrderStatusHistory",
+                "Order"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "eventLog",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Painel de status da cozinha",
+                "Workflow de status do pedido"
+              ],
+              "writesByArtifacts": [
+                "Atualizar status do pedido"
+              ],
+              "rulesApplied": [
+                "orderStatusTransition"
+              ],
+              "reason": "r.eventlog.orderStatusHistory"
+            },
+            {
+              "tableId": "shift",
+              "tableName": "shifts",
+              "title": "Turnos",
+              "purpose": "Controlar abertura e fechamento de turnos diários.",
+              "ownership": "moduleOwned",
+              "rootEntity": "Shift",
+              "sourceEntities": [
+                "Shift"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Relatório de fechamento de turno",
+                "Dashboard",
+                "Workflow de fechamento de turno"
+              ],
+              "writesByArtifacts": [
+                "Fechar turno"
+              ],
+              "rulesApplied": [
+                "shiftClosureRequiresNoOpenOrders"
+              ],
+              "reason": "r.transaction.shift"
+            },
+            {
+              "tableId": "shiftReport",
+              "tableName": "shift_reports",
+              "title": "Relatórios de Fechamento de Turno",
+              "purpose": "Armazenar resumo do fechamento do turno para consulta gerencial.",
+              "ownership": "moduleOwned",
+              "rootEntity": "ShiftReport",
+              "sourceEntities": [
+                "ShiftReport",
+                "Shift"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "aggregateJsonDetails",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": true,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Relatório de fechamento de turno",
+                "Dashboard"
+              ],
+              "writesByArtifacts": [
+                "Fechar turno"
+              ],
+              "rulesApplied": [
+                "shiftClosureRequiresNoOpenOrders"
+              ],
+              "reason": "r.transaction.shiftReport"
+            },
+            {
+              "tableId": "stockMovement",
+              "tableName": "stock_movements",
+              "title": "Movimentações de Estoque",
+              "purpose": "Registrar entradas e saídas de estoque ligadas à operação diária.",
+              "ownership": "moduleOwned",
+              "rootEntity": "StockMovement",
+              "sourceEntities": [
+                "StockMovement"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "eventLog",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Gerenciamento de cardápio e estoque",
+                "Workflow de alerta de estoque baixo",
+                "Dashboard"
+              ],
+              "writesByArtifacts": [
+                "Gerenciar item de estoque"
+              ],
+              "rulesApplied": [
+                "lowStockThresholdRule"
+              ],
+              "reason": "r.eventlog.stockMovement"
+            },
+            {
+              "tableId": "lowStockAlert",
+              "tableName": "low_stock_alerts",
+              "title": "Alertas de Estoque Baixo",
+              "purpose": "Persistir alertas de estoque baixo para acompanhamento do gerente.",
+              "ownership": "moduleOwned",
+              "rootEntity": "LowStockAlert",
+              "sourceEntities": [
+                "LowStockAlert"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "now",
+              "readsByArtifacts": [
+                "Gerenciamento de cardápio e estoque",
+                "Workflow de alerta de estoque baixo",
+                "Dashboard"
+              ],
+              "writesByArtifacts": [
+                "Gerenciar item de estoque"
+              ],
+              "rulesApplied": [
+                "lowStockThresholdRule"
+              ],
+              "reason": "r.transaction.lowStockAlert"
+            },
+            {
+              "tableId": "salesSummaryRequest",
+              "tableName": "sales_summary_requests",
+              "title": "Solicitações de Resumo de Vendas",
+              "purpose": "Rastrear solicitações de resumo de vendas para o assistente IA.",
+              "ownership": "moduleOwned",
+              "rootEntity": "SalesSummaryRequest",
+              "sourceEntities": [
+                "SalesSummaryRequest"
+              ],
+              "embeddedEntities": [],
+              "persistencePattern": "singleEntity",
+              "tableKind": "transactional",
+              "detailsColumnRecommended": false,
+              "priority": "soon",
+              "readsByArtifacts": [
+                "Gerar resumo de vendas do dia"
+              ],
+              "writesByArtifacts": [
+                "Gerar resumo de vendas do dia"
+              ],
+              "rulesApplied": [
+                "salesSummaryUsesLast7Days"
+              ],
+              "reason": "r.transaction.salesSummaryRequest"
+            }
+          ]
+        },
+        "questions": [],
+        "trace": [
+          "r.transaction.order.aggregate",
+          "r.eventlog.orderStatusHistory",
+          "r.transaction.shift",
+          "r.transaction.shiftReport",
+          "r.eventlog.stockMovement",
+          "r.transaction.lowStockAlert",
+          "r.transaction.salesSummaryRequest"
+        ]
+      }
+    },
+    "status": "completed",
+    "stepId": 38,
+    "interaction": null,
+    "nextSteps": null
+  }
+}
