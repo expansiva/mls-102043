@@ -70,3 +70,22 @@ export const useCase = {
 } as const;
 
 export default useCase;
+
+export const pipeline = [
+  {
+    "id": "fecharTurno__layer_3_usecases",
+    "type": "layer_3_usecases",
+    "outputPath": "_102043_/l1/cafeFlow/layer_3_usecases/fecharTurno.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_3_usecases/fecharTurno.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_4_entities/metricasEntity.d.ts",
+      "_102043_/l1/cafeFlow/layer_4_entities/pedidoEntity.d.ts",
+      "_102043_/l1/cafeFlow/layer_4_entities/turnoEntity.d.ts"
+    ],
+    "dependsOn": [],
+    "rulesApplied": [
+      "shiftClosureRequiresNoOpenOrders"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

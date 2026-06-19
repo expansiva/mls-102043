@@ -160,3 +160,15 @@ export const lowStockMetricsMetricTableDefinition = {
 } as const;
 
 export default lowStockMetricsMetricTableDefinition;
+
+export const pipeline = [
+  {
+    "id": "lowStockMetrics__layer_1_external",
+    "type": "layer_1_external",
+    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/lowStockMetrics.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_1_external/lowStockMetrics.defs.ts",
+    "dependsFiles": [],
+    "dependsOn": [],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

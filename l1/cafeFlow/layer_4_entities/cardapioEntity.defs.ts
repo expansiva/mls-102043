@@ -114,3 +114,18 @@ export const entity = {
 } as const;
 
 export default entity;
+
+export const pipeline = [
+  {
+    "id": "cardapioEntity__layer_4_entities",
+    "type": "layer_4_entities",
+    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/cardapioEntity.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/cardapioEntity.defs.ts",
+    "dependsFiles": [],
+    "dependsOn": [],
+    "rulesApplied": [
+      "menuItemRequiresCategory"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

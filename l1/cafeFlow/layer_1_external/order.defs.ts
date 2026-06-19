@@ -123,3 +123,15 @@ export const orderTableDefinition = {
 } as const;
 
 export default orderTableDefinition;
+
+export const pipeline = [
+  {
+    "id": "order__layer_1_external",
+    "type": "layer_1_external",
+    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/order.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_1_external/order.defs.ts",
+    "dependsFiles": [],
+    "dependsOn": [],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

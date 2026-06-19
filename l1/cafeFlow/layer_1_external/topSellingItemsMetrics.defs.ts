@@ -305,3 +305,15 @@ export const topSellingItemsMetricsTableDefinition = {
 } as const;
 
 export default topSellingItemsMetricsTableDefinition;
+
+export const pipeline = [
+  {
+    "id": "topSellingItemsMetrics__layer_1_external",
+    "type": "layer_1_external",
+    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/topSellingItemsMetrics.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_1_external/topSellingItemsMetrics.defs.ts",
+    "dependsFiles": [],
+    "dependsOn": [],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

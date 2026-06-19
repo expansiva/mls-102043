@@ -101,3 +101,22 @@ export const entity = {
 } as const;
 
 export default entity;
+
+export const pipeline = [
+  {
+    "id": "pedidoEntity__layer_4_entities",
+    "type": "layer_4_entities",
+    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/pedidoEntity.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/pedidoEntity.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_1_external/order.d.ts",
+      "_102043_/l1/cafeFlow/layer_1_external/orderStatusHistory.d.ts"
+    ],
+    "dependsOn": [],
+    "rulesApplied": [
+      "orderRequiresItem",
+      "orderStatusTransition"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;
