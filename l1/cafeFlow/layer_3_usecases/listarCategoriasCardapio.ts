@@ -4,7 +4,7 @@ import { AppError, type RequestContext } from '/_102034_/l1/server/layer_2_contr
 export interface ListarCategoriasCardapioInput {}
 
 export interface ListarCategoriasCardapioOutput {
-  categorias: MenuCategory[];
+  categorias: any[];
 }
 
 export async function listarCategoriasCardapio(
