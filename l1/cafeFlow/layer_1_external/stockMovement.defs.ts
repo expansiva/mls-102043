@@ -172,3 +172,20 @@ export const stockMovementTableDefinition = {
 } as const;
 
 export default stockMovementTableDefinition;
+
+export const pipeline = [
+  {
+    "id": "stockMovement__layer_1_external",
+    "type": "layer_1_external",
+    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/stockMovement.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_1_external/stockMovement.defs.ts",
+    "dependsFiles": [],
+    "dependsOn": [],
+    "skills": [
+      "_102021_/l2/skills/layer_1.md",
+      "_102034_.d.ts"
+    ],
+    "afterSaveBackEnd": "_102021_/l2/agentMaterializeSolution/registerBackEnd.ts?registerLayer1",
+    "agent": "agentMaterializeGen"
+  }
+] as const;

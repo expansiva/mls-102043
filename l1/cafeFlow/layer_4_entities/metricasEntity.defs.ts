@@ -60,3 +60,23 @@ export const entity = {
 } as const;
 
 export default entity;
+
+export const pipeline = [
+  {
+    "id": "metricasEntity__layer_4_entities",
+    "type": "layer_4_entities",
+    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/metricasEntity.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/metricasEntity.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_1_external/dailySalesMetrics.d.ts",
+      "_102043_/l1/cafeFlow/layer_1_external/topSellingItemsMetrics.d.ts",
+      "_102043_/l1/cafeFlow/layer_1_external/lowStockMetrics.d.ts"
+    ],
+    "dependsOn": [],
+    "skills": [
+      "_102021_/l2/skills/layer_4.md",
+      "_102034_.d.ts"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

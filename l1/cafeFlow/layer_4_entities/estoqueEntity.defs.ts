@@ -146,3 +146,26 @@ export const entity = {
 } as const;
 
 export default entity;
+
+export const pipeline = [
+  {
+    "id": "estoqueEntity__layer_4_entities",
+    "type": "layer_4_entities",
+    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/estoqueEntity.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/estoqueEntity.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_1_external/stockMovement.d.ts",
+      "_102043_/l1/cafeFlow/layer_1_external/lowStockAlert.d.ts"
+    ],
+    "dependsOn": [],
+    "skills": [
+      "_102021_/l2/skills/layer_4.md",
+      "_102034_.d.ts"
+    ],
+    "rulesPath": "_102043_/l5/cafeFlow/rules.defs.ts",
+    "rulesApplied": [
+      "lowStockThresholdRule"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

@@ -121,3 +121,26 @@ export const entity = {
 } as const;
 
 export default entity;
+
+export const pipeline = [
+  {
+    "id": "turnoEntity__layer_4_entities",
+    "type": "layer_4_entities",
+    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/turnoEntity.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/turnoEntity.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_1_external/shift.d.ts",
+      "_102043_/l1/cafeFlow/layer_1_external/shiftReport.d.ts"
+    ],
+    "dependsOn": [],
+    "skills": [
+      "_102021_/l2/skills/layer_4.md",
+      "_102034_.d.ts"
+    ],
+    "rulesPath": "_102043_/l5/cafeFlow/rules.defs.ts",
+    "rulesApplied": [
+      "shiftClosureRequiresNoOpenOrders"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;

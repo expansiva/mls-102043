@@ -71,3 +71,26 @@ export const useCase = {
 } as const;
 
 export default useCase;
+
+export const pipeline = [
+  {
+    "id": "criarPedido__layer_3_usecases",
+    "type": "layer_3_usecases",
+    "outputPath": "_102043_/l1/cafeFlow/layer_3_usecases/criarPedido.ts",
+    "defPath": "_102043_/l1/cafeFlow/layer_3_usecases/criarPedido.defs.ts",
+    "dependsFiles": [
+      "_102043_/l1/cafeFlow/layer_4_entities/cardapioEntity.d.ts",
+      "_102043_/l1/cafeFlow/layer_4_entities/metricasEntity.d.ts",
+      "_102043_/l1/cafeFlow/layer_4_entities/pedidoEntity.d.ts"
+    ],
+    "dependsOn": [],
+    "skills": [
+      "_102021_/l2/skills/layer_3.md"
+    ],
+    "rulesPath": "_102043_/l5/cafeFlow/rules.defs.ts",
+    "rulesApplied": [
+      "orderRequiresItem"
+    ],
+    "agent": "agentMaterializeGen"
+  }
+] as const;
