@@ -46,20 +46,3 @@ export const useCase = {
 } as const;
 
 export default useCase;
-
-export const pipeline = [
-  {
-    "id": "solicitarResumoVendasDia__layer_3_usecases",
-    "type": "layer_3_usecases",
-    "outputPath": "_102043_/l1/cafeFlow/layer_3_usecases/solicitarResumoVendasDia.ts",
-    "defPath": "_102043_/l1/cafeFlow/layer_3_usecases/solicitarResumoVendasDia.defs.ts",
-    "dependsFiles": [
-      "_102043_/l1/cafeFlow/layer_4_entities/resumoVendasEntity.d.ts"
-    ],
-    "dependsOn": [],
-    "rulesApplied": [
-      "salesSummaryUsesLast7Days"
-    ],
-    "agent": "agentMaterializeGen"
-  }
-] as const;

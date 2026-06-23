@@ -134,15 +134,3 @@ export const shiftTableDefinition = {
 } as const;
 
 export default shiftTableDefinition;
-
-export const pipeline = [
-  {
-    "id": "shift__layer_1_external",
-    "type": "layer_1_external",
-    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/shift.ts",
-    "defPath": "_102043_/l1/cafeFlow/layer_1_external/shift.defs.ts",
-    "dependsFiles": [],
-    "dependsOn": [],
-    "agent": "agentMaterializeGen"
-  }
-] as const;

@@ -151,15 +151,3 @@ export const lowStockAlertTableDefinition = {
 } as const;
 
 export default lowStockAlertTableDefinition;
-
-export const pipeline = [
-  {
-    "id": "lowStockAlert__layer_1_external",
-    "type": "layer_1_external",
-    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/lowStockAlert.ts",
-    "defPath": "_102043_/l1/cafeFlow/layer_1_external/lowStockAlert.defs.ts",
-    "dependsFiles": [],
-    "dependsOn": [],
-    "agent": "agentMaterializeGen"
-  }
-] as const;

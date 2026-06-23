@@ -65,20 +65,3 @@ export const entity = {
 } as const;
 
 export default entity;
-
-export const pipeline = [
-  {
-    "id": "resumoVendasEntity__layer_4_entities",
-    "type": "layer_4_entities",
-    "outputPath": "_102043_/l1/cafeFlow/layer_4_entities/resumoVendasEntity.ts",
-    "defPath": "_102043_/l1/cafeFlow/layer_4_entities/resumoVendasEntity.defs.ts",
-    "dependsFiles": [
-      "_102043_/l1/cafeFlow/layer_1_external/salesSummaryRequest.d.ts"
-    ],
-    "dependsOn": [],
-    "rulesApplied": [
-      "salesSummaryUsesLast7Days"
-    ],
-    "agent": "agentMaterializeGen"
-  }
-] as const;

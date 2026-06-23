@@ -150,15 +150,3 @@ export const orderStatusHistoryTableDefinition = {
 } as const;
 
 export default orderStatusHistoryTableDefinition;
-
-export const pipeline = [
-  {
-    "id": "orderStatusHistory__layer_1_external",
-    "type": "layer_1_external",
-    "outputPath": "_102043_/l1/cafeFlow/layer_1_external/orderStatusHistory.ts",
-    "defPath": "_102043_/l1/cafeFlow/layer_1_external/orderStatusHistory.defs.ts",
-    "dependsFiles": [],
-    "dependsOn": [],
-    "agent": "agentMaterializeGen"
-  }
-] as const;
