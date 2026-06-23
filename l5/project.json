@@ -5,6 +5,11 @@
       "language": "en",
       "name": "English",
       "path": "/"
+    },
+    {
+      "language": "pt",
+      "name": "Portuguese",
+      "path": "/pt"
     }
   ],
   "plugins": {},
@@ -47,6 +52,41 @@
     "1": {
       "name": "default",
       "skill": "_102020_/l2/agentMaterializeSolution/skills/genPageDS.ts"
+    },
+    "2": {
+      "name": "Collab design",
+      "description": "Um design system de teste",
+      "skill": "_102020_/l2/agentMaterializeSolution/skills/genPageDS.ts",
+      "rules": {
+        "labelPlacement": "floating",
+        "validation": "inline-below",
+        "listOverflow": "infinite",
+        "requiredMark": "asterisk",
+        "boolean": "toggle",
+        "numberInput": "input",
+        "dateInput": "compact",
+        "intervalInput": "dual-calendar",
+        "timeInput": "scroll-picker",
+        "selectOne": "dropdown",
+        "selectMany": "dropdown",
+        "upload": "dropzone",
+        "feedback": "toast",
+        "progress": "spinner",
+        "recordsView": "table",
+        "metric": "big-number",
+        "hierarchy": "tree",
+        "actionStyle": "standard",
+        "rating": "stars",
+        "expand": "accordion",
+        "accordionMode": "single",
+        "search": "bar"
+      },
+      "moduleOverrides": {},
+      "pageOverrides": {
+        "cafeFlow/dashboardGerente": {
+          "metric": "gauge"
+        }
+      }
     }
   }
 }
