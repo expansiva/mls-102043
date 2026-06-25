@@ -1,4 +1,4 @@
-/// <mls fileReference="_102043_/l1/cafeFlow/layer_1_external/dailySalesMetrics.defs.ts" enhancement="_blank"/>
+/// <mls fileReference="_102043_/l1/cafeFlow/layer_1_external/dailySalesMetrics.defs.ts" enhancement="_blank"/> 
 
 export const dailySalesMetricsTableDefinition = {
   "schemaVersion": "2026-06-06",
